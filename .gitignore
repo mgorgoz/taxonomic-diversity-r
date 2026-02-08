@@ -1,0 +1,23 @@
+# R package specific
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+*.Rproj
+
+# Build outputs
+*.tar.gz
+*.Rcheck/
+man/*.Rd
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Documentation build
+docs/
+inst/doc/
