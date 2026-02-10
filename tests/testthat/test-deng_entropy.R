@@ -111,3 +111,32 @@ test_that("pto_components returns named numeric vector", {
   expect_length(result, 4)
   expect_equal(names(result), c("uTO", "TO", "uTO_plus", "TO_plus"))
 })
+
+test_that("ozkan_pto matches Ozkan (2018) hypothetical examples", {
+  # Community A: 12 species, 3 genera (4 each), 1 family
+  # Expected uTO+ = ln(54.6) = 4.00003 (Ozkan 2018, Section 4)
+  comm_A <- setNames(rep(1, 12), paste0("sp", 1:12))
+  tax_A <- data.frame(
+    Species = paste0("sp", 1:12),
+    Genus = rep(c("G1", "G2", "G3"), each = 4),
+    Family = rep("F1", 12),
+    stringsAsFactors = FALSE
+  )
+  r_A <- ozkan_pto(comm_A, tax_A)
+  expect_equal(r_A$uTO_plus, log(54.6), tolerance = 1e-4)
+
+  # Community B: 6 species, 3 genera (2 each), 1 family
+  # Expected uTO+ = ln(35) = 3.5554
+  comm_B <- setNames(rep(1, 6), paste0("sp", 1:6))
+  tax_B <- data.frame(
+    Species = paste0("sp", 1:6),
+    Genus = rep(c("G1", "G2", "G3"), each = 2),
+    Family = rep("F1", 6),
+    stringsAsFactors = FALSE
+  )
+  r_B <- ozkan_pto(comm_B, tax_B)
+  expect_equal(r_B$uTO_plus, log(35), tolerance = 1e-4)
+
+  # A should have higher diversity than B
+  expect_true(r_A$uTO_plus > r_B$uTO_plus)
+})

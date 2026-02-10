@@ -160,7 +160,6 @@ ozkan_pto <- function(community, tax_tree) {
 
   for (k in seq_along(active_levels)) {
     lev_idx <- active_levels[k]
-    if (lev_idx == 1) next  # Skip species level in product
 
     Ed_i <- Ed[lev_idx]
     ratio <- e_Ed_S_sq / exp(Ed_i) + 1
@@ -174,8 +173,9 @@ ozkan_pto <- function(community, tax_tree) {
   }
 
   # pTO+ (taxonomic distance, presence/absence based)
-  uTO_plus <- core_unweighted
-  TO_plus <- core_weighted
+  # Apply ln() as per Ozkan (2018) formula
+  uTO_plus <- unname(log(core_unweighted))
+  TO_plus <- unname(log(core_weighted))
 
   # --- Step 3: Slicing procedure for pTO ---
   # Determine slicing steps
@@ -219,9 +219,11 @@ ozkan_pto <- function(community, tax_tree) {
 
     e_Ed_S_sq_step <- (exp(Ed_S_step))^2
 
-    # Core product for this step
-    core_u_step <- 1
-    core_w_step <- 1
+    # Core product for this step — include species level (i=1)
+    # Species level: (e^EdS)^2 / e^EdS + 1 = e^EdS + 1
+    ratio_species <- exp(Ed_S_step) + 1
+    core_u_step <- ratio_species       # wi = 1 for unweighted
+    core_w_step <- 1 * ratio_species   # wi = 1 for species level
 
     for (lev in seq_len(n_levels)) {
       col_idx <- lev + 1
@@ -244,7 +246,7 @@ ozkan_pto <- function(community, tax_tree) {
       ratio_step <- e_Ed_S_sq_step / exp(Ed_i_step) + 1
 
       core_u_step <- core_u_step * (1 * ratio_step)
-      w_i <- lev + 1
+      w_i <- lev + 1  # genus=2, family=3, ...
       core_w_step <- core_w_step * (w_i * ratio_step)
     }
 
