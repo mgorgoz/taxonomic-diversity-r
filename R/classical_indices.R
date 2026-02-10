@@ -85,6 +85,189 @@ simpson <- function(community, type = c("gini_simpson", "inverse",
 }
 
 
+#' Taxonomic Diversity Index (Delta)
+#'
+#' Calculates the taxonomic diversity index (Delta) from Warwick &
+#' Clarke (1995). This is the average weighted path length between
+#' every pair of individuals, including same-species pairs (weighted 0).
+#'
+#' @param community A named numeric vector of species abundances.
+#' @param tax_tree A data frame with taxonomic hierarchy.
+#' @param step_weights Optional numeric vector of path weights for each
+#'   taxonomic level. If NULL, a linear scale is used (1, 2, 3, ...).
+#'
+#' @return A numeric value representing taxonomic diversity (Delta).
+#'
+#' @details
+#' \deqn{\Delta = \frac{\sum\sum_{i<j} w_{ij} x_i x_j + \sum_i 0
+#'   \cdot x_i(x_i-1)/2}{\sum\sum_{i<j} x_i x_j + \sum_i
+#'   x_i(x_i-1)/2}}
+#'
+#' @references
+#' Warwick, R.M. & Clarke, K.R. (1995). New 'biodiversity' measures
+#' reveal a decrease in taxonomic distinctness with increasing stress.
+#' Marine Ecology Progress Series, 129, 301-305.
+#'
+#' @examples
+#' comm <- c(sp1 = 5, sp2 = 3, sp3 = 3, sp4 = 1, sp5 = 3)
+#' tax <- data.frame(
+#'   Species = paste0("sp", 1:5),
+#'   Genus = c("G1", "G1", "G2", "G2", "G2"),
+#'   Family = c("F1", "F1", "F1", "F2", "F2"),
+#'   stringsAsFactors = FALSE
+#' )
+#' delta(comm, tax)
+#'
+#' @export
+delta <- function(community, tax_tree, step_weights = NULL) {
+  if (!is.numeric(community) || any(community < 0)) {
+    stop("'community' must be a numeric vector with non-negative values.",
+         call. = FALSE)
+  }
+
+  community <- community[community > 0]
+  if (length(community) < 2) return(0)
+
+  species_names <- names(community)
+  if (is.null(species_names)) {
+    stop("'community' must be a named vector.", call. = FALSE)
+  }
+
+  n_levels <- ncol(tax_tree) - 1
+  if (is.null(step_weights)) {
+    step_weights <- seq_len(n_levels)
+  }
+
+  # Get path weights between all species pairs
+  n_sp <- length(community)
+  x <- as.numeric(community)
+
+  # Find the taxonomic level at which each pair diverges
+  tax_species <- as.character(tax_tree[[1]])
+  idx <- match(species_names, tax_species)
+  tax_sub <- tax_tree[idx, , drop = FALSE]
+
+  # Numerator: sum of w_ij * xi * xj for i < j
+  numerator <- 0
+  # Denominator: sum of xi*xj for i<j + sum of xi*(xi-1)/2
+  denom_cross <- 0
+
+  for (i in seq_len(n_sp - 1)) {
+    for (j in (i + 1):n_sp) {
+      # Find path weight: the level at which species i and j diverge
+      w_ij <- 0
+      for (lev in seq_len(n_levels)) {
+        if (as.character(tax_sub[i, lev + 1]) !=
+            as.character(tax_sub[j, lev + 1])) {
+          w_ij <- step_weights[n_levels - lev + 1]
+          break
+        }
+      }
+      # If they never diverge (same at all levels), w_ij stays 0
+      # Actually: find the HIGHEST level at which they differ
+      # Warwick convention: w_ij = step for the level where they meet
+      # Re-implement: find lowest common level
+      w_ij <- 0
+      for (lev in rev(seq_len(n_levels))) {
+        if (as.character(tax_sub[i, lev + 1]) !=
+            as.character(tax_sub[j, lev + 1])) {
+          w_ij <- step_weights[lev]
+          break
+        }
+      }
+
+      numerator <- numerator + w_ij * x[i] * x[j]
+      denom_cross <- denom_cross + x[i] * x[j]
+    }
+  }
+
+  # Same-species pairs contribute 0 to numerator
+  denom_same <- sum(x * (x - 1) / 2)
+
+  numerator / (denom_cross + denom_same)
+}
+
+
+#' Taxonomic Distinctness (Delta*)
+#'
+#' Calculates the taxonomic distinctness (Delta*) from Warwick &
+#' Clarke (1995). This is the average weighted path length between
+#' individuals of different species only.
+#'
+#' @inheritParams delta
+#'
+#' @return A numeric value representing taxonomic distinctness (Delta*).
+#'
+#' @details
+#' \deqn{\Delta^* = \frac{\sum\sum_{i<j} w_{ij} x_i x_j}
+#'   {\sum\sum_{i<j} x_i x_j}}
+#'
+#' @references
+#' Warwick, R.M. & Clarke, K.R. (1995). New 'biodiversity' measures
+#' reveal a decrease in taxonomic distinctness with increasing stress.
+#' Marine Ecology Progress Series, 129, 301-305.
+#'
+#' @examples
+#' comm <- c(sp1 = 5, sp2 = 3, sp3 = 3, sp4 = 1, sp5 = 3)
+#' tax <- data.frame(
+#'   Species = paste0("sp", 1:5),
+#'   Genus = c("G1", "G1", "G2", "G2", "G2"),
+#'   Family = c("F1", "F1", "F1", "F2", "F2"),
+#'   stringsAsFactors = FALSE
+#' )
+#' delta_star(comm, tax)
+#'
+#' @export
+delta_star <- function(community, tax_tree, step_weights = NULL) {
+  if (!is.numeric(community) || any(community < 0)) {
+    stop("'community' must be a numeric vector with non-negative values.",
+         call. = FALSE)
+  }
+
+  community <- community[community > 0]
+  if (length(community) < 2) return(0)
+
+  species_names <- names(community)
+  if (is.null(species_names)) {
+    stop("'community' must be a named vector.", call. = FALSE)
+  }
+
+  n_levels <- ncol(tax_tree) - 1
+  if (is.null(step_weights)) {
+    step_weights <- seq_len(n_levels)
+  }
+
+  n_sp <- length(community)
+  x <- as.numeric(community)
+
+  tax_species <- as.character(tax_tree[[1]])
+  idx <- match(species_names, tax_species)
+  tax_sub <- tax_tree[idx, , drop = FALSE]
+
+  numerator <- 0
+  denominator <- 0
+
+  for (i in seq_len(n_sp - 1)) {
+    for (j in (i + 1):n_sp) {
+      w_ij <- 0
+      for (lev in rev(seq_len(n_levels))) {
+        if (as.character(tax_sub[i, lev + 1]) !=
+            as.character(tax_sub[j, lev + 1])) {
+          w_ij <- step_weights[lev]
+          break
+        }
+      }
+
+      numerator <- numerator + w_ij * x[i] * x[j]
+      denominator <- denominator + x[i] * x[j]
+    }
+  }
+
+  if (denominator == 0) return(0)
+  numerator / denominator
+}
+
+
 #' Average Taxonomic Distinctness (Delta+)
 #'
 #' Calculates the average taxonomic distinctness (AvTD, Delta+) based
