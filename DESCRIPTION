@@ -2,8 +2,7 @@ Package: taxdiv
 Title: Taxonomic Diversity Indices Using Deng Entropy
 Version: 0.1.0
 Authors@R:
-    person("Murat", "Görgöz", , "mgorgoz@github.com", role = c("aut", "cre"),
-           comment = c(ORCID = "0000-0000-0000-0000"))
+    person("Murat", "Gorgoz", , "muratgorgoz@ogm.gov.tr", role = c("aut", "cre"))
 Description: Calculates taxonomic diversity indices for ecological community
     data using Deng entropy framework and classical approaches (Shannon,
     Simpson, Clarke & Warwick). Provides functions for computing taxonomic
@@ -18,16 +17,8 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
 Depends:
     R (>= 4.1.0)
-Imports:
-    stats,
-    utils
 Suggests:
-    testthat (>= 3.0.0),
-    knitr,
-    rmarkdown,
-    ggplot2,
-    vegan
+    testthat (>= 3.0.0)
 Config/testthat/edition: 3
-VignetteBuilder: knitr
 URL: https://github.com/mgorgoz/taxonomic-diversity-r
 BugReports: https://github.com/mgorgoz/taxonomic-diversity-r/issues

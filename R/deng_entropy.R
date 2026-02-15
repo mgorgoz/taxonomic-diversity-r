@@ -7,6 +7,10 @@
 #'
 #' @param abundances A numeric vector of abundances for each group
 #'   (node) at the given taxonomic level.
+#' @param group_sizes Optional integer vector of focal element sizes
+#'   (`|Fi|`) for each group. At species level this is NULL (all sizes
+#'   are 1, reducing to Shannon entropy). At higher taxonomic levels,
+#'   each value represents the number of species within that group.
 #'
 #' @return A numeric value representing the Deng entropy at that level.
 #'
