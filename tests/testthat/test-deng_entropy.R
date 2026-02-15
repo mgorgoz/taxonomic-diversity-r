@@ -112,6 +112,36 @@ test_that("pto_components returns named numeric vector", {
   expect_equal(names(result), c("uTO", "TO", "uTO_plus", "TO_plus"))
 })
 
+test_that("ozkan_pto uses presence-based (equal weight) entropy at species level", {
+  # Species-level Ed should be ln(S) regardless of abundances
+  # because all species get equal weight (1/S) in the pTO formula
+  comm <- c(sp1 = 100, sp2 = 1, sp3 = 1, sp4 = 1, sp5 = 1)
+  tax <- data.frame(
+    Species = paste0("sp", 1:5),
+    Genus   = c("G1", "G1", "G2", "G2", "G3"),
+    Family  = rep("F1", 5),
+    stringsAsFactors = FALSE
+  )
+  r <- ozkan_pto(comm, tax)
+  expect_equal(r$Ed_levels[["Species"]], log(5), tolerance = 1e-10)
+})
+
+test_that("ozkan_pto genus-level Deng entropy with equal proportions", {
+  # 6 species, 3 genera (2 each): genus-level m(Fi) = 2/6 for each,
+  # |Fi| = 2 for each genus
+  # Ed_genus = -3 * (2/6) * log((2/6) / (2^2 - 1))
+  #          = -3 * (1/3) * log((1/3) / 3) = -log(1/9) = log(9)
+  comm <- setNames(rep(1, 6), paste0("sp", 1:6))
+  tax <- data.frame(
+    Species = paste0("sp", 1:6),
+    Genus = rep(c("G1", "G2", "G3"), each = 2),
+    Family = rep("F1", 6),
+    stringsAsFactors = FALSE
+  )
+  r <- ozkan_pto(comm, tax)
+  expect_equal(r$Ed_levels[["Genus"]], log(9), tolerance = 1e-10)
+})
+
 test_that("ozkan_pto matches Ozkan (2018) hypothetical examples", {
   # Community A: 12 species, 3 genera (4 each), 1 family
   # Expected uTO+ = ln(54.6) = 4.00003 (Ozkan 2018, Section 4)

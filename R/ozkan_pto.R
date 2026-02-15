@@ -11,9 +11,6 @@
 #'   is species names, subsequent columns are taxonomic ranks from
 #'   lowest to highest (e.g., Species, Genus, Family, Order, Class,
 #'   Phylum, Kingdom).
-#' @param weighted Logical. If TRUE (default), use weighted calculation
-#'   where w_i increases from 1 (species) to max level. If FALSE, all
-#'   w_i = 1 (unweighted).
 #'
 #' @return A named list with components:
 #'   \describe{
@@ -21,27 +18,36 @@
 #'     \item{TO}{Weighted taxonomic diversity}
 #'     \item{uTO_plus}{Unweighted taxonomic distance}
 #'     \item{TO_plus}{Weighted taxonomic distance}
-#'     \item{Ed_levels}{Deng entropy at each taxonomic level}
+#'     \item{Ed_levels}{Deng entropy at each taxonomic level (nk=0 slice)}
 #'   }
 #'
 #' @details
-#' The method applies the slicing procedure to abundance data and
-#' computes Deng entropy at each taxonomic level of the Linnean
-#' hierarchy. The formula is:
+#' The method uses the slicing procedure from Ozkan (2018). At each
+#' slice (nk = 0, 1, ..., n_s), species with abundance <= nk are removed.
+#' The surviving species receive EQUAL weight (1/count) — abundance
+#' information enters indirectly through which species survive each slice.
 #'
+#' Deng entropy at each taxonomic level is computed using these equal
+#' proportions, where the mass function m(Fi) = count_in_group / total_count
+#' and |Fi| = number of species in that taxonomic group.
+#'
+#' The core product formula at each slice is:
+#'
+#' \deqn{\prod_{i=1}^{L} \left( w_i \left( \frac{(e^{E_d^S})^2}
+#'   {e^{E_d^i}} + 1 \right) \right)}
+#'
+#' where \eqn{E_d^S} is the Deng entropy at species level and
+#' \eqn{E_d^i} is the Deng entropy at level i, computed using
+#' presence/absence (equal weight) proportions.
+#'
+#' pTO+ (taxonomic distance) uses only the nk=0 slice:
+#' \deqn{pT_O^+ = \ln \prod_{i=1}^{L} \left( w_i \left(
+#'   \frac{(e^{E_d^S})^2}{e^{E_d^i}} + 1 \right) \right)}
+#'
+#' pTO (taxonomic diversity) aggregates across all slices:
 #' \deqn{pT_O = \ln \left( \frac{\sum_{k=0}^{n_s} (n_s - n_k)
 #'   \prod_{i=1}^{L} \left( w_i \left( \frac{(e^{E_d^S})^2}
 #'   {e^{E_d^i}} + 1 \right) \right)}{n_s + \sum n_k} \right)}
-#'
-#' where \eqn{E_d^S} is the Deng entropy at species level (Shannon H),
-#' \eqn{E_d^i} is the Deng entropy at level i, and the product runs
-#' over levels where the number of nodes > 1.
-#'
-#' The taxonomic distance (pTO+) uses only presence/absence data
-#' (equivalent to n_s = 1, n_k = 0):
-#'
-#' \deqn{pT_O^+ = \prod_{i=1}^{L} \left( w_i \left(
-#'   \frac{(e^{E_d^S})^2}{e^{E_d^i}} + 1 \right) \right)}
 #'
 #' @references
 #' Ozkan, K. (2018). A new proposed measure for estimating taxonomic
@@ -107,60 +113,74 @@ ozkan_pto <- function(community, tax_tree) {
     ))
   }
 
-  # --- Step 1: Compute Deng entropy at each taxonomic level ---
-  Ed <- numeric(n_levels + 1)
-  level_names <- c("Species", names(tax_tree)[-1])
-  names(Ed) <- level_names
+  # --- Helper: compute Deng entropy at all levels for a given set of
+  #     present species (using EQUAL weights / presence-absence) ---
+  compute_deng_all_levels <- function(present_mask, tax_data, n_lev) {
+    tax_present <- tax_data[present_mask, , drop = FALSE]
+    n_present <- sum(present_mask)
 
-  # Species level: Ed_S = Shannon entropy (|Fi| = 1)
-  Ed[1] <- deng_entropy_level(as.numeric(community))
-
-  # Higher levels: aggregate abundances by group, compute Deng entropy
-  active_levels <- 1  # Track which levels have > 1 node
-
-  for (lev in seq_len(n_levels)) {
-    col_idx <- lev + 1  # Column in tax_tree
-    groups <- as.character(tax_sub[[col_idx]])
-    unique_groups <- unique(groups)
-    n_nodes <- length(unique_groups)
-
-    # Termination rule: if only 1 node, Ed = 0, stop here
-    if (n_nodes <= 1) {
-      Ed[lev + 1] <- 0
-      break
+    if (n_present <= 1) {
+      ed <- setNames(rep(0, n_lev + 1),
+                     c("Species", names(tax_data)[-1]))
+      return(list(Ed = ed, active = integer(0)))
     }
 
-    active_levels <- c(active_levels, lev + 1)
+    ed <- numeric(n_lev + 1)
+    names(ed) <- c("Species", names(tax_data)[-1])
 
-    # Aggregate abundance by group at this level
-    group_abundances <- numeric(n_nodes)
-    group_sizes <- integer(n_nodes)  # Number of species in each group
+    # Species level: equal weights -> Ed_S = ln(S)
+    # Each species gets m_i = 1/S, |Fi| = 1
+    # Ed = -sum((1/S) * ln((1/S) / (2^1 - 1))) = -sum((1/S) * ln(1/S)) = ln(S)
+    ed[1] <- log(n_present)
 
-    for (g in seq_along(unique_groups)) {
-      mask <- groups == unique_groups[g]
-      group_abundances[g] <- sum(as.numeric(community[mask]))
-      group_sizes[g] <- sum(mask)
+    active <- 1L  # Species level is always active if > 1 species
+
+    for (lev in seq_len(n_lev)) {
+      col_idx <- lev + 1
+      groups <- as.character(tax_present[[col_idx]])
+      unique_groups <- unique(groups)
+      n_nodes <- length(unique_groups)
+
+      if (n_nodes <= 1) {
+        ed[lev + 1] <- 0
+        break
+      }
+
+      active <- c(active, as.integer(lev + 1))
+
+      # Count species per group (presence-based)
+      group_counts <- numeric(n_nodes)
+      group_sizes <- integer(n_nodes)  # |Fi| = species in each group
+
+      for (g in seq_along(unique_groups)) {
+        mask <- groups == unique_groups[g]
+        group_counts[g] <- sum(mask)   # Number of present species
+        group_sizes[g] <- sum(mask)    # Same as count for presence-based
+      }
+
+      # Deng entropy: m_i = count_i / total, |Fi| = group_sizes[i]
+      ed[lev + 1] <- deng_entropy_level(group_counts,
+                                         group_sizes = group_sizes)
     }
 
-    # Deng entropy at this level
-    Ed[lev + 1] <- deng_entropy_level(group_abundances,
-                                       group_sizes = group_sizes)
+    return(list(Ed = ed, active = active))
   }
 
-  # --- Step 2: Compute the core product (pTO+) ---
-  # For both weighted and unweighted versions
+  # --- Step 1: Compute Deng entropy at nk=0 (all species present) ---
+  all_present <- rep(TRUE, n_species)
+  result_nk0 <- compute_deng_all_levels(all_present, tax_sub, n_levels)
+  Ed <- result_nk0$Ed
+  active_levels <- result_nk0$active
 
-  Ed_S <- Ed[1]  # Species-level entropy
-  e_Ed_S_sq <- (exp(Ed_S))^2
+  # --- Step 2: Compute the core product (pTO+) using nk=0 entropies ---
+  Ed_S <- Ed[1]  # Species-level entropy = ln(S)
+  e_Ed_S_sq <- (exp(Ed_S))^2  # S^2
 
-  # Core product for unweighted (all wi = 1)
   core_unweighted <- 1
-  # Core product for weighted (wi = i)
   core_weighted <- 1
 
   for (k in seq_along(active_levels)) {
     lev_idx <- active_levels[k]
-
     Ed_i <- Ed[lev_idx]
     ratio <- e_Ed_S_sq / exp(Ed_i) + 1
 
@@ -173,85 +193,62 @@ ozkan_pto <- function(community, tax_tree) {
   }
 
   # pTO+ (taxonomic distance, presence/absence based)
-  # Apply ln() as per Ozkan (2018) formula
   uTO_plus <- unname(log(core_unweighted))
   TO_plus <- unname(log(core_weighted))
 
   # --- Step 3: Slicing procedure for pTO ---
-  # Determine slicing steps
   max_abundance <- max(community)
   abundances <- as.numeric(community)
-
-  # Build slicing steps: for each step k, subtract k from abundances
-  # Record which species remain (abundance - k > 0)
-  n_s <- max_abundance  # Total number of steps
-
-  # Compute sum of (ns - nk) * core_product for each step
-  # At each step, we recompute Deng entropy with the reduced community
+  n_s <- max_abundance
 
   sum_weighted <- 0
   sum_unweighted <- 0
 
   for (step in seq_len(n_s)) {
     nk <- step - 1  # Amount subtracted (0-indexed: step 1 = nk 0)
-    factor <- n_s - nk
+    factor_val <- n_s - nk
 
-    # Reduce abundances: subtract nk, keep positive
-    reduced <- abundances - nk
-    reduced[reduced < 0] <- 0
-    # Convert to presence/absence at this step
-    present <- as.integer(reduced > 0)
+    # Species survive if abundance > nk
+    present_mask <- abundances > nk
 
-    if (sum(present) == 0) break
+    if (sum(present_mask) == 0) break
 
-    # Recompute Deng entropy at each level with reduced community
-    # Only include species that are still present
-    present_mask <- present > 0
-    comm_step <- reduced[present_mask]
+    # Compute Deng entropy for this slice using presence-based weights
     tax_step <- tax_sub[present_mask, , drop = FALSE]
+    n_present <- sum(present_mask)
 
-    # Species-level entropy for this step
-    if (length(comm_step) <= 1) {
-      Ed_S_step <- 0
+    if (n_present <= 1) {
+      # Single species: Ed = 0 at all levels, product = 1+1 = 2
+      ratio_species <- 0 + 1  # (e^0)^2 / e^0 + 1 = 1/1 + 1 = 2
+      core_u_step <- 1 * ratio_species
+      core_w_step <- 1 * ratio_species
     } else {
-      Ed_S_step <- deng_entropy_level(comm_step)
-    }
+      # Compute full Deng entropy at all levels for this slice
+      result_step <- compute_deng_all_levels(
+        rep(TRUE, n_present), tax_step, n_levels)
+      Ed_step <- result_step$Ed
+      active_step <- result_step$active
 
-    e_Ed_S_sq_step <- (exp(Ed_S_step))^2
+      Ed_S_step <- Ed_step[1]
+      e_Ed_S_sq_step <- (exp(Ed_S_step))^2
 
-    # Core product for this step — include species level (i=1)
-    # Species level: (e^EdS)^2 / e^EdS + 1 = e^EdS + 1
-    ratio_species <- exp(Ed_S_step) + 1
-    core_u_step <- ratio_species       # wi = 1 for unweighted
-    core_w_step <- 1 * ratio_species   # wi = 1 for species level
+      core_u_step <- 1
+      core_w_step <- 1
 
-    for (lev in seq_len(n_levels)) {
-      col_idx <- lev + 1
-      groups_step <- as.character(tax_step[[col_idx]])
-      unique_groups_step <- unique(groups_step)
-      n_nodes_step <- length(unique_groups_step)
+      for (a in seq_along(active_step)) {
+        lev_idx <- active_step[a]
+        Ed_i_step <- Ed_step[lev_idx]
+        ratio_step <- e_Ed_S_sq_step / exp(Ed_i_step) + 1
 
-      if (n_nodes_step <= 1) break
+        core_u_step <- core_u_step * (1 * ratio_step)
 
-      # Aggregate
-      ga <- numeric(n_nodes_step)
-      gs <- integer(n_nodes_step)
-      for (g in seq_along(unique_groups_step)) {
-        mask <- groups_step == unique_groups_step[g]
-        ga[g] <- sum(comm_step[mask])
-        gs[g] <- sum(mask)
+        w_i <- lev_idx
+        core_w_step <- core_w_step * (w_i * ratio_step)
       }
-
-      Ed_i_step <- deng_entropy_level(ga, group_sizes = gs)
-      ratio_step <- e_Ed_S_sq_step / exp(Ed_i_step) + 1
-
-      core_u_step <- core_u_step * (1 * ratio_step)
-      w_i <- lev + 1  # genus=2, family=3, ...
-      core_w_step <- core_w_step * (w_i * ratio_step)
     }
 
-    sum_unweighted <- sum_unweighted + factor * core_u_step
-    sum_weighted <- sum_weighted + factor * core_w_step
+    sum_unweighted <- sum_unweighted + factor_val * core_u_step
+    sum_weighted <- sum_weighted + factor_val * core_w_step
   }
 
   # Denominator: ns + sum(nk) = ns + sum(0:(ns-1)) = ns + ns*(ns-1)/2
