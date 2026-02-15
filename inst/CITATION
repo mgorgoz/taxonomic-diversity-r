@@ -1,0 +1,20 @@
+bibentry(
+  bibtype  = "Manual",
+  title    = "taxdiv: Taxonomic Diversity Indices Using Deng Entropy",
+  author   = person("Murat", "Gorgoz"),
+  year     = "2026",
+  note     = "R package version 0.1.0",
+  url      = "https://github.com/mgorgoz/taxonomic-diversity-r"
+)
+
+bibentry(
+  bibtype  = "Article",
+  title    = "A new proposed measure for estimating taxonomic diversity",
+  author   = person("Kursad", "Ozkan"),
+  journal  = "Turkish Journal of Forestry",
+  year     = "2018",
+  volume   = "19",
+  number   = "4",
+  pages    = "336--346",
+  doi      = "10.18182/tjf.441061"
+)

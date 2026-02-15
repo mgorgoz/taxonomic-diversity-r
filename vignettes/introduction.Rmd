@@ -1,0 +1,222 @@
+---
+title: "Introduction to taxdiv"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction to taxdiv}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Overview
+
+The **taxdiv** package provides tools for calculating taxonomic diversity
+indices that incorporate the hierarchical structure of biological
+classification. While traditional diversity indices like Shannon and Simpson
+only consider species abundances, taxonomic diversity measures account for
+the evolutionary and ecological relationships among species.
+
+The package implements three main approaches:
+
+1. **Classical diversity indices**: Shannon and Simpson
+2. **Clarke & Warwick taxonomic distinctness**: Delta, Delta*, AvTD, VarTD
+3. **Ozkan (2018) Deng entropy-based diversity**: pTO and pTO+
+
+```{r setup}
+library(taxdiv)
+```
+
+## Example Data: Mediterranean Forest Community
+
+We will use a hypothetical Mediterranean forest community to demonstrate the
+package functionality. This community has 10 tree and shrub species with
+known abundances and a 4-level taxonomic hierarchy.
+
+```{r data}
+# Species abundances (individuals per plot)
+community <- c(
+  Quercus_coccifera    = 25,
+  Quercus_infectoria   = 18,
+  Pinus_brutia         = 30,
+  Pinus_nigra          = 12,
+  Juniperus_excelsa    = 8,
+  Juniperus_oxycedrus  = 6,
+  Arbutus_andrachne    = 15,
+  Styrax_officinalis   = 4,
+  Cercis_siliquastrum  = 3,
+  Olea_europaea        = 10
+)
+
+# Taxonomic hierarchy
+tax_tree <- build_tax_tree(
+  species = names(community),
+  Genus   = c("Quercus", "Quercus", "Pinus", "Pinus",
+              "Juniperus", "Juniperus", "Arbutus", "Styrax",
+              "Cercis", "Olea"),
+  Family  = c("Fagaceae", "Fagaceae", "Pinaceae", "Pinaceae",
+              "Cupressaceae", "Cupressaceae", "Ericaceae", "Styracaceae",
+              "Fabaceae", "Oleaceae"),
+  Order   = c("Fagales", "Fagales", "Pinales", "Pinales",
+              "Pinales", "Pinales", "Ericales", "Ericales",
+              "Fabales", "Lamiales")
+)
+
+tax_tree
+```
+
+## Classical Diversity Indices
+
+Shannon and Simpson indices measure diversity based solely on species
+abundance distribution:
+
+```{r classical}
+# Shannon diversity (natural log)
+H <- shannon(community)
+cat("Shannon H':", round(H, 4), "\n")
+
+# Simpson indices
+D <- simpson(community, type = "dominance")
+GS <- simpson(community, type = "gini_simpson")
+inv_D <- simpson(community, type = "inverse")
+
+cat("Simpson dominance (D):", round(D, 4), "\n")
+cat("Gini-Simpson (1-D):", round(GS, 4), "\n")
+cat("Inverse Simpson (1/D):", round(inv_D, 4), "\n")
+```
+
+These indices tell us about the evenness and richness of the community, but
+they do not consider that some species are taxonomically more distant from
+each other than others.
+
+## Taxonomic Distance
+
+Before computing taxonomic diversity, we can examine the pairwise
+taxonomic distances between species:
+
+```{r distance}
+dist_mat <- tax_distance_matrix(tax_tree)
+round(dist_mat, 2)
+```
+
+Species in the same genus (e.g., *Quercus coccifera* and *Q. infectoria*)
+have distance 0 at all shared taxonomic levels, while species in different
+orders have the maximum distance.
+
+## Clarke & Warwick Taxonomic Distinctness
+
+The Clarke & Warwick framework provides abundance-weighted and
+presence/absence-based measures:
+
+```{r cw}
+# Delta: average taxonomic diversity (abundance-weighted)
+d <- delta(community, tax_tree)
+cat("Delta (taxonomic diversity):", round(d, 4), "\n")
+
+# Delta*: taxonomic distinctness (abundance-weighted, excludes same-species)
+ds <- delta_star(community, tax_tree)
+cat("Delta* (taxonomic distinctness):", round(ds, 4), "\n")
+
+# AvTD (Delta+): average taxonomic distinctness (presence/absence)
+spp <- names(community)
+avg_td <- avtd(spp, tax_tree)
+cat("AvTD (Delta+):", round(avg_td, 4), "\n")
+
+# VarTD (Lambda+): variation in taxonomic distinctness
+var_td <- vartd(spp, tax_tree)
+cat("VarTD (Lambda+):", round(var_td, 4), "\n")
+```
+
+## Deng Entropy and Ozkan pTO
+
+The Deng entropy framework (Deng, 2016) generalizes Shannon entropy through
+Dempster-Shafer evidence theory. At each taxonomic level, the mass function
+accounts for the number of species within each group (the "focal element
+size"), giving more weight to groups that contain more species.
+
+Ozkan (2018) uses Deng entropy to construct four measures:
+
+- **uTO**: Unweighted taxonomic diversity (uses slicing procedure)
+- **TO**: Weighted taxonomic diversity (taxonomic levels weighted by rank)
+- **uTO+**: Unweighted taxonomic distance (presence/absence, nk=0 only)
+- **TO+**: Weighted taxonomic distance
+
+```{r pto}
+result <- ozkan_pto(community, tax_tree)
+
+cat("uTO  (unweighted diversity):", round(result$uTO, 4), "\n")
+cat("TO   (weighted diversity):", round(result$TO, 4), "\n")
+cat("uTO+ (unweighted distance):", round(result$uTO_plus, 4), "\n")
+cat("TO+  (weighted distance):", round(result$TO_plus, 4), "\n")
+```
+
+The Deng entropy values at each taxonomic level reveal the contribution
+of each hierarchical level to overall diversity:
+
+```{r ed_levels}
+cat("Deng entropy at each level:\n")
+for (i in seq_along(result$Ed_levels)) {
+  cat("  ", names(result$Ed_levels)[i], ":",
+      round(result$Ed_levels[i], 4), "\n")
+}
+```
+
+At the species level, Ed equals ln(S) = ln(10) since all present species
+receive equal weight. At higher levels, the Deng correction term
+(2^|Fi| - 1) increases entropy for groups containing more species.
+
+### Convenience wrapper
+
+The `pto_components()` function returns all four values as a named vector:
+
+```{r components}
+pto_components(community, tax_tree)
+```
+
+## Comparing Communities
+
+Taxonomic diversity measures are most useful when comparing communities.
+Here we compare our Mediterranean community with a species-poor community:
+
+```{r compare}
+# Degraded community (fewer species, less taxonomic breadth)
+degraded <- c(
+  Quercus_coccifera   = 40,
+  Pinus_brutia        = 35,
+  Juniperus_oxycedrus = 10
+)
+
+tax_degraded <- tax_tree[tax_tree$Species %in% names(degraded), ]
+
+cat("=== Original community (10 species) ===\n")
+cat("Shannon:", round(shannon(community), 4), "\n")
+r1 <- ozkan_pto(community, tax_tree)
+cat("uTO+:", round(r1$uTO_plus, 4), "\n")
+cat("TO+:", round(r1$TO_plus, 4), "\n\n")
+
+cat("=== Degraded community (3 species) ===\n")
+cat("Shannon:", round(shannon(degraded), 4), "\n")
+r2 <- ozkan_pto(degraded, tax_degraded)
+cat("uTO+:", round(r2$uTO_plus, 4), "\n")
+cat("TO+:", round(r2$TO_plus, 4), "\n")
+```
+
+The degraded community shows lower diversity across all measures, but the
+taxonomic indices (uTO+, TO+) capture not only the loss of species richness
+but also the narrowing of taxonomic breadth.
+
+## References
+
+- Deng, Y. (2016). Deng entropy. *Chaos, Solitons & Fractals*, 91, 549-553.
+- Ozkan, K. (2018). A new proposed measure for estimating taxonomic
+  diversity. *Turkish Journal of Forestry*, 19(4), 336-346.
+- Clarke, K.R. & Warwick, R.M. (1998). A taxonomic distinctness index and
+  its statistical properties. *Journal of Applied Ecology*, 35, 523-531.
+- Warwick, R.M. & Clarke, K.R. (1995). New 'biodiversity' measures reveal
+  a decrease in taxonomic distinctness with increasing stress. *Marine
+  Ecology Progress Series*, 129, 301-305.
