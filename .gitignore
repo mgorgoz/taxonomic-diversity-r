@@ -8,7 +8,7 @@
 # Build outputs
 *.tar.gz
 *.Rcheck/
-man/*.Rd
+# man/*.Rd  # Keep Rd files for CRAN package
 
 # OS files
 .DS_Store
