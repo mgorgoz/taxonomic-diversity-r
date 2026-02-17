@@ -145,6 +145,11 @@ delta <- function(community, tax_tree, step_weights = NULL) {
   # Find the taxonomic level at which each pair diverges
   tax_species <- as.character(tax_tree[[1]])
   idx <- match(species_names, tax_species)
+  if (any(is.na(idx))) {
+    missing <- species_names[is.na(idx)]
+    stop("Species not found in tax_tree: ",
+         paste(missing, collapse = ", "), call. = FALSE)
+  }
   tax_sub <- tax_tree[idx, , drop = FALSE]
 
   # Numerator: sum of w_ij * xi * xj for i < j
@@ -234,6 +239,11 @@ delta_star <- function(community, tax_tree, step_weights = NULL) {
 
   tax_species <- as.character(tax_tree[[1]])
   idx <- match(species_names, tax_species)
+  if (any(is.na(idx))) {
+    missing <- species_names[is.na(idx)]
+    stop("Species not found in tax_tree: ",
+         paste(missing, collapse = ", "), call. = FALSE)
+  }
   tax_sub <- tax_tree[idx, , drop = FALSE]
 
   numerator <- 0

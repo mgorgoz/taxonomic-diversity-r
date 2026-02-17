@@ -176,3 +176,25 @@ test_that("vartd requires at least 2 species", {
   )
   expect_error(vartd("sp1", tax), "At least 2")
 })
+
+test_that("delta errors on species not in tax_tree", {
+  comm <- c(sp1 = 5, sp_unknown = 3)
+  tax <- data.frame(
+    Species = c("sp1", "sp2"),
+    Genus = c("G1", "G2"),
+    Family = c("F1", "F1"),
+    stringsAsFactors = FALSE
+  )
+  expect_error(delta(comm, tax), "Species not found in tax_tree: sp_unknown")
+})
+
+test_that("delta_star errors on species not in tax_tree", {
+  comm <- c(sp1 = 5, sp_missing = 3, sp_also = 2)
+  tax <- data.frame(
+    Species = c("sp1", "sp2"),
+    Genus = c("G1", "G2"),
+    Family = c("F1", "F1"),
+    stringsAsFactors = FALSE
+  )
+  expect_error(delta_star(comm, tax), "Species not found in tax_tree: sp_missing, sp_also")
+})
