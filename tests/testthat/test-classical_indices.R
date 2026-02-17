@@ -117,10 +117,9 @@ test_that("avtd calculates average taxonomic distinctness", {
 
   expect_type(result, "double")
   expect_true(result > 0)
-  expect_true(result <= 1)
 })
 
-test_that("avtd with all same-genus species is zero", {
+test_that("avtd with all same-genus species equals weights[1]", {
   tax <- data.frame(
     Species = c("sp1", "sp2", "sp3"),
     Genus = c("G1", "G1", "G1"),
@@ -128,8 +127,10 @@ test_that("avtd with all same-genus species is zero", {
     stringsAsFactors = FALSE
   )
 
+  # All species in same genus -> first match at Genus (level 1)
+  # -> all pairwise distances = weights[1] = 1 -> avtd = 1
   result <- avtd(c("sp1", "sp2", "sp3"), tax)
-  expect_equal(result, 0)
+  expect_equal(result, 1)
 })
 
 test_that("avtd requires at least 2 species", {

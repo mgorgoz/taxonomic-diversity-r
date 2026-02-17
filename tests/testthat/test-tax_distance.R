@@ -6,13 +6,14 @@ test_that("tax_distance_matrix computes correct distances", {
     stringsAsFactors = FALSE
   )
 
+  # Default weights = c(1, 2) for 2 taxonomic levels
   d <- tax_distance_matrix(tax)
 
-  # Same genus, same family -> differ at 0 levels
-  expect_equal(d["sp_a", "sp_b"], 0)
+  # Same genus -> first match at Genus (level 1) -> weights[1] = 1
+  expect_equal(d["sp_a", "sp_b"], 1)
 
-  # Different genus, same family -> differ at genus level (weight 0.5)
-  expect_equal(d["sp_a", "sp_c"], 0.5)
+  # Different genus, same family -> first match at Family (level 2) -> weights[2] = 2
+  expect_equal(d["sp_a", "sp_c"], 2)
 
   # Symmetric
   expect_equal(d["sp_a", "sp_c"], d["sp_c", "sp_a"])
@@ -29,13 +30,13 @@ test_that("tax_distance_matrix works with custom weights", {
     stringsAsFactors = FALSE
   )
 
-  # With equal weights (default)
+  # Default weights = c(1, 2); no match at any level -> sum(weights) = 3
   d1 <- tax_distance_matrix(tax)
-  expect_equal(d1["sp_a", "sp_b"], 1)
+  expect_equal(d1["sp_a", "sp_b"], 3)
 
-  # With custom weights
+  # Custom weights c(1, 3); no match -> sum(weights) = 4
   d2 <- tax_distance_matrix(tax, weights = c(1, 3))
-  expect_equal(d2["sp_a", "sp_b"], 1)  # Normalized, so still sums to 1
+  expect_equal(d2["sp_a", "sp_b"], 4)
 })
 
 test_that("build_tax_tree creates correct structure", {

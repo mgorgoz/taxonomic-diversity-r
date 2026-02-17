@@ -13,9 +13,10 @@
 #' @param weights Optional numeric vector of weights for each taxonomic
 #'   level. If NULL, equal weights are assigned.
 #'
-#' @return A symmetric matrix of taxonomic distances between species,
-#'   with values ranging from 0 (same species) to 1 (maximum
-#'   taxonomic distance).
+#' @return A symmetric matrix of taxonomic distances between species.
+#'   With default equal step weights (1, 2, 3, ...), values range from
+#'   0 (same species) to the number of taxonomic levels (maximum
+#'   distance when no common ancestor is found at any level).
 #'
 #' @examples
 #' tax <- data.frame(

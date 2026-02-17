@@ -18,9 +18,10 @@ If NULL, all species in \code{tax_tree} are used.}
 level. If NULL, equal weights are assigned.}
 }
 \value{
-A symmetric matrix of taxonomic distances between species,
-with values ranging from 0 (same species) to 1 (maximum
-taxonomic distance).
+A symmetric matrix of taxonomic distances between species.
+With default equal step weights (1, 2, 3, ...), values range from
+0 (same species) to the number of taxonomic levels (maximum
+distance when no common ancestor is found at any level).
 }
 \description{
 Calculates pairwise taxonomic distances between species based on
