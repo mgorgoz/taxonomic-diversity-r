@@ -42,3 +42,7 @@ Warwick, R.M. & Clarke, K.R. (1995). New 'biodiversity' measures
 reveal a decrease in taxonomic distinctness with increasing stress.
 Marine Ecology Progress Series, 129, 301-305.
 }
+\seealso{
+\code{\link[=delta]{delta()}} for taxonomic diversity (including same-species),
+\code{\link[=avtd]{avtd()}} and \code{\link[=vartd]{vartd()}} for presence/absence measures.
+}

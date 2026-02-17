@@ -29,6 +29,9 @@
 #' @references
 #' Deng, Y. (2016). Deng entropy. Chaos, Solitons & Fractals, 91, 549-553.
 #'
+#' @seealso [ozkan_pto()] which uses this function internally,
+#'   [shannon()] for classical Shannon entropy.
+#'
 #' @examples
 #' # Shannon entropy (species level, |Fi| = 1 for all)
 #' deng_entropy_level(c(4, 2, 3, 1, 2, 3, 2, 2))

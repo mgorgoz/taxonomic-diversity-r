@@ -57,6 +57,10 @@
 #' Deng, Y. (2016). Deng entropy. Chaos, Solitons & Fractals, 91,
 #' 549-553.
 #'
+#' @seealso [deng_entropy_level()] for the core Deng entropy calculation,
+#'   [pto_components()] for a convenience wrapper returning a named vector,
+#'   [delta()] and [avtd()] for Clarke & Warwick alternatives.
+#'
 #' @examples
 #' # Simple example with 5 species
 #' comm <- c(sp1 = 4, sp2 = 2, sp3 = 3, sp4 = 1, sp5 = 2)
@@ -275,6 +279,8 @@ ozkan_pto <- function(community, tax_tree) {
 #' @inheritParams ozkan_pto
 #'
 #' @return A named numeric vector with uTO, TO, uTO_plus, TO_plus.
+#'
+#' @seealso [ozkan_pto()] for the full result including per-level entropy.
 #'
 #' @examples
 #' comm <- c(sp1 = 4, sp2 = 2, sp3 = 3, sp4 = 1, sp5 = 2)

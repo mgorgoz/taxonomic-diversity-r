@@ -32,3 +32,6 @@ tax <- data.frame(
 pto_components(comm, tax)
 
 }
+\seealso{
+\code{\link[=ozkan_pto]{ozkan_pto()}} for the full result including per-level entropy.
+}

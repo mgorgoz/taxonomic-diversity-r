@@ -14,6 +14,9 @@
 #' where \eqn{p_i} is the proportion of species \eqn{i} and \eqn{S}
 #' is the total number of species.
 #'
+#' @seealso [simpson()] for Simpson diversity, [deng_entropy_level()] for
+#'   Deng entropy (a generalization of Shannon).
+#'
 #' @examples
 #' comm <- c(10, 5, 8, 3, 12)
 #' shannon(comm)
@@ -52,6 +55,8 @@ shannon <- function(community, base = exp(1)) {
 #' \deqn{D = \sum_{i=1}^{S} p_i^2}
 #' The Gini-Simpson index is \eqn{1 - D} and the inverse Simpson is
 #' \eqn{1/D}.
+#'
+#' @seealso [shannon()] for Shannon diversity.
 #'
 #' @examples
 #' comm <- c(10, 5, 8, 3, 12)
@@ -107,6 +112,10 @@ simpson <- function(community, type = c("gini_simpson", "inverse",
 #' Warwick, R.M. & Clarke, K.R. (1995). New 'biodiversity' measures
 #' reveal a decrease in taxonomic distinctness with increasing stress.
 #' Marine Ecology Progress Series, 129, 301-305.
+#'
+#' @seealso [delta_star()] for taxonomic distinctness (excluding same-species),
+#'   [avtd()] for presence/absence-based AvTD,
+#'   [ozkan_pto()] for Deng entropy-based alternative.
 #'
 #' @examples
 #' comm <- c(sp1 = 5, sp2 = 3, sp3 = 3, sp4 = 1, sp5 = 3)
@@ -208,6 +217,9 @@ delta <- function(community, tax_tree, weights = NULL) {
 #' Warwick, R.M. & Clarke, K.R. (1995). New 'biodiversity' measures
 #' reveal a decrease in taxonomic distinctness with increasing stress.
 #' Marine Ecology Progress Series, 129, 301-305.
+#'
+#' @seealso [delta()] for taxonomic diversity (including same-species),
+#'   [avtd()] and [vartd()] for presence/absence measures.
 #'
 #' @examples
 #' comm <- c(sp1 = 5, sp2 = 3, sp3 = 3, sp4 = 1, sp5 = 3)

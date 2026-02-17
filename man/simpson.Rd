@@ -30,3 +30,6 @@ simpson(comm)
 simpson(comm, type = "inverse")
 
 }
+\seealso{
+\code{\link[=shannon]{shannon()}} for Shannon diversity.
+}

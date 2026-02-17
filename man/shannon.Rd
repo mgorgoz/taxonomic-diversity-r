@@ -29,3 +29,7 @@ comm <- c(10, 5, 8, 3, 12)
 shannon(comm)
 
 }
+\seealso{
+\code{\link[=simpson]{simpson()}} for Simpson diversity, \code{\link[=deng_entropy_level]{deng_entropy_level()}} for
+Deng entropy (a generalization of Shannon).
+}

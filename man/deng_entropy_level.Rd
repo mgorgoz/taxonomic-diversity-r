@@ -47,3 +47,7 @@ deng_entropy_level(c(9, 3, 7), group_sizes = c(3, 2, 3))
 \references{
 Deng, Y. (2016). Deng entropy. Chaos, Solitons & Fractals, 91, 549-553.
 }
+\seealso{
+\code{\link[=ozkan_pto]{ozkan_pto()}} which uses this function internally,
+\code{\link[=shannon]{shannon()}} for classical Shannon entropy.
+}
