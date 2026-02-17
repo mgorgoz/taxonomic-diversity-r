@@ -198,3 +198,26 @@ test_that("delta_star errors on species not in tax_tree", {
   )
   expect_error(delta_star(comm, tax), "Species not found in tax_tree: sp_missing, sp_also")
 })
+
+test_that("delta errors on wrong weights length", {
+  comm <- c(sp1 = 5, sp2 = 3)
+  tax <- data.frame(
+    Species = c("sp1", "sp2"),
+    Genus = c("G1", "G2"),
+    Family = c("F1", "F1"),
+    stringsAsFactors = FALSE
+  )
+  # 2 levels (Genus, Family) but 3 weights given
+  expect_error(delta(comm, tax, weights = c(1, 2, 3)), "must have length 2")
+})
+
+test_that("delta_star errors on wrong weights length", {
+  comm <- c(sp1 = 5, sp2 = 3)
+  tax <- data.frame(
+    Species = c("sp1", "sp2"),
+    Genus = c("G1", "G2"),
+    Family = c("F1", "F1"),
+    stringsAsFactors = FALSE
+  )
+  expect_error(delta_star(comm, tax, weights = c(1)), "must have length 2")
+})

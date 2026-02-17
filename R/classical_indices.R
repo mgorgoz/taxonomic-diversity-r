@@ -93,7 +93,7 @@ simpson <- function(community, type = c("gini_simpson", "inverse",
 #'
 #' @param community A named numeric vector of species abundances.
 #' @param tax_tree A data frame with taxonomic hierarchy.
-#' @param step_weights Optional numeric vector of path weights for each
+#' @param weights Optional numeric vector of path weights for each
 #'   taxonomic level. If NULL, a linear scale is used (1, 2, 3, ...).
 #'
 #' @return A numeric value representing taxonomic diversity (Delta).
@@ -119,7 +119,7 @@ simpson <- function(community, type = c("gini_simpson", "inverse",
 #' delta(comm, tax)
 #'
 #' @export
-delta <- function(community, tax_tree, step_weights = NULL) {
+delta <- function(community, tax_tree, weights = NULL) {
   if (!is.numeric(community) || any(community < 0)) {
     stop("'community' must be a numeric vector with non-negative values.",
          call. = FALSE)
@@ -134,8 +134,13 @@ delta <- function(community, tax_tree, step_weights = NULL) {
   }
 
   n_levels <- ncol(tax_tree) - 1
-  if (is.null(step_weights)) {
-    step_weights <- seq_len(n_levels)
+  if (is.null(weights)) {
+    weights <- seq_len(n_levels)
+  }
+  if (length(weights) != n_levels) {
+    stop("'weights' must have length ", n_levels,
+         " (one per taxonomic level), got ", length(weights), ".",
+         call. = FALSE)
   }
 
   # Get path weights between all species pairs
@@ -168,7 +173,7 @@ delta <- function(community, tax_tree, step_weights = NULL) {
       for (lev in seq_len(n_levels)) {
         if (as.character(tax_sub[i, lev + 1]) ==
             as.character(tax_sub[j, lev + 1])) {
-          w_ij <- step_weights[lev]
+          w_ij <- weights[lev]
           break
         }
       }
@@ -215,7 +220,7 @@ delta <- function(community, tax_tree, step_weights = NULL) {
 #' delta_star(comm, tax)
 #'
 #' @export
-delta_star <- function(community, tax_tree, step_weights = NULL) {
+delta_star <- function(community, tax_tree, weights = NULL) {
   if (!is.numeric(community) || any(community < 0)) {
     stop("'community' must be a numeric vector with non-negative values.",
          call. = FALSE)
@@ -230,8 +235,13 @@ delta_star <- function(community, tax_tree, step_weights = NULL) {
   }
 
   n_levels <- ncol(tax_tree) - 1
-  if (is.null(step_weights)) {
-    step_weights <- seq_len(n_levels)
+  if (is.null(weights)) {
+    weights <- seq_len(n_levels)
+  }
+  if (length(weights) != n_levels) {
+    stop("'weights' must have length ", n_levels,
+         " (one per taxonomic level), got ", length(weights), ".",
+         call. = FALSE)
   }
 
   n_sp <- length(community)
@@ -256,7 +266,7 @@ delta_star <- function(community, tax_tree, step_weights = NULL) {
       for (lev in seq_len(n_levels)) {
         if (as.character(tax_sub[i, lev + 1]) ==
             as.character(tax_sub[j, lev + 1])) {
-          w_ij <- step_weights[lev]
+          w_ij <- weights[lev]
           break
         }
       }

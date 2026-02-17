@@ -58,3 +58,16 @@ test_that("build_tax_tree validates input", {
   )
   expect_error(build_tax_tree(species = c("a")), "At least one")
 })
+
+test_that("tax_distance_matrix errors on wrong weights length", {
+  tax <- data.frame(
+    Species = c("sp_a", "sp_b"),
+    Genus = c("Gen1", "Gen2"),
+    Family = c("Fam1", "Fam1"),
+    stringsAsFactors = FALSE
+  )
+  # 2 levels but 1 weight
+  expect_error(tax_distance_matrix(tax, weights = c(1)), "must have length 2")
+  # 2 levels but 4 weights
+  expect_error(tax_distance_matrix(tax, weights = c(1, 2, 3, 4)), "must have length 2")
+})

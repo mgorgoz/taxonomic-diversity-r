@@ -62,6 +62,11 @@ tax_distance_matrix <- function(tax_tree, species = NULL, weights = NULL) {
   if (is.null(weights)) {
     weights <- seq_len(n_levels)
   }
+  if (length(weights) != n_levels) {
+    stop("'weights' must have length ", n_levels,
+         " (one per taxonomic level), got ", length(weights), ".",
+         call. = FALSE)
+  }
 
   # Initialize distance matrix
   dist_mat <- matrix(0, nrow = n_sp, ncol = n_sp,

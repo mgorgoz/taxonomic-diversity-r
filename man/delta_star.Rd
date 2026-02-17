@@ -4,14 +4,14 @@
 \alias{delta_star}
 \title{Taxonomic Distinctness (Delta*)}
 \usage{
-delta_star(community, tax_tree, step_weights = NULL)
+delta_star(community, tax_tree, weights = NULL)
 }
 \arguments{
 \item{community}{A named numeric vector of species abundances.}
 
 \item{tax_tree}{A data frame with taxonomic hierarchy.}
 
-\item{step_weights}{Optional numeric vector of path weights for each
+\item{weights}{Optional numeric vector of path weights for each
 taxonomic level. If NULL, a linear scale is used (1, 2, 3, ...).}
 }
 \value{
