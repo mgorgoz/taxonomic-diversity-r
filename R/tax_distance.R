@@ -124,6 +124,13 @@ build_tax_tree <- function(species, ...) {
     stop("At least one taxonomic rank must be provided.", call. = FALSE)
   }
 
+  # Check for duplicate species names
+  dups <- species[duplicated(species)]
+  if (length(dups) > 0) {
+    stop("Duplicate species names: ",
+         paste(unique(dups), collapse = ", "), call. = FALSE)
+  }
+
   # Check all ranks have same length as species
   n <- length(species)
   for (nm in names(ranks)) {

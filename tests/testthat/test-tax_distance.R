@@ -59,6 +59,13 @@ test_that("build_tax_tree validates input", {
   expect_error(build_tax_tree(species = c("a")), "At least one")
 })
 
+test_that("build_tax_tree rejects duplicate species", {
+  expect_error(
+    build_tax_tree(species = c("sp1", "sp2", "sp1"), Genus = c("G1", "G2", "G1")),
+    "Duplicate species names: sp1"
+  )
+})
+
 test_that("tax_distance_matrix errors on wrong weights length", {
   tax <- data.frame(
     Species = c("sp_a", "sp_b"),
