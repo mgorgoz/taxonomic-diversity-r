@@ -30,13 +30,13 @@ test_that("tax_distance_matrix works with custom weights", {
     stringsAsFactors = FALSE
   )
 
-  # Default weights = c(1, 2); no match at any level -> sum(weights) = 3
+  # Default weights = c(1, 2); no match at any level -> max weight = 2
   d1 <- tax_distance_matrix(tax)
-  expect_equal(d1["sp_a", "sp_b"], 3)
+  expect_equal(d1["sp_a", "sp_b"], 2)
 
-  # Custom weights c(1, 3); no match -> sum(weights) = 4
+  # Custom weights c(1, 3); no match -> max weight = 3
   d2 <- tax_distance_matrix(tax, weights = c(1, 3))
-  expect_equal(d2["sp_a", "sp_b"], 4)
+  expect_equal(d2["sp_a", "sp_b"], 3)
 })
 
 test_that("build_tax_tree creates correct structure", {

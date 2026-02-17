@@ -70,9 +70,10 @@ tax_distance_matrix <- function(tax_tree, species = NULL, weights = NULL) {
   # Compute pairwise distances using Clarke & Warwick path length:
   # Find the first MATCHING taxonomic level from bottom (lowest rank).
   # Distance = weight of that level. If no match found, use max weight.
+  max_weight <- weights[n_levels]  # consistent with delta()/delta_star()
   for (i in seq_len(n_sp - 1)) {
     for (j in (i + 1):n_sp) {
-      d <- sum(weights)  # max distance if nothing matches
+      d <- max_weight  # max distance if nothing matches
       for (k in seq_len(n_levels)) {
         if (as.character(tax_sub[i, k + 1]) ==
             as.character(tax_sub[j, k + 1])) {
