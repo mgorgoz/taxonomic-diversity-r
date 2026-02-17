@@ -179,8 +179,8 @@ ozkan_pto <- function(community, tax_tree) {
   core_unweighted <- 1
   core_weighted <- 1
 
-  for (k in seq_along(active_levels)) {
-    lev_idx <- active_levels[k]
+  for (lv in seq_along(active_levels)) {
+    lev_idx <- active_levels[lv]
     Ed_i <- Ed[lev_idx]
     ratio <- e_Ed_S_sq / exp(Ed_i) + 1
 

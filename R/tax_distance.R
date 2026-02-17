@@ -57,26 +57,26 @@ tax_distance_matrix <- function(tax_tree, species = NULL, weights = NULL) {
   n_sp <- length(species)
   n_levels <- ncol(tax_tree) - 1
 
-  # Set weights
+  # Set weights (equal step lengths by default: 1, 2, 3, ...)
   if (is.null(weights)) {
-    weights <- rep(1 / n_levels, n_levels)
-  } else {
-    weights <- weights / sum(weights)
+    weights <- seq_len(n_levels)
   }
 
   # Initialize distance matrix
   dist_mat <- matrix(0, nrow = n_sp, ncol = n_sp,
                      dimnames = list(species, species))
 
-  # Compute pairwise distances
+  # Compute pairwise distances using Clarke & Warwick path length:
+  # Find the first MATCHING taxonomic level from bottom (lowest rank).
+  # Distance = weight of that level. If no match found, use max weight.
   for (i in seq_len(n_sp - 1)) {
     for (j in (i + 1):n_sp) {
-      d <- 0
+      d <- sum(weights)  # max distance if nothing matches
       for (k in seq_len(n_levels)) {
-        # Compare taxonomic rank k+1 (skip species name column)
-        if (as.character(tax_sub[i, k + 1]) !=
+        if (as.character(tax_sub[i, k + 1]) ==
             as.character(tax_sub[j, k + 1])) {
-          d <- d + weights[k]
+          d <- weights[k]
+          break
         }
       }
       dist_mat[i, j] <- d

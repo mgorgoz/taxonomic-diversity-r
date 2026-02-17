@@ -154,22 +154,14 @@ delta <- function(community, tax_tree, step_weights = NULL) {
 
   for (i in seq_len(n_sp - 1)) {
     for (j in (i + 1):n_sp) {
-      # Find path weight: the level at which species i and j diverge
-      w_ij <- 0
+      # Clarke & Warwick path length: number of steps from species
+      # to their lowest common ancestor. With equal step lengths,
+      # w_ij = index of the first MATCHING level from bottom.
+      # Genus=1, Family=2, Order=3, ... If same genus -> w=1,
+      # same family but different genus -> w=2, etc.
+      w_ij <- n_levels  # max distance if nothing matches
       for (lev in seq_len(n_levels)) {
-        if (as.character(tax_sub[i, lev + 1]) !=
-            as.character(tax_sub[j, lev + 1])) {
-          w_ij <- step_weights[n_levels - lev + 1]
-          break
-        }
-      }
-      # If they never diverge (same at all levels), w_ij stays 0
-      # Actually: find the HIGHEST level at which they differ
-      # Warwick convention: w_ij = step for the level where they meet
-      # Re-implement: find lowest common level
-      w_ij <- 0
-      for (lev in rev(seq_len(n_levels))) {
-        if (as.character(tax_sub[i, lev + 1]) !=
+        if (as.character(tax_sub[i, lev + 1]) ==
             as.character(tax_sub[j, lev + 1])) {
           w_ij <- step_weights[lev]
           break
@@ -249,9 +241,10 @@ delta_star <- function(community, tax_tree, step_weights = NULL) {
 
   for (i in seq_len(n_sp - 1)) {
     for (j in (i + 1):n_sp) {
-      w_ij <- 0
-      for (lev in rev(seq_len(n_levels))) {
-        if (as.character(tax_sub[i, lev + 1]) !=
+      # Clarke & Warwick path length: first matching level from bottom
+      w_ij <- n_levels  # max distance if nothing matches
+      for (lev in seq_len(n_levels)) {
+        if (as.character(tax_sub[i, lev + 1]) ==
             as.character(tax_sub[j, lev + 1])) {
           w_ij <- step_weights[lev]
           break
