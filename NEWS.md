@@ -21,4 +21,4 @@
 
 * Verified against Ozkan (2018) hypothetical examples (Community A = 4.000034, Community B = 3.555348)
 * Cross-validated with Kursad Ozkan's Excel macro (TD_OMD.xlsm)
-* 70 unit tests covering all exported functions
+* 69 unit tests covering all exported functions

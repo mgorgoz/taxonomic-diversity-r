@@ -10,8 +10,9 @@ Description: Calculates taxonomic diversity indices for ecological community
     distinctness, average taxonomic distinctness (AvTD/Delta+), variation in
     taxonomic distinctness (VarTD/Lambda+), and Deng entropy-based measures
     that incorporate taxonomic hierarchy information. Includes tools for
-    constructing taxonomic trees, computing pairwise taxonomic distances,
-    and visualizing diversity patterns across ecological gradients.
+    constructing taxonomic trees and computing pairwise taxonomic distances.
+Imports:
+    stats
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

@@ -6,7 +6,7 @@
 \alias{taxdiv-package}
 \title{taxdiv: Taxonomic Diversity Indices Using Deng Entropy}
 \description{
-Calculates taxonomic diversity indices for ecological community data using Deng entropy framework and classical approaches (Shannon, Simpson, Clarke & Warwick). Provides functions for computing taxonomic distinctness, average taxonomic distinctness (AvTD/Delta+), variation in taxonomic distinctness (VarTD/Lambda+), and Deng entropy-based measures that incorporate taxonomic hierarchy information. Includes tools for constructing taxonomic trees, computing pairwise taxonomic distances, and visualizing diversity patterns across ecological gradients.
+Calculates taxonomic diversity indices for ecological community data using Deng entropy framework and classical approaches (Shannon, Simpson, Clarke & Warwick). Provides functions for computing taxonomic distinctness, average taxonomic distinctness (AvTD/Delta+), variation in taxonomic distinctness (VarTD/Lambda+), and Deng entropy-based measures that incorporate taxonomic hierarchy information. Includes tools for constructing taxonomic trees and computing pairwise taxonomic distances.
 }
 \seealso{
 Useful links:
