@@ -374,11 +374,12 @@ vartd <- function(species, tax_tree, weights = NULL) {
   dist_mat <- tax_distance_matrix(tax_tree, species, weights)
 
   n <- length(species)
-  delta_plus <- avtd(species, tax_tree, weights)
-
-  # VarTD = variance of omega_ij around Delta+
   upper_vals <- dist_mat[upper.tri(dist_mat)]
   n_pairs <- n * (n - 1) / 2
 
+  # Delta+ = mean of upper triangle (same as avtd)
+  delta_plus <- sum(upper_vals) / n_pairs
+
+  # VarTD = variance of omega_ij around Delta+
   sum((upper_vals - delta_plus)^2) / n_pairs
 }
