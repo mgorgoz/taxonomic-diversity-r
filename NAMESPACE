@@ -2,6 +2,7 @@
 
 export(avtd)
 export(build_tax_tree)
+export(compare_indices)
 export(delta)
 export(delta_star)
 export(deng_entropy_level)
