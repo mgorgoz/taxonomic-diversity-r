@@ -12,7 +12,8 @@ Description: Calculates taxonomic diversity indices for ecological community
     that incorporate taxonomic hierarchy information. Includes tools for
     constructing taxonomic trees and computing pairwise taxonomic distances.
 Imports:
-    stats
+    stats,
+    rlang
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
@@ -22,7 +23,8 @@ Depends:
 Suggests:
     testthat (>= 3.0.0),
     knitr,
-    rmarkdown
+    rmarkdown,
+    ggplot2
 Config/testthat/edition: 3
 VignetteBuilder: knitr
 URL: https://github.com/mgorgoz/taxonomic-diversity-r

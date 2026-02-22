@@ -17,7 +17,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Murat Gorgoz \email{muratgorgoz@ogm.gov.tr} (\href{https://orcid.org/0000-0002-6398-0005}{ORCID})
+\strong{Maintainer}: Murat Gorgoz \email{muratgorgoz350@gmail.com} (\href{https://orcid.org/0000-0002-6398-0005}{ORCID})
 
 }
 \keyword{internal}
