@@ -1,0 +1,418 @@
+---
+title: "taxdiv Paketi Kullanim Rehberi (Turkce)"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{taxdiv Paketi Kullanim Rehberi (Turkce)}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 8,
+  fig.height = 5
+)
+```
+
+## Bu Paket Ne Ise Yarar?
+
+**taxdiv** paketi, ekolojik topluluklarda **taksonomik cesitliligi** hesaplamak
+icin yazilmis bir R paketidir.
+
+Klasik cesitlilik indeksleri (Shannon, Simpson) sadece tur bolluklarini dikkate
+alir. Ancak iki toplulukta ayni sayida tur olsa bile, birinde tum turler ayni
+familyadan, digerinde farkli takimlardan olabilir. Taksonomik cesitlilik
+indeksleri bu farki yakalayabilir.
+
+Pakette uc ana yaklasim vardir:
+
+1. **Klasik indeksler**: Shannon ve Simpson
+2. **Clarke & Warwick taksonomik ayirt edicilik**: Delta, Delta*, AvTD, VarTD
+3. **Ozkan (2018) Deng entropisi tabanli**: pTO (uTO, TO, uTO+, TO+)
+
+```{r setup}
+library(taxdiv)
+```
+
+## Ornek Veri: Akdeniz Ormani Toplulugu
+
+Orneklerimizde 10 turlu hayali bir Akdeniz ormani toplulugu kullanacagiz.
+Her turun **bolluk degeri** (birey sayisi) ve **7 taksonomik seviyesi** vardir.
+
+```{r veri}
+# Tur bolluklari (ornek alanindaki birey sayisi)
+topluluk <- c(
+  Quercus_coccifera    = 25,
+  Quercus_infectoria   = 18,
+  Pinus_brutia         = 30,
+  Pinus_nigra          = 12,
+  Juniperus_excelsa    = 8,
+  Juniperus_oxycedrus  = 5,
+  Cedrus_libani        = 15,
+  Abies_cilicica       = 7,
+  Fagus_orientalis     = 20,
+  Carpinus_betulus      = 10
+)
+
+# Taksonomik hiyerarsi (7 seviye: Tur, Cins, Familya, Takim, Sinif, Bolum, Alem)
+agac <- build_tax_tree(
+  species = names(topluluk),
+  Genus   = c("Quercus", "Quercus", "Pinus", "Pinus",
+              "Juniperus", "Juniperus", "Cedrus", "Abies",
+              "Fagus", "Carpinus"),
+  Family  = c("Fagaceae", "Fagaceae", "Pinaceae", "Pinaceae",
+              "Cupressaceae", "Cupressaceae", "Pinaceae", "Pinaceae",
+              "Fagaceae", "Betulaceae"),
+  Order   = c("Fagales", "Fagales", "Pinales", "Pinales",
+              "Pinales", "Pinales", "Pinales", "Pinales",
+              "Fagales", "Fagales"),
+  Class   = c("Magnoliopsida", "Magnoliopsida", "Pinopsida", "Pinopsida",
+              "Pinopsida", "Pinopsida", "Pinopsida", "Pinopsida",
+              "Magnoliopsida", "Magnoliopsida"),
+  Phylum  = c("Magnoliophyta", "Magnoliophyta", "Pinophyta", "Pinophyta",
+              "Pinophyta", "Pinophyta", "Pinophyta", "Pinophyta",
+              "Magnoliophyta", "Magnoliophyta"),
+  Kingdom = c("Plantae", "Plantae", "Plantae", "Plantae",
+              "Plantae", "Plantae", "Plantae", "Plantae",
+              "Plantae", "Plantae")
+)
+
+agac
+```
+
+`build_tax_tree()` fonksiyonu turleri ve taksonomik seviyelerini bir data frame
+olarak dondurur. Ilk sutun tur isimleri, sonrakiler en dusukten en yuksege
+sirali taksonomik ranklar (Cins -> Familya -> Takim -> Sinif -> Bolum -> Alem).
+
+## Adim 1: Klasik Cesitlilik Indeksleri
+
+Shannon ve Simpson indeksleri **sadece tur bolluklarini** kullanir.
+Taksonomik yapiyi dikkate almazlar.
+
+```{r klasik}
+# Shannon cesitliligi (dogal logaritma)
+H <- shannon(topluluk)
+cat("Shannon H':", round(H, 4), "\n")
+
+# Simpson indeksleri
+D <- simpson(topluluk, type = "dominance")       # Baskinlik
+GS <- simpson(topluluk, type = "gini_simpson")    # 1 - D
+inv_D <- simpson(topluluk, type = "inverse")      # 1 / D
+
+cat("Simpson baskinlik (D):", round(D, 4), "\n")
+cat("Gini-Simpson (1-D):", round(GS, 4), "\n")
+cat("Ters Simpson (1/D):", round(inv_D, 4), "\n")
+```
+
+**Yorum**: Shannon degeri ne kadar yuksekse topluluk o kadar cesitlidir.
+Simpson baskinlik degeri ne kadar dusukse o kadar iyi dagilim vardir.
+
+## Adim 2: Taksonomik Mesafe Matrisi
+
+Taksonomik cesitliligi hesaplamadan once turler arasi **taksonomik mesafeyi**
+hesaplamamiz gerekir. Bu mesafe, iki turun taksonomik hiyerarsideki
+ilk ortak atalarinin seviyesine gore belirlenir.
+
+```{r mesafe}
+mesafe <- tax_distance_matrix(agac)
+round(mesafe, 1)
+```
+
+**Nasil okunur:**
+
+- **0** = Ayni tur (kosegen)
+- **1** = Ayni cins, farkli tur (ornegin Pinus brutia - Pinus nigra)
+- **2** = Ayni familya, farkli cins (ornegin Pinus - Cedrus, ikisi de Pinaceae)
+- **3** = Ayni takim, farkli familya (ornegin Pinaceae - Cupressaceae, ikisi de Pinales)
+- **6** = Farkli sinif (Magnoliopsida vs Pinopsida — en uzak mesafe)
+
+## Adim 3: Clarke & Warwick Taksonomik Ayirt Edicilik
+
+Clarke & Warwick (1998) dort farkli olcu onerir:
+
+```{r cw}
+# Delta: Taksonomik cesitlilik (bolluk agirlikli)
+d <- delta(topluluk, agac)
+cat("Delta (taksonomik cesitlilik):", round(d, 4), "\n")
+
+# Delta*: Taksonomik ayirt edicilik (bolluk agirlikli, ayni tur ciftleri haric)
+ds <- delta_star(topluluk, agac)
+cat("Delta* (taksonomik ayirt edicilik):", round(ds, 4), "\n")
+
+# AvTD (Delta+): Ortalama taksonomik ayirt edicilik (sadece tur listesi, bolluk onemsiz)
+turler <- names(topluluk)
+avg_td <- avtd(turler, agac)
+cat("AvTD (Delta+):", round(avg_td, 4), "\n")
+
+# VarTD (Lambda+): Taksonomik ayirt edicilik varyasyonu
+var_td <- vartd(turler, agac)
+cat("VarTD (Lambda+):", round(var_td, 4), "\n")
+```
+
+**Onemli fark:**
+
+- **Delta ve Delta***: Bolluga bagimli — tur sayilari onemli
+- **AvTD ve VarTD**: Bolluktan bagimsiz — sadece turlerin var/yok bilgisini kullanir
+
+## Adim 4: Deng Entropisi ve Ozkan pTO (Islem 1)
+
+Deng (2016) entropisi, Shannon entropisinin Dempster-Shafer kanit teorisi
+uzerinden genellenmis halidir. Her taksonomik seviyede gruplarin tur
+sayisini (fokal eleman boyutu) dikkate alir.
+
+Ozkan (2018) Deng entropisini kullanarak dort olcu tanimlar:
+
+- **uTO**: Agirliksiz taksonomik cesitlilik
+- **TO**: Agirlikli taksonomik cesitlilik (seviye agirliklari ile)
+- **uTO+**: Agirliksiz taksonomik uzaklik (sadece tur listesi)
+- **TO+**: Agirlikli taksonomik uzaklik
+
+```{r pto}
+sonuc <- ozkan_pto(topluluk, agac)
+
+cat("uTO  (agirliksiz cesitlilik):", round(sonuc$uTO, 4), "\n")
+cat("TO   (agirlikli cesitlilik):", round(sonuc$TO, 4), "\n")
+cat("uTO+ (agirliksiz uzaklik):", round(sonuc$uTO_plus, 4), "\n")
+cat("TO+  (agirlikli uzaklik):", round(sonuc$TO_plus, 4), "\n")
+```
+
+Her taksonomik seviyedeki Deng entropisi degerleri:
+
+```{r ed_seviyeleri}
+cat("Taksonomik seviye bazinda Deng entropisi:\n")
+for (i in seq_along(sonuc$Ed_levels)) {
+  cat("  ", names(sonuc$Ed_levels)[i], ":",
+      round(sonuc$Ed_levels[i], 4), "\n")
+}
+```
+
+`pto_components()` ile dort degeri tek satirda alabilirsiniz:
+
+```{r bilesenler}
+pto_components(topluluk, agac)
+```
+
+## Adim 5: Stokastik Yeniden Ornekleme (Islem 2 / Run 2)
+
+Islem 1 tum turleri oldugu gibi kullanir. Peki topluluk yapisini degistirirsek
+cesitlilik nasil etkilenir?
+
+**Islem 2** bunu test eder: Her turde %50 olasilikla dahil/haric birakarak
+rastgele alt topluluklar olusturur. Birden fazla iterasyon yapilir ve
+**maksimum** pTO degeri alinir.
+
+```{r islem2}
+islem2 <- ozkan_pto_resample(topluluk, agac, n_iter = 101, seed = 42)
+
+cat("=== Islem 1 (deterministik) ===\n")
+cat("uTO+:", round(islem2$uTO_plus_det, 4), "\n")
+cat("TO+: ", round(islem2$TO_plus_det, 4), "\n")
+cat("uTO: ", round(islem2$uTO_det, 4), "\n")
+cat("TO:  ", round(islem2$TO_det, 4), "\n\n")
+
+cat("=== Islem 2 (maksimum,", islem2$n_iter, "iterasyon) ===\n")
+cat("uTO+:", round(islem2$uTO_plus_max, 4), "\n")
+cat("TO+: ", round(islem2$TO_plus_max, 4), "\n")
+cat("uTO: ", round(islem2$uTO_max, 4), "\n")
+cat("TO:  ", round(islem2$TO_max, 4), "\n")
+```
+
+Islem 2 degerleri her zaman Islem 1'e esit veya buyuktur, cunku
+deterministik hesaplama ilk iterasyon olarak dahil edilir.
+
+## Adim 6: Duyarlilik Analizi (Islem 3 / Run 3)
+
+Islem 3, Islem 2 sonuclarina gore **tur bazli dahil etme olasiliklari**
+hesaplar. Cesitlilige daha cok katki saglayan turler farkli olasilikla
+dahil edilir.
+
+```{r islem3}
+islem3 <- ozkan_pto_sensitivity(topluluk, agac, islem2, seed = 123)
+
+cat("=== Islem 3 (duyarlilik analizi) ===\n")
+cat("Islem 3 max uTO+:", round(islem3$run3_uTO_plus_max, 4), "\n")
+cat("Islem 3 max TO+: ", round(islem3$run3_TO_plus_max, 4), "\n\n")
+
+cat("=== Genel maksimum (Islem 1 + 2 + 3) ===\n")
+cat("uTO+:", round(islem3$uTO_plus_max, 4), "\n")
+cat("TO+: ", round(islem3$TO_plus_max, 4), "\n")
+cat("uTO: ", round(islem3$uTO_max, 4), "\n")
+cat("TO:  ", round(islem3$TO_max, 4), "\n")
+```
+
+### Tur Dahil Etme Olasiliklari
+
+Her turun Islem 3'te dahil edilme olasiligi:
+
+```{r olasiliklar}
+olasiliklar <- islem3$species_probs
+veri_cercevesi <- data.frame(
+  Tur = names(olasiliklar),
+  Olasilik = round(olasiliklar, 4)
+)
+print(veri_cercevesi, row.names = FALSE)
+```
+
+## Tam Pipeline Ozeti
+
+Ozkan (2018) analiz hatti uc asamadan olusur:
+
+```{r pipeline}
+cat("Pipeline: Islem 1 -> Islem 2 -> Islem 3\n\n")
+
+cat("          uTO+      TO+       uTO       TO\n")
+cat("Islem 1:", sprintf("%9.4f %9.4f %9.4f %9.4f",
+    islem2$uTO_plus_det, islem2$TO_plus_det,
+    islem2$uTO_det, islem2$TO_det), "\n")
+cat("Islem 2:", sprintf("%9.4f %9.4f %9.4f %9.4f",
+    islem2$uTO_plus_max, islem2$TO_plus_max,
+    islem2$uTO_max, islem2$TO_max), "\n")
+cat("Islem 3:", sprintf("%9.4f %9.4f %9.4f %9.4f",
+    islem3$uTO_plus_max, islem3$TO_plus_max,
+    islem3$uTO_max, islem3$TO_max), "\n")
+```
+
+Her asama bir oncekine esit veya daha buyuk deger uretir.
+
+## Gorsellestime
+
+taxdiv paketi ggplot2 tabanli cesitli gorsellestirme fonksiyonlari sunar.
+
+### Taksonomik Agac (Dendogram)
+
+Turlerin taksonomik yakinligini dendogram olarak gosterir:
+
+```{r dendogram, fig.width=9, fig.height=5.5}
+plot_taxonomic_tree(agac, community = topluluk,
+                    color_by = "Family", label_size = 3.5,
+                    title = "Akdeniz Ormani - Familya Bazinda")
+```
+
+**Nasil okunur:** Ayni daldan cikan turler taksonomik olarak yakindir. Parantez
+icindeki sayilar bolluk degerleridir. Renkler familyalari gosterir.
+
+### Taksonomik Mesafe Isi Haritasi (Heatmap)
+
+Turler arasi mesafe matrisini renkli olarak gosterir:
+
+```{r heatmap, fig.width=9, fig.height=8}
+plot_heatmap(agac, label_size = 2.8,
+             title = "Taksonomik Mesafe Isi Haritasi")
+```
+
+**Nasil okunur:** Koyu kirmizi = uzak turler, beyaz = yakin turler.
+Her hucredeki sayi taksonomik mesafe degerini gosterir.
+
+### Indeks Karsilastirma (Bar Plot)
+
+Birden fazla toplulugu tum indeksler uzerinden karsilastirir:
+
+```{r karsilastirma, fig.width=10, fig.height=6}
+# Ikinci topluluk: tek tur baskin
+baskin_topluluk <- c(
+  Quercus_coccifera   = 80, Quercus_infectoria  = 5,
+  Pinus_brutia        = 3,  Pinus_nigra         = 2,
+  Juniperus_excelsa   = 2,  Juniperus_oxycedrus = 1,
+  Cedrus_libani       = 3,  Abies_cilicica      = 1,
+  Fagus_orientalis    = 2,  Carpinus_betulus     = 1
+)
+
+topluluklar <- list(
+  Cesitli = topluluk,
+  Baskin  = baskin_topluluk
+)
+
+sonuc_plot <- compare_indices(topluluklar, agac, plot = TRUE)
+sonuc_plot$plot
+```
+
+**Nasil okunur:** Cesitli toplulugun Shannon, Simpson, Delta degerleri yuksek.
+Ama AvTD, VarTD, uTO+, TO+ ayni cunku iki toplulukta da ayni turler var
+— sadece bolluk dagilimi farkli.
+
+### Tablo ciktisi:
+
+```{r tablo}
+sonuc_plot$table
+```
+
+### Islem 2 Iterasyon Grafigi
+
+Her iterasyondaki pTO degerlerini gosterir:
+
+```{r iterasyon, fig.width=9, fig.height=5}
+plot_iteration(islem2, component = "TO",
+               title = "Islem 2 - TO Degerleri (200 Iterasyon)")
+```
+
+**Nasil okunur:**
+
+- **Gri noktalar**: Her iterasyondaki deger
+- **Kirmizi cizgi**: Deterministik (Islem 1) degeri
+- **Mavi cizgi**: Tum iterasyonlar arasindaki maksimum
+
+Dusuk noktalar = az tur dahil edildigi durumlar (cesitlilik duser).
+
+### Tur Katki Baloncuk Grafigi (Bubble Chart)
+
+Her turun topluluk cesitliligine katkisini gosterir:
+
+```{r balon, fig.width=10, fig.height=7}
+plot_bubble(topluluk, agac, color_by = "Family",
+            title = "Tur Katkilari - Familya Bazinda")
+```
+
+**Nasil okunur:**
+
+- **X ekseni**: Bolluk (birey sayisi)
+- **Y ekseni**: Ortalama taksonomik mesafe (diger turlere uzaklik)
+- **Balon boyutu**: Katki orani (bolluk x mesafe)
+- Sag ust koseteki turler cesitlilige en cok katki saglar (hem bol hem uzak)
+
+### Radar Grafigi (Spider Chart)
+
+Birden fazla toplulugu tum indeksler uzerinden radar seklinde karsilastirir:
+
+```{r radar, fig.width=8, fig.height=8}
+plot_radar(topluluklar, agac,
+           title = "Cesitli vs Baskin - Radar Karsilastirmasi")
+```
+
+**Nasil okunur:** Her eksen bir indeksi temsil eder. Degerler 0-1 arasinda
+normalize edilmistir. Buyuk alan = yuksek cesitlilik.
+
+## Fonksiyon Listesi
+
+| Fonksiyon | Ne yapar |
+|-----------|----------|
+| `build_tax_tree()` | Taksonomik hiyerarsi tablosu olusturur |
+| `tax_distance_matrix()` | Turler arasi taksonomik mesafe matrisi hesaplar |
+| `shannon()` | Shannon cesitlilik indeksi |
+| `simpson()` | Simpson indeksleri (baskinlik, Gini-Simpson, ters Simpson) |
+| `delta()` | Clarke & Warwick Delta (taksonomik cesitlilik, bolluk agirlikli) |
+| `delta_star()` | Clarke & Warwick Delta* (taksonomik ayirt edicilik) |
+| `avtd()` | Ortalama taksonomik ayirt edicilik AvTD / Delta+ |
+| `vartd()` | Taksonomik ayirt edicilik varyasyonu VarTD / Lambda+ |
+| `deng_entropy_level()` | Belirli bir taksonomik seviyede Deng entropisi |
+| `ozkan_pto()` | Ozkan pTO hesaplama (Islem 1) |
+| `pto_components()` | pTO dort bileseni (uTO, TO, uTO+, TO+) |
+| `ozkan_pto_resample()` | Stokastik yeniden ornekleme (Islem 2) |
+| `ozkan_pto_sensitivity()` | Duyarlilik analizi (Islem 3) |
+| `compare_indices()` | Tum indeksleri yan yana karsilastirir |
+| `plot_taxonomic_tree()` | Taksonomik agac dendogrami |
+| `plot_heatmap()` | Taksonomik mesafe isi haritasi |
+| `plot_iteration()` | Islem 2/3 iterasyon grafigi |
+| `plot_bubble()` | Tur katkilari balon grafigi |
+| `plot_radar()` | Radar/orumcek grafigi |
+
+## Kaynaklar
+
+- Deng, Y. (2016). Deng entropy. *Chaos, Solitons & Fractals*, 91, 549-553.
+- Ozkan, K. (2018). A new proposed measure for estimating taxonomic
+  diversity. *Turkish Journal of Forestry*, 19(4), 336-346.
+- Clarke, K.R. & Warwick, R.M. (1998). A taxonomic distinctness index and
+  its statistical properties. *Journal of Applied Ecology*, 35, 523-531.
+- Pielou, E.C. (1966). The measurement of diversity in different types of
+  biological collections. *Journal of Theoretical Biology*, 13, 131-144.
