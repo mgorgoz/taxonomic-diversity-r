@@ -1,4 +1,13 @@
+# =============================================================================
+# Özkan pTO (İşlem 1) Fonksiyonu Testleri
+# ozkan_pto() ve pto_components() fonksiyonlarının doğruluğunu kontrol eder.
+#
+# Bu testler Özkan (2018) makalesindeki deterministik (İşlem 1) hesaplamayı
+# test eder. 4 bileşen üretilir: uTO, TO, uTO+, TO+
+# =============================================================================
+
 test_that("ozkan_pto returns all four components", {
+  # 8 türlü, 3 cinsli, 1 familyalı örnek topluluk
   comm <- c(sp1 = 4, sp2 = 2, sp3 = 3, sp4 = 1, sp5 = 2,
             sp6 = 3, sp7 = 2, sp8 = 2)
   tax <- data.frame(
@@ -10,7 +19,15 @@ test_that("ozkan_pto returns all four components", {
 
   result <- ozkan_pto(comm, tax)
 
+  # Fonksiyon bir liste dönmeli
   expect_type(result, "list")
+
+  # Listede şu 5 bileşen olmalı:
+  # uTO      = ağırlıksız taksonomik çeşitlilik
+  # TO       = ağırlıklı taksonomik çeşitlilik
+  # uTO_plus = ağırlıksız taksonomik mesafe (sadece bulunma/bulunmama)
+  # TO_plus  = ağırlıklı taksonomik mesafe
+  # Ed_levels = her taksonomik seviyedeki Deng entropisi değerleri
   expect_true("uTO" %in% names(result))
   expect_true("TO" %in% names(result))
   expect_true("uTO_plus" %in% names(result))
@@ -19,7 +36,11 @@ test_that("ozkan_pto returns all four components", {
 })
 
 test_that("ozkan_pto satisfies ordering constraints", {
-  # From Ozkan (2018): TO+ >= TO, uTO+ >= uTO, TO >= uTO, TO+ >= uTO+
+  # Özkan (2018)'e göre şu sıralama her zaman geçerli olmalı:
+  # TO+ >= TO    (mesafe >= çeşitlilik, ağırlıklı)
+  # uTO+ >= uTO  (mesafe >= çeşitlilik, ağırlıksız)
+  # TO >= uTO    (ağırlıklı >= ağırlıksız, çeşitlilik)
+  # TO+ >= uTO+  (ağırlıklı >= ağırlıksız, mesafe)
   comm <- c(sp1 = 4, sp2 = 2, sp3 = 3, sp4 = 1, sp5 = 2,
             sp6 = 3, sp7 = 2, sp8 = 2)
   tax <- data.frame(
@@ -38,6 +59,8 @@ test_that("ozkan_pto satisfies ordering constraints", {
 })
 
 test_that("ozkan_pto returns zero for single species", {
+  # Tek türlü toplulukta çeşitlilik sıfır olmalı
+  # Çünkü karşılaştırma yapılacak başka tür yok
   comm <- c(sp1 = 10)
   tax <- data.frame(
     Species = "sp1",
@@ -51,18 +74,26 @@ test_that("ozkan_pto returns zero for single species", {
 })
 
 test_that("ozkan_pto validates input", {
+  # Hatalı girdilerde fonksiyon anlamlı hata mesajları vermeli
   tax <- data.frame(
     Species = c("sp1", "sp2"),
     Genus = c("G1", "G2"),
     stringsAsFactors = FALSE
   )
 
+  # İsimsiz vektör: tür isimleri olmadan taksonomi eşleştirilemez
   expect_error(ozkan_pto(c(10, 5), tax), "named vector")
+
+  # Negatif bolluk: doğada bolluk negatif olamaz
   expect_error(ozkan_pto(c(sp1 = -1, sp2 = 5), tax), "non-negative")
+
+  # Taksonomide olmayan tür adı: eşleşme bulunamaz
   expect_error(ozkan_pto(c(sp_x = 10), tax), "not found")
 })
 
 test_that("pto_components returns named numeric vector", {
+  # pto_components() fonksiyonu ozkan_pto()'nun kısa yol versiyonu
+  # Liste yerine isimli sayısal vektör döner: c(uTO, TO, uTO_plus, TO_plus)
   comm <- c(sp1 = 4, sp2 = 2, sp3 = 3)
   tax <- data.frame(
     Species = paste0("sp", 1:3),
@@ -72,14 +103,24 @@ test_that("pto_components returns named numeric vector", {
   )
 
   result <- pto_components(comm, tax)
+
+  # Sayısal (double) tipinde olmalı
   expect_type(result, "double")
+
+  # 4 eleman olmalı
   expect_length(result, 4)
+
+  # İsimleri doğru sırada olmalı
   expect_equal(names(result), c("uTO", "TO", "uTO_plus", "TO_plus"))
 })
 
 test_that("ozkan_pto uses presence-based (equal weight) entropy at species level", {
-  # Species-level Ed should be ln(S) regardless of abundances
-  # because all species get equal weight (1/S) in the pTO formula
+  # pTO formülünde tür seviyesinde her türe EŞİT AĞIRLIK verilir (1/S)
+  # Bolluk bilgisi doğrudan kullanılmaz — sadece "dilimleme" aşamasında
+  # hangi türlerin hayatta kaldığını belirler
+  #
+  # Bu yüzden tür seviyesi Deng entropisi = ln(S) olmalı
+  # Bolluklar ne olursa olsun (100, 1, 1, 1, 1) -> Ed_S = ln(5)
   comm <- c(sp1 = 100, sp2 = 1, sp3 = 1, sp4 = 1, sp5 = 1)
   tax <- data.frame(
     Species = paste0("sp", 1:5),
@@ -88,14 +129,19 @@ test_that("ozkan_pto uses presence-based (equal weight) entropy at species level
     stringsAsFactors = FALSE
   )
   r <- ozkan_pto(comm, tax)
+
+  # nk=0 diliminde 5 tür var → Ed_S = ln(5) = 1.6094
   expect_equal(r$Ed_levels[["Species"]], log(5), tolerance = 1e-10)
 })
 
 test_that("ozkan_pto genus-level Deng entropy with equal proportions", {
-  # 6 species, 3 genera (2 each): genus-level m(Fi) = 2/6 for each,
-  # |Fi| = 2 for each genus
-  # Ed_genus = -3 * (2/6) * log((2/6) / (2^2 - 1))
-  #          = -3 * (1/3) * log((1/3) / 3) = -log(1/9) = log(9)
+  # 6 tür, 3 cins (her cinste 2'şer tür): cins seviyesi Deng entropisi
+  # m(Fi) = 2/6 = 1/3 (her cinsin oranı)
+  # |Fi| = 2 (her cinste 2 tür)
+  #
+  # Ed_cins = -3 × (1/3) × ln((1/3) / (2²-1))
+  #         = -3 × (1/3) × ln(1/9)
+  #         = -ln(1/9) = ln(9) = 2.197
   comm <- setNames(rep(1, 6), paste0("sp", 1:6))
   tax <- data.frame(
     Species = paste0("sp", 1:6),
@@ -104,12 +150,17 @@ test_that("ozkan_pto genus-level Deng entropy with equal proportions", {
     stringsAsFactors = FALSE
   )
   r <- ozkan_pto(comm, tax)
+
+  # Cins seviyesi Deng entropisi = ln(9) olmalı
   expect_equal(r$Ed_levels[["Genus"]], log(9), tolerance = 1e-10)
 })
 
 test_that("ozkan_pto matches Ozkan (2018) hypothetical examples", {
-  # Community A: 12 species, 3 genera (4 each), 1 family
-  # Expected uTO+ = ln(54.6) = 4.00003 (Ozkan 2018, Section 4)
+  # Özkan (2018) makalesinin Bölüm 4'teki hipotetik örnek topluluklar
+  # Bu değerler makaledeki tablolarla doğrulanmıştır
+
+  # Topluluk A: 12 tür, 3 cins (her cinste 4 tür), 1 familya
+  # Beklenen uTO+ = ln(54.6) ≈ 4.00003
   comm_A <- setNames(rep(1, 12), paste0("sp", 1:12))
   tax_A <- data.frame(
     Species = paste0("sp", 1:12),
@@ -120,8 +171,8 @@ test_that("ozkan_pto matches Ozkan (2018) hypothetical examples", {
   r_A <- ozkan_pto(comm_A, tax_A)
   expect_equal(r_A$uTO_plus, log(54.6), tolerance = 1e-4)
 
-  # Community B: 6 species, 3 genera (2 each), 1 family
-  # Expected uTO+ = ln(35) = 3.5554
+  # Topluluk B: 6 tür, 3 cins (her cinste 2 tür), 1 familya
+  # Beklenen uTO+ = ln(35) ≈ 3.5554
   comm_B <- setNames(rep(1, 6), paste0("sp", 1:6))
   tax_B <- data.frame(
     Species = paste0("sp", 1:6),
@@ -132,6 +183,6 @@ test_that("ozkan_pto matches Ozkan (2018) hypothetical examples", {
   r_B <- ozkan_pto(comm_B, tax_B)
   expect_equal(r_B$uTO_plus, log(35), tolerance = 1e-4)
 
-  # A should have higher diversity than B
+  # A topluluğu B'den daha çeşitli olmalı (12 tür > 6 tür)
   expect_true(r_A$uTO_plus > r_B$uTO_plus)
 })
