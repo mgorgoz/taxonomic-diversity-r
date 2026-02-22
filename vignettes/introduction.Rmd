@@ -210,6 +210,106 @@ The degraded community shows lower diversity across all measures, but the
 taxonomic indices (uTO+, TO+) capture not only the loss of species richness
 but also the narrowing of taxonomic breadth.
 
+## Stochastic Resampling (Run 2)
+
+The deterministic pTO calculation (Run 1) uses all species as they are.
+But how sensitive is the result to community composition? Run 2 explores
+this by randomly including or excluding each species with 50% probability
+across many iterations, then taking the maximum pTO value observed.
+
+```{r run2}
+set.seed(42)
+run2 <- ozkan_pto_resample(community, tax_tree, n_iter = 101, seed = 42)
+
+cat("=== Run 1 (deterministic) ===\n")
+cat("uTO+:", round(run2$uTO_plus_det, 4), "\n")
+cat("TO+: ", round(run2$TO_plus_det, 4), "\n")
+cat("uTO: ", round(run2$uTO_det, 4), "\n")
+cat("TO:  ", round(run2$TO_det, 4), "\n\n")
+
+cat("=== Run 2 (max across", run2$n_iter, "iterations) ===\n")
+cat("uTO+:", round(run2$uTO_plus_max, 4), "\n")
+cat("TO+: ", round(run2$TO_plus_max, 4), "\n")
+cat("uTO: ", round(run2$uTO_max, 4), "\n")
+cat("TO:  ", round(run2$TO_max, 4), "\n")
+```
+
+The maximum values from Run 2 are always >= the deterministic values from
+Run 1, because the deterministic calculation is included as the first
+iteration.
+
+We can examine how the pTO values vary across iterations:
+
+```{r run2_summary}
+iter_df <- run2$iteration_results
+cat("uTO+ range:", round(min(iter_df$uTO_plus), 4), "to",
+    round(max(iter_df$uTO_plus), 4), "\n")
+cat("TO+  range:", round(min(iter_df$TO_plus), 4), "to",
+    round(max(iter_df$TO_plus), 4), "\n")
+```
+
+## Sensitivity Analysis (Run 3)
+
+Run 3 refines the exploration by assigning species-specific inclusion
+probabilities based on the Run 2 results. Species that contributed to
+higher diversity in Run 2 get different inclusion probabilities than
+those that did not.
+
+```{r run3}
+run3 <- ozkan_pto_sensitivity(community, tax_tree, run2, seed = 123)
+
+cat("=== Run 3 (sensitivity analysis) ===\n")
+cat("Run 3 max uTO+:", round(run3$run3_uTO_plus_max, 4), "\n")
+cat("Run 3 max TO+: ", round(run3$run3_TO_plus_max, 4), "\n\n")
+
+cat("=== Overall max (across Run 1 + 2 + 3) ===\n")
+cat("uTO+:", round(run3$uTO_plus_max, 4), "\n")
+cat("TO+: ", round(run3$TO_plus_max, 4), "\n")
+cat("uTO: ", round(run3$uTO_max, 4), "\n")
+cat("TO:  ", round(run3$TO_max, 4), "\n")
+```
+
+The overall maximum across all three runs represents the "potential"
+taxonomic diversity of the community — the highest diversity that can
+be observed under different species compositions derived from the
+original community.
+
+### Species Inclusion Probabilities
+
+Run 3 assigns each species a probability of being included in each
+iteration:
+
+```{r species_probs}
+probs <- run3$species_probs
+prob_df <- data.frame(
+  Species = names(probs),
+  Probability = round(probs, 4)
+)
+print(prob_df, row.names = FALSE)
+```
+
+## Full Pipeline Summary
+
+The complete Ozkan (2018) analysis pipeline runs three stages:
+
+```{r pipeline_summary}
+cat("Pipeline: Run 1 -> Run 2 -> Run 3\n\n")
+
+cat("         uTO+      TO+       uTO       TO\n")
+cat("Run 1:", sprintf("%9.4f %9.4f %9.4f %9.4f",
+    run2$uTO_plus_det, run2$TO_plus_det,
+    run2$uTO_det, run2$TO_det), "\n")
+cat("Run 2:", sprintf("%9.4f %9.4f %9.4f %9.4f",
+    run2$uTO_plus_max, run2$TO_plus_max,
+    run2$uTO_max, run2$TO_max), "\n")
+cat("Run 3:", sprintf("%9.4f %9.4f %9.4f %9.4f",
+    run3$uTO_plus_max, run3$TO_plus_max,
+    run3$uTO_max, run3$TO_max), "\n")
+```
+
+Each subsequent run finds values >= the previous run, reflecting
+the increasing exploration of the diversity landscape.
+
 ## References
 
 - Deng, Y. (2016). Deng entropy. *Chaos, Solitons & Fractals*, 91, 549-553.
