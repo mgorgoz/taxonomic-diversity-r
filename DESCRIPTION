@@ -2,7 +2,7 @@ Package: taxdiv
 Title: Taxonomic Diversity Indices Using Deng Entropy
 Version: 0.1.0
 Authors@R:
-    person("Murat", "Gorgoz", , "muratgorgoz@ogm.gov.tr", role = c("aut", "cre"),
+    person("Murat", "Gorgoz", , "muratgorgoz350@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-6398-0005"))
 Description: Calculates taxonomic diversity indices for ecological community
     data using Deng entropy framework and classical approaches (Shannon,
