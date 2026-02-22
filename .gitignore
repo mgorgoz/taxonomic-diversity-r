@@ -21,3 +21,5 @@ Thumbs.db
 # Documentation build
 docs/
 inst/doc/
+/doc/
+/Meta/
