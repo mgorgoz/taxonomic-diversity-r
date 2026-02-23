@@ -65,6 +65,35 @@ vartd(names(community), tax_tree)  # Variation in taxonomic distinctness
 tax_distance_matrix(tax_tree)
 ```
 
+## Using Excel Data / Excel ile Kullanim
+
+The easiest way to use taxdiv is with an Excel file. A ready-to-use template is included in the package.
+
+**Excel format** — single sheet, 8 columns:
+
+| Species | Genus | Family | Order | Class | Phylum | Kingdom | Abundance |
+|---------|-------|--------|-------|-------|--------|---------|-----------|
+| Pinus nigra | Pinus | Pinaceae | Pinales | Pinopsida | Pinophyta | Plantae | 45 |
+| Quercus cerris | Quercus | Fagaceae | Fagales | Magnoliopsida | Magnoliophyta | Plantae | 30 |
+
+```r
+library(taxdiv)
+library(readxl)
+
+# Read Excel file
+data <- as.data.frame(read_excel("your_data.xlsx"))
+
+# Create community vector and taxonomy table
+community <- setNames(data$Abundance, data$Species)
+tax_tree  <- data[, -ncol(data)]
+
+# Ready to use!
+ozkan_pto(community, tax_tree)
+compare_indices(community, tax_tree, plot = TRUE)
+```
+
+Download the template: [`inst/templates/taxdiv_template.xlsx`](inst/templates/taxdiv_template.xlsx)
+
 ## Background
 
 This package implements the Deng entropy-based taxonomic diversity measure proposed by Ozkan (2018), which generalizes Shannon entropy through Dempster-Shafer evidence theory to incorporate taxonomic hierarchy information. The method uses a slicing procedure where species receive equal weight at each slice, and abundance information enters indirectly through which species survive progressive elimination steps.
