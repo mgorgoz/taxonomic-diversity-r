@@ -108,13 +108,17 @@ This package implements the Deng entropy-based taxonomic diversity measure propo
 
 - [x] Core Deng entropy calculation
 - [x] Ozkan pTO formula with slicing procedure
+- [x] Ozkan pTO resampling and sensitivity analysis (Run 2/3)
 - [x] Classical diversity indices (Shannon, Simpson)
 - [x] Clarke & Warwick taxonomic distinctness (Delta, Delta*, AvTD, VarTD)
+- [x] Multi-community comparison (compare_indices)
+- [x] Visualization suite (dendrogram, heatmap, bubble, radar, iteration)
+- [x] Excel template and data import support
+- [x] Turkish vignette (giris_rehberi)
 - [x] R CMD check CRAN compliance
 - [x] GitHub Actions CI/CD
 - [ ] Funnel plots for AvTD/VarTD significance testing
 - [ ] Bias-corrected entropy estimators
-- [ ] Vignettes with ecological case studies
 - [ ] CRAN submission
 
 ## License
