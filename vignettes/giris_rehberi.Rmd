@@ -383,6 +383,295 @@ plot_radar(topluluklar, agac,
 **Nasil okunur:** Her eksen bir indeksi temsil eder. Degerler 0-1 arasinda
 normalize edilmistir. Buyuk alan = yuksek cesitlilik.
 
+## Matematiksel Arka Plan
+
+Bu bolum, paketteki indekslerin matematiksel formullerini ve birbirleriyle
+iliskilerini aciklar. Tez veya makale yazarken bu formullere ihtiyaciniz
+olacaktir.
+
+### Shannon Entropisi
+
+Shannon (1948), bir sistemdeki **belirsizligi** olcmek icin su formulu
+onermistir:
+
+$$H' = -\sum_{i=1}^{S} p_i \ln(p_i)$$
+
+- $S$ = toplam tur sayisi
+- $p_i$ = $i$. turun oransal bolluğu ($n_i / N$)
+- $N$ = toplam birey sayisi
+
+Shannon entropisi her turu **bireysel bir olay** olarak ele alir. Turler
+arasindaki akrabalik iliskilerini gormez. Yani Pinus nigra ile Pinus brutia
+arasindaki akrabalik, Pinus nigra ile Quercus cerris arasindaki akrabalik
+kadar uzak kabul edilir.
+
+### Simpson Indeksi
+
+Simpson (1949), rastgele secilen iki bireyin **ayni turden** olma
+olasiligini olcer:
+
+$$D = \sum_{i=1}^{S} p_i^2$$
+
+Genellikle Gini-Simpson formu kullanilir:
+
+$$1 - D = 1 - \sum_{i=1}^{S} p_i^2$$
+
+Simpson, baskin turlere daha duyarlidir. Shannon ise nadir turlere
+daha fazla agirlik verir.
+
+### Clarke & Warwick: Taksonomik Ayirt Edicilik
+
+Clarke & Warwick (1998) taksonomik hiyerarsiyi hesaba katan dort indeks
+tanimlamistir:
+
+**Delta (Taksonomik cesitlilik, bolluk agirlikli):**
+
+$$\Delta = \frac{\sum \sum_{i<j} \omega_{ij} \cdot n_i \cdot n_j}
+{N(N-1)/2}$$
+
+**Delta+ (AvTD, sadece tur listesi):**
+
+$$\Delta^+ = \frac{\sum \sum_{i<j} \omega_{ij}}{S(S-1)/2}$$
+
+**Lambda+ (VarTD, varyasyon):**
+
+$$\Lambda^+ = \frac{\sum \sum_{i<j} (\omega_{ij} - \Delta^+)^2}{S(S-1)/2}$$
+
+Burada $\omega_{ij}$, $i$ ve $j$ turleri arasindaki taksonomik mesafedir.
+Bu mesafe, iki turun taksonomik agacta ilk birlestigi seviyeye esittir
+(Cins = 1, Familya = 2, ..., Alem = 6).
+
+**Onemli:** $\Delta^+$ ve $\Lambda^+$ bolluk bilgisi kullanmaz. Bu sayede
+farkli orneklem buyuklugundeki alanlari dogrudan karsilastirabilirsiniz.
+
+### Deng Entropisi
+
+Deng (2016), Shannon entropisini Dempster-Shafer kanit teorisi cercevesinde
+genellestirmistir. Temel fark: Shannon'da her olay (tur) atomiktir.
+Deng entropisinde olaylar **kume yapisi** icerebilir.
+
+Bir taksonomik seviyedeki Deng entropisi:
+
+$$E_d = -\sum_{i=1}^{K} m(F_i) \cdot \ln\frac{m(F_i)}{2^{|F_i|} - 1}$$
+
+- $K$ = o seviyedeki grup sayisi (ornegin familya sayisi)
+- $m(F_i)$ = $i$. gruptaki turlerin oransal agirligi
+- $|F_i|$ = $i$. gruptaki tur sayisi (fokal eleman boyutu)
+
+**Shannon ile karsilastirma:**
+
+Shannon entropisinde $|F_i| = 1$ kabul edilir (her tur tek basina bir olay).
+Bu durumda $2^{|F_i|} - 1 = 1$ olur ve Deng entropisi Shannon'a indirgenir:
+
+$$E_d = -\sum_{i=1}^{K} m(F_i) \cdot \ln(m(F_i)) = H'$$
+
+Yani Deng entropisi Shannon'in **genellestirilmis hali**dir. Eger
+taksonomik gruplar 1'er turden olusuyorsa ikisi ayni sonucu verir.
+
+### Ozkan pTO Formulu
+
+Ozkan (2018), Deng entropisini kullanarak dort bilesenden olusan bir
+taksonomik cesitlilik olcusu tanimlar.
+
+**Temel carpim (bir dilim icin):**
+
+$$\prod_{i=1}^{L} \left( w_i \cdot \left( \frac{(e^{E_d^S})^2}{e^{E_d^i}} + 1 \right) \right)$$
+
+- $L$ = aktif taksonomik seviye sayisi
+- $E_d^S$ = tur seviyesindeki Deng entropisi
+- $E_d^i$ = $i$. seviyedeki Deng entropisi
+- $w_i$ = seviye agirligi (agirliksiz icin $w_i = 1$, agirlikli icin $w_i = i$)
+
+**pTO+ (Taksonomik mesafe, sadece Islem 1):**
+
+$$pT_O^+ = \ln \prod_{i=1}^{L} \left( w_i \cdot \left(
+\frac{(e^{E_d^S})^2}{e^{E_d^i}} + 1 \right) \right)$$
+
+Sadece nk = 0 dilimini (tum turler dahil) kullanir. Bolluk bilgisine
+ihtiyac duymaz cunku tur listesiyle calisir.
+
+**pTO (Taksonomik cesitlilik, Islem 1 + 2 + 3):**
+
+$$pT_O = \ln \left( \frac{\sum_{k=0}^{n_s} (n_s - n_k)
+\prod_{i=1}^{L} \left( w_i \cdot \left( \frac{(e^{E_d^S})^2}
+{e^{E_d^i}} + 1 \right) \right)}{n_s + \sum n_k} \right)$$
+
+Dilim proseduru (slicing): nk = 0, 1, ..., n_s icin bolluğu $\leq n_k$ olan
+turler elenir. Her dilimde hayatta kalan turlerle Deng entropisi
+yeniden hesaplanir. Boylece bolluk bilgisi dolayli olarak sisteme girer.
+
+### Rarefaction (Seyreltme)
+
+Rarefaction, farkli orneklem buyukluklerinin cesitlilik tahminleri
+uzerindeki etkisini degerlendirmek icin kullanilir (Gotelli & Colwell,
+2001).
+
+Klasik rarefaction formulu (Hurlbert, 1971):
+
+$$E(S_n) = S - \sum_{i=1}^{S} \frac{\binom{N - N_i}{n}}{\binom{N}{n}}$$
+
+- $E(S_n)$ = $n$ birey icin beklenen tur sayisi
+- $N_i$ = $i$. turun birey sayisi
+- $\binom{a}{b}$ = kombinasyon
+
+Bu paket, rarefaction'i **taksonomik indekslere** genisletir. Bootstrap
+yeniden ornekleme ile herhangi bir indeks icin (Shannon, Simpson, pTO,
+AvTD vb.) seyreltme egrisi hesaplar. Egri duzlestiyse orneklemeniz
+yeterlidir.
+
+## Adim Adim Hesaplama Ornegi
+
+Bu bolumde 5 turlu kucuk bir toplulugu elle adim adim hesaplayarak
+fonksiyonlarin arkasindaki mantigi gosteriyoruz.
+
+### Veri
+
+```{r ornek_veri}
+# 5 turlu kucuk bir topluluk
+ornek_topluluk <- c(
+  Pinus_nigra     = 4,
+  Pinus_brutia    = 3,
+  Quercus_cerris  = 2,
+  Fagus_orientalis = 1,
+  Cedrus_libani   = 2
+)
+
+ornek_agac <- build_tax_tree(
+  species = names(ornek_topluluk),
+  Genus   = c("Pinus", "Pinus", "Quercus", "Fagus", "Cedrus"),
+  Family  = c("Pinaceae", "Pinaceae", "Fagaceae", "Fagaceae", "Pinaceae"),
+  Order   = c("Pinales", "Pinales", "Fagales", "Fagales", "Pinales")
+)
+
+cat("Topluluk:\n")
+print(ornek_topluluk)
+cat("\nTaksonomik agac:\n")
+print(ornek_agac)
+```
+
+### Adim 1: Shannon
+
+```{r ornek_shannon}
+# Toplam birey: 4 + 3 + 2 + 1 + 2 = 12
+N <- sum(ornek_topluluk)
+cat("Toplam birey (N):", N, "\n\n")
+
+# Oransal bolluklar
+p <- ornek_topluluk / N
+cat("Oransal bolluklar (p_i):\n")
+for (i in seq_along(p)) {
+  cat("  ", names(p)[i], ":", round(p[i], 4), "\n")
+}
+
+# Shannon: H' = -sum(p * ln(p))
+H_elle <- -sum(p * log(p))
+H_fonksiyon <- shannon(ornek_topluluk)
+cat("\nElle hesaplanan H':", round(H_elle, 4), "\n")
+cat("shannon() sonucu:  ", round(H_fonksiyon, 4), "\n")
+```
+
+### Adim 2: Taksonomik Mesafe
+
+```{r ornek_mesafe}
+# Mesafe matrisi
+m <- tax_distance_matrix(ornek_agac)
+cat("Taksonomik mesafe matrisi:\n")
+print(round(m, 1))
+cat("\nOrnek yorumlar:\n")
+cat("  Pinus_nigra - Pinus_brutia: Ayni cins -> mesafe = 1\n")
+cat("  Pinus_nigra - Cedrus_libani: Ayni familya (Pinaceae) -> mesafe = 2\n")
+cat("  Pinus_nigra - Quercus_cerris: Ayni takim degil (Pinales vs Fagales) -> mesafe = 3\n")
+```
+
+### Adim 3: AvTD (Elle)
+
+```{r ornek_avtd}
+# AvTD = tum tur ciftleri arasindaki ortalama mesafe
+# S = 5, S*(S-1)/2 = 10 cift
+S <- length(ornek_topluluk)
+cift_sayisi <- S * (S - 1) / 2
+cat("Tur sayisi (S):", S, "\n")
+cat("Cift sayisi:", cift_sayisi, "\n\n")
+
+# Tum ciftlerin mesafelerini topla
+toplam_mesafe <- 0
+for (i in 1:(S - 1)) {
+  for (j in (i + 1):S) {
+    d_ij <- m[i, j]
+    cat("  ", rownames(m)[i], "-", colnames(m)[j], ":", d_ij, "\n")
+    toplam_mesafe <- toplam_mesafe + d_ij
+  }
+}
+
+avtd_elle <- toplam_mesafe / cift_sayisi
+avtd_fonksiyon <- avtd(names(ornek_topluluk), ornek_agac)
+cat("\nToplam mesafe:", toplam_mesafe, "\n")
+cat("Elle hesaplanan AvTD:", round(avtd_elle, 4), "\n")
+cat("avtd() sonucu:      ", round(avtd_fonksiyon, 4), "\n")
+```
+
+### Adim 4: Deng Entropisi (Tur Seviyesinde)
+
+```{r ornek_deng}
+# Tur seviyesinde: her tur tek basina bir grup (|F_i| = 1)
+# Esit agirlik: m_i = 1/S = 1/5 = 0.2
+# Ed = -sum(m_i * ln(m_i / (2^1 - 1))) = -sum(0.2 * ln(0.2)) = ln(5)
+Ed_tur <- log(S)
+cat("Tur seviyesinde Deng entropisi:\n")
+cat("  Ed_species = ln(S) = ln(", S, ") =", round(Ed_tur, 4), "\n")
+cat("  (Bu Shannon entropisiyle ayni, cunku |F_i| = 1)\n\n")
+
+# Cins seviyesinde: Pinus(2 tur), Quercus(1), Fagus(1), Cedrus(1)
+# 4 grup, esit agirlikli: m_i = grup_tur_sayisi / toplam_tur_sayisi
+cat("Cins seviyesinde:\n")
+cat("  Pinus: 2 tur, Quercus: 1 tur, Fagus: 1 tur, Cedrus: 1 tur\n")
+cat("  m_Pinus = 2/5 = 0.4, |F| = 2\n")
+cat("  m_diger = 1/5 = 0.2, |F| = 1\n\n")
+
+# Ed = -(0.4 * ln(0.4 / (2^2 - 1))) - 3*(0.2 * ln(0.2 / (2^1 - 1)))
+Ed_cins <- -(0.4 * log(0.4 / (2^2 - 1))) - 3 * (0.2 * log(0.2 / (2^1 - 1)))
+cat("  Ed_genus = -(0.4 * ln(0.4/3)) - 3*(0.2 * ln(0.2/1))\n")
+cat("           =", round(Ed_cins, 4), "\n")
+```
+
+### Adim 5: Ozkan pTO
+
+```{r ornek_pto}
+# Fonksiyonla hesapla
+pto_sonuc <- ozkan_pto(ornek_topluluk, ornek_agac)
+
+cat("Ozkan pTO sonuclari:\n")
+cat("  uTO  =", round(pto_sonuc$uTO, 4), "\n")
+cat("  TO   =", round(pto_sonuc$TO, 4), "\n")
+cat("  uTO+ =", round(pto_sonuc$uTO_plus, 4), "\n")
+cat("  TO+  =", round(pto_sonuc$TO_plus, 4), "\n\n")
+
+cat("Seviye bazinda Deng entropisi:\n")
+for (i in seq_along(pto_sonuc$Ed_levels)) {
+  cat("  ", names(pto_sonuc$Ed_levels)[i], ":",
+      round(pto_sonuc$Ed_levels[i], 4), "\n")
+}
+```
+
+### Adim 6: Rarefaction
+
+```{r ornek_rarefaction, fig.width=8, fig.height=5}
+# 12 bireylik toplulugun seyreltme egrisi
+rare <- rarefaction_taxonomic(ornek_topluluk, ornek_agac,
+                               index = "shannon",
+                               steps = 10, n_boot = 100, seed = 42)
+cat("Rarefaction sonuclari (Shannon):\n")
+print(round(rare, 4))
+```
+
+```{r ornek_rare_plot, fig.width=8, fig.height=5}
+plot_rarefaction(rare)
+```
+
+**Yorum:** 12 bireylik kucuk bir orneklemde egri henuz tam duzlesmemis.
+Bu, daha fazla ornekleme yapilsa cesitlilik degerinin biraz daha
+artabilecegini gosterir.
+
 ## Fonksiyon Listesi
 
 | Fonksiyon | Ne yapar |
@@ -406,13 +695,43 @@ normalize edilmistir. Buyuk alan = yuksek cesitlilik.
 | `plot_iteration()` | Islem 2/3 iterasyon grafigi |
 | `plot_bubble()` | Tur katkilari balon grafigi |
 | `plot_radar()` | Radar/orumcek grafigi |
+| `rarefaction_taxonomic()` | Taksonomik cesitlilik icin seyreltme egrisi hesaplar |
+| `plot_rarefaction()` | Seyreltme egrisini guven araliklariyla gosterir |
 
 ## Kaynaklar
 
-- Deng, Y. (2016). Deng entropy. *Chaos, Solitons & Fractals*, 91, 549-553.
-- Ozkan, K. (2018). A new proposed measure for estimating taxonomic
-  diversity. *Turkish Journal of Forestry*, 19(4), 336-346.
-- Clarke, K.R. & Warwick, R.M. (1998). A taxonomic distinctness index and
-  its statistical properties. *Journal of Applied Ecology*, 35, 523-531.
+### Klasik Cesitlilik Indeksleri
+- Shannon, C.E. (1948). A mathematical theory of communication.
+  *Bell System Technical Journal*, 27, 379-423.
+- Simpson, E.H. (1949). Measurement of diversity. *Nature*, 163, 688.
 - Pielou, E.C. (1966). The measurement of diversity in different types of
   biological collections. *Journal of Theoretical Biology*, 13, 131-144.
+
+### Taksonomik Farklilik
+- Clarke, K.R. & Warwick, R.M. (1998). A taxonomic distinctness index and
+  its statistical properties. *Journal of Applied Ecology*, 35, 523-531.
+- Clarke, K.R. & Warwick, R.M. (2001). A further biodiversity index
+  applicable to species lists: variation in taxonomic distinctness.
+  *Marine Ecology Progress Series*, 216, 265-278.
+
+### Deng Entropisi ve Kanit Teorisi
+- Deng, Y. (2016). Deng entropy. *Chaos, Solitons & Fractals*, 91, 549-553.
+- Dempster, A.P. (1967). Upper and lower probabilities induced by a
+  multivalued mapping. *The Annals of Mathematical Statistics*, 38, 325-339.
+- Shafer, G. (1976). *A Mathematical Theory of Evidence*. Princeton
+  University Press.
+
+### Ozkan pTO Indeksi
+- Ozkan, K. (2018). Yeni bir taksonomik cesitlilik olcusu onerisi.
+  *Turkish Journal of Forestry*, 19(4), 336-346. DOI: 10.18182/tjf.441061
+
+### Rarefaction (Seyreltme)
+- Gotelli, N.J. & Colwell, R.K. (2001). Quantifying biodiversity:
+  procedures and pitfalls in the measurement and comparison of species
+  richness. *Ecology Letters*, 4, 379-391.
+- Hurlbert, S.H. (1971). The nonconcept of species diversity: a critique
+  and alternative parameters. *Ecology*, 52, 577-586.
+
+### Genel Ekoloji ve Biyocesitlilik
+- Magurran, A.E. (2004). *Measuring Biological Diversity*. Blackwell
+  Publishing, Oxford.
