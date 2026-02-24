@@ -42,7 +42,7 @@
 #' trees where branch lengths represent average distances between groups.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Build a simple taxonomic tree
 #' tax <- build_tax_tree(
 #'   species = c("Quercus_robur", "Quercus_petraea", "Pinus_nigra",

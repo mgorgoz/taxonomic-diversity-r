@@ -43,7 +43,7 @@ interval. A vertical dashed line marks the total sample size (full data).
 Requires the \pkg{ggplot2} package.
 }
 \examples{
-\dontrun{
+\donttest{
 comm <- c(sp1 = 10, sp2 = 5, sp3 = 8, sp4 = 2, sp5 = 3)
 tax <- data.frame(
   Species = paste0("sp", 1:5),

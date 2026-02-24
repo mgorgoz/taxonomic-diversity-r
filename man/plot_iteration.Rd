@@ -40,7 +40,7 @@ This helps assess how stochastic species removal affects the pTO
 index and whether the maximum exceeds the deterministic value.
 }
 \examples{
-\dontrun{
+\donttest{
 comm <- c(sp1 = 10, sp2 = 20, sp3 = 15, sp4 = 5)
 tax <- build_tax_tree(
   species = paste0("sp", 1:4),

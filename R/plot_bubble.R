@@ -27,7 +27,7 @@
 #' contribution to overall taxonomic diversity.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' comm <- c(sp1 = 25, sp2 = 18, sp3 = 30, sp4 = 12, sp5 = 8)
 #' tax <- build_tax_tree(
 #'   species = paste0("sp", 1:5),

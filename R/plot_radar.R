@@ -31,7 +31,7 @@
 #' easy to spot which community scores higher on which indices.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' tax <- build_tax_tree(
 #'   species = c("sp1", "sp2", "sp3", "sp4"),
 #'   Genus   = c("G1", "G1", "G2", "G2"),

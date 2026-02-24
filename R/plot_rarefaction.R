@@ -24,7 +24,7 @@
 #' @seealso [rarefaction_taxonomic()] for computing the rarefaction curve.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' comm <- c(sp1 = 10, sp2 = 5, sp3 = 8, sp4 = 2, sp5 = 3)
 #' tax <- data.frame(
 #'   Species = paste0("sp", 1:5),
