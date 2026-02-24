@@ -115,6 +115,9 @@ This package implements the Deng entropy-based taxonomic diversity measure propo
 - [x] Visualization suite (dendrogram, heatmap, bubble, radar, iteration)
 - [x] Excel template and data import support
 - [x] Turkish vignette (giris_rehberi)
+- [x] Taxonomic rarefaction with bootstrap CI
+- [x] Mathematical background vignette (LaTeX formulas)
+- [x] CITATION file with BibTeX references
 - [x] R CMD check CRAN compliance
 - [x] GitHub Actions CI/CD
 - [ ] Funnel plots for AvTD/VarTD significance testing

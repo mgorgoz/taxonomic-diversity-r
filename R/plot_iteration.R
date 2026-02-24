@@ -36,7 +36,7 @@
 #'   Genus = c("G1", "G1", "G2", "G2"),
 #'   Family = c("F1", "F1", "F1", "F2")
 #' )
-#' res <- ozkan_pto_resample(comm, tax, n_iter = 100, seed = 42)
+#' res <- ozkan_pto_resample(comm, tax, n_iter = 101, seed = 42)
 #' plot_iteration(res, component = "TO")
 #' }
 #'
