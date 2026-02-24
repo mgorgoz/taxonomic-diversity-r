@@ -1,7 +1,10 @@
 bibentry(
   bibtype  = "Manual",
   title    = "taxdiv: Taxonomic Diversity Indices Using Deng Entropy",
-  author   = person("Murat", "Gorgoz"),
+  author   = c(
+    person("Murat", "Gorgoz"),
+    person("Kursad", "Ozkan")
+  ),
   year     = "2026",
   note     = "R package version 0.1.0",
   url      = "https://github.com/mgorgoz/taxonomic-diversity-r"
@@ -17,4 +20,27 @@ bibentry(
   number   = "4",
   pages    = "336--346",
   doi      = "10.18182/tjf.441061"
+)
+
+bibentry(
+  bibtype  = "Article",
+  title    = "Deng entropy",
+  author   = person("Yong", "Deng"),
+  journal  = "Chaos, Solitons \\& Fractals",
+  year     = "2016",
+  volume   = "91",
+  pages    = "549--553"
+)
+
+bibentry(
+  bibtype  = "Article",
+  title    = "A taxonomic distinctness index and its statistical properties",
+  author   = c(
+    person("K.R.", "Clarke"),
+    person("R.M.", "Warwick")
+  ),
+  journal  = "Journal of Applied Ecology",
+  year     = "1998",
+  volume   = "35",
+  pages    = "523--531"
 )
