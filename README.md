@@ -1,8 +1,12 @@
 # taxdiv
 
 <!-- badges: start -->
-[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![R-CMD-check](https://github.com/mgorgoz/taxonomic-diversity-r/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/mgorgoz/taxonomic-diversity-r/actions/workflows/R-CMD-check.yaml)
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![GitHub release](https://img.shields.io/github/v/release/mgorgoz/taxonomic-diversity-r?include_prereleases&label=version)](https://github.com/mgorgoz/taxonomic-diversity-r/releases)
+[![GitHub Downloads](https://img.shields.io/github/downloads/mgorgoz/taxonomic-diversity-r/total?label=downloads)](https://github.com/mgorgoz/taxonomic-diversity-r/releases)
+[![GitHub Stars](https://img.shields.io/github/stars/mgorgoz/taxonomic-diversity-r?style=social)](https://github.com/mgorgoz/taxonomic-diversity-r)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 <!-- badges: end -->
 
 ## Overview
