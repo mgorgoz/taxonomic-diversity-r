@@ -54,10 +54,14 @@ pTO+ (taxonomic distance) uses only the nk=0 slice:
 \deqn{pT_O^+ = \ln \prod_{i=1}^{L} \left( w_i \left(
   \frac{(e^{E_d^S})^2}{e^{E_d^i}} + 1 \right) \right)}
 
-pTO (taxonomic diversity) aggregates across all slices:
-\deqn{pT_O = \ln \left( \frac{\sum_{k=0}^{n_s} (n_s - n_k)
+pTO (taxonomic diversity) aggregates across slices (max 9 steps,
+matching the original Ozkan macro implementation):
+\deqn{pT_O = \ln \left( \frac{\sum_{k=0}^{n_a-1} (n_a - k)
   \prod_{i=1}^{L} \left( w_i \left( \frac{(e^{E_d^S})^2}
-  {e^{E_d^i}} + 1 \right) \right)}{n_s + \sum n_k} \right)}
+  {e^{E_d^i}} + 1 \right) \right)}{n_a (n_a + 1) / 2} \right)}
+
+where \eqn{n_a} is the number of active slicing steps (steps where
+at least one species survives, capped at 9).
 }
 \examples{
 # Simple example with 5 species
