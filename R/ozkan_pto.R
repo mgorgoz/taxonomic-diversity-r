@@ -44,14 +44,10 @@
 #' \deqn{pT_O^+ = \ln \prod_{i=1}^{L} \left( w_i \left(
 #'   \frac{(e^{E_d^S})^2}{e^{E_d^i}} + 1 \right) \right)}
 #'
-#' pTO (taxonomic diversity) aggregates across slices (max 9 steps,
-#' matching the original Ozkan macro implementation):
-#' \deqn{pT_O = \ln \left( \frac{\sum_{k=0}^{n_a-1} (n_a - k)
+#' pTO (taxonomic diversity) aggregates across all slices:
+#' \deqn{pT_O = \ln \left( \frac{\sum_{k=0}^{n_s} (n_s - n_k)
 #'   \prod_{i=1}^{L} \left( w_i \left( \frac{(e^{E_d^S})^2}
-#'   {e^{E_d^i}} + 1 \right) \right)}{n_a (n_a + 1) / 2} \right)}
-#'
-#' where \eqn{n_a} is the number of active slicing steps (steps where
-#' at least one species survives, capped at 9).
+#'   {e^{E_d^i}} + 1 \right) \right)}{n_s + \sum n_k} \right)}
 #'
 #' @references
 #' Ozkan, K. (2018). A new proposed measure for estimating taxonomic
@@ -205,76 +201,66 @@ ozkan_pto <- function(community, tax_tree) {
   TO_plus <- unname(log(core_weighted))
 
   # --- Step 3: Slicing procedure for pTO ---
-  # Following the original Ozkan macro: max 9 slicing steps (nk = 0..8).
-  # Each step removes species with abundance <= nk.
-  # Only steps where at least 2 species survive are considered "active"
-  # (single-species steps have trivial entropy and are excluded).
-  # Weights are based on n_active (count of multi-species steps).
   max_abundance <- max(community)
   abundances <- as.numeric(community)
-  max_steps <- 9L  # Macro uses 9 TE sheets (1TE..9TE)
-  n_steps <- min(max_abundance, max_steps)
+  n_s <- max_abundance
 
-  # Compute products at each slice (only for steps with >= 2 species)
-  products_u <- numeric(0)  # unweighted products (multi-species only)
-  products_w <- numeric(0)  # weighted products (multi-species only)
+  sum_weighted <- 0
+  sum_unweighted <- 0
 
-  for (step in seq_len(n_steps)) {
-    nk <- step - 1  # Threshold (0-indexed: step 1 = nk 0)
+  for (step in seq_len(n_s)) {
+    nk <- step - 1  # Amount subtracted (0-indexed: step 1 = nk 0)
+    factor_val <- n_s - nk
 
     # Species survive if abundance > nk
     present_mask <- abundances > nk
-    n_present <- sum(present_mask)
 
-    if (n_present <= 1) next  # Skip single-species or empty steps
+    if (sum(present_mask) == 0) break
 
     # Compute Deng entropy for this slice using presence-based weights
     tax_step <- tax_sub[present_mask, , drop = FALSE]
+    n_present <- sum(present_mask)
 
-    result_step <- compute_deng_all_levels(
-      rep(TRUE, n_present), tax_step, n_levels)
-    Ed_step <- result_step$Ed
-    active_step <- result_step$active
+    if (n_present <= 1) {
+      # Single species: Ed = 0 at all levels, product = 1+1 = 2
+      ratio_species <- 0 + 1  # (e^0)^2 / e^0 + 1 = 1/1 + 1 = 2
+      core_u_step <- 1 * ratio_species
+      core_w_step <- 1 * ratio_species
+    } else {
+      # Compute full Deng entropy at all levels for this slice
+      result_step <- compute_deng_all_levels(
+        rep(TRUE, n_present), tax_step, n_levels)
+      Ed_step <- result_step$Ed
+      active_step <- result_step$active
 
-    Ed_S_step <- Ed_step[1]
-    e_Ed_S_sq_step <- (exp(Ed_S_step))^2
+      Ed_S_step <- Ed_step[1]
+      e_Ed_S_sq_step <- (exp(Ed_S_step))^2
 
-    core_u_step <- 1
-    core_w_step <- 1
+      core_u_step <- 1
+      core_w_step <- 1
 
-    for (a in seq_along(active_step)) {
-      lev_idx <- active_step[a]
-      Ed_i_step <- Ed_step[lev_idx]
-      ratio_step <- e_Ed_S_sq_step / exp(Ed_i_step) + 1
+      for (a in seq_along(active_step)) {
+        lev_idx <- active_step[a]
+        Ed_i_step <- Ed_step[lev_idx]
+        ratio_step <- e_Ed_S_sq_step / exp(Ed_i_step) + 1
 
-      core_u_step <- core_u_step * (1 * ratio_step)
+        core_u_step <- core_u_step * (1 * ratio_step)
 
-      w_i <- lev_idx
-      core_w_step <- core_w_step * (w_i * ratio_step)
+        w_i <- lev_idx
+        core_w_step <- core_w_step * (w_i * ratio_step)
+      }
     }
 
-    products_u <- c(products_u, core_u_step)
-    products_w <- c(products_w, core_w_step)
+    sum_unweighted <- sum_unweighted + factor_val * core_u_step
+    sum_weighted <- sum_weighted + factor_val * core_w_step
   }
 
-  # Count active (multi-species) steps and compute weighted average
-  n_active <- length(products_u)
+  # Denominator: ns + sum(nk) = ns + sum(0:(ns-1)) = ns + ns*(ns-1)/2
+  denom <- n_s + sum(0:(n_s - 1))
 
-  if (n_active == 0) {
-    uTO <- 0
-    TO <- 0
-  } else {
-    # Weights: n_active, n_active-1, ..., 1 (descending for ordered steps)
-    weights_vec <- n_active:1
-    denom <- sum(weights_vec)  # = n_active * (n_active + 1) / 2
-
-    sum_unweighted <- sum(products_u * weights_vec)
-    sum_weighted <- sum(products_w * weights_vec)
-
-    # pTO = ln(weighted_average)
-    uTO <- log(sum_unweighted / denom)
-    TO <- log(sum_weighted / denom)
-  }
+  # pTO = ln(numerator / denominator)
+  uTO <- log(sum_unweighted / denom)
+  TO <- log(sum_weighted / denom)
 
   return(list(
     uTO = uTO,
