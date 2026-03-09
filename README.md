@@ -124,9 +124,22 @@ This package implements the Deng entropy-based taxonomic diversity measure propo
 - [x] CITATION file with BibTeX references
 - [x] R CMD check CRAN compliance
 - [x] GitHub Actions CI/CD
+- [x] PAST dogrulama (Delta, Delta*, AvTD, VarTD — 5 alan, tez verisiyle birebir eslesme)
+- [x] Makale vs makro formul karsilastirmasi (ozkan_pto vs ozkan_pto_macro ayri fonksiyonlar)
 - [ ] `ozkan_pto_macro()` fonksiyonunu kaldir — Makale formulune (Ozkan 2018, Denklem 4) sadik kalan `ozkan_pto()` kalici fonksiyondur. Makro uyumlu `ozkan_pto_macro()` gecici olarak pakette bulunmaktadir (`R/ozkan_pto_macro.R`). Karsilastirma tamamlanip makale formulu dogrulandiktan sonra `R/ozkan_pto_macro.R` ve `man/ozkan_pto_macro.Rd` silinip `devtools::document()` calistirilarak temizlenmelidir.
+- [ ] Excel Islem 2/3 karsilastirmasi
+- [ ] Ornek veri seti → .rda
+- [ ] JOSS paper.md hazirlama
+- [ ] Literature review — 10 makale
+- [ ] taxize paketi kesfi
+- [ ] pkgdown web sitesi
 - [ ] Funnel plots for AvTD/VarTD significance testing
 - [ ] Bias-corrected entropy estimators
+- [ ] Topluluk kesfi
+- [ ] ggtree arastirmasi
+- [ ] Topluluk katkisi
+- [ ] S3 sinif sistemi
+- [ ] Paralel hesaplama
 - [ ] CRAN submission
 
 ## License
