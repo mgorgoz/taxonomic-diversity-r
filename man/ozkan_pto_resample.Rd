@@ -2,7 +2,7 @@
 % Please edit documentation in R/ozkan_pto_resample.R
 \name{ozkan_pto_resample}
 \alias{ozkan_pto_resample}
-\title{Stochastic Resampling of Ozkan's pTO Index (Run 2)}
+\title{Stochastic Resampling of Ozkan's pTO Index (Islem 2 / Run 2)}
 \usage{
 ozkan_pto_resample(community, tax_tree, n_iter = 101L, seed = NULL)
 }
@@ -14,50 +14,56 @@ Names must match the first column of \code{tax_tree}.}
 is species names, subsequent columns are taxonomic ranks.}
 
 \item{n_iter}{Number of stochastic iterations to run (default: 101).
-Must be >= 101. The first iteration is always deterministic
-(original community).}
+Must be >= 101.}
 
 \item{seed}{Optional random seed for reproducibility (default: NULL).}
 }
 \value{
 A named list with components:
 \describe{
-\item{uTO_plus_max}{Maximum unweighted taxonomic distance across iterations}
-\item{TO_plus_max}{Maximum weighted taxonomic distance across iterations}
-\item{uTO_max}{Maximum unweighted taxonomic diversity across iterations}
+\item{uTO_plus_max}{Maximum unweighted taxonomic distance across
+iterations}
+\item{TO_plus_max}{Maximum weighted taxonomic distance across
+iterations}
+\item{uTO_max}{Maximum unweighted taxonomic diversity across
+iterations}
 \item{TO_max}{Maximum weighted taxonomic diversity across iterations}
-\item{uTO_plus_det}{Deterministic uTO+ (first iteration, same as ozkan_pto)}
+\item{uTO_plus_det}{Deterministic uTO+ (first iteration, same as
+\code{\link[=ozkan_pto]{ozkan_pto()}})}
 \item{TO_plus_det}{Deterministic TO+ (first iteration)}
 \item{uTO_det}{Deterministic uTO (first iteration)}
 \item{TO_det}{Deterministic TO (first iteration)}
 \item{n_iter}{Number of iterations performed}
+\item{species_status}{Named logical vector from jackknife
+(\code{TRUE} = happy)}
+\item{jackknife}{Full jackknife result from
+\code{\link[=ozkan_pto_jackknife]{ozkan_pto_jackknife()}}}
+\item{n_positive}{Number of iterations with positive uTO+}
 \item{iteration_results}{Data frame with all iteration results}
 }
 }
 \description{
-Implements the stochastic resampling procedure from Ozkan et al. (2018)
-Excel macro (Run 2 / Islem 2). In each iteration, every species is
-randomly included (with its original abundance) or excluded (set to 0)
-with 50\\% probability. The pTO indices are recalculated for the
-resampled community, and the maximum values across all iterations are
-returned. The first iteration always uses the original (deterministic)
-community.
+Implements the stochastic resampling procedure from Ozkan's Excel macro
+(Islem 2). First performs a jackknife (Islem 1) to identify "happy"
+(contributing) and "unhappy" (non-contributing) species, then runs
+stochastic resampling where unhappy species are always included and
+happy species are randomly included with 50\\% probability.
 }
 \details{
-The algorithm follows the Excel macro's logic:
+The algorithm follows the Excel macro's Islem 1 + Islem 2 logic:
 \enumerate{
-\item Iteration 1: Use the original community as-is (deterministic).
-\item Iterations 2..n_iter: For each species with abundance > 0,
-randomly set abundance to 0 (excluded) or keep original abundance
-(included), each with 50\\% probability.
-\item At each iteration, compute all four pTO components using
-\code{\link[=ozkan_pto]{ozkan_pto()}}.
-\item Return the maximum value of each component across all iterations.
+\item Run jackknife (\code{\link[=ozkan_pto_jackknife]{ozkan_pto_jackknife()}}) to classify each
+species as happy or unhappy.
+\item Iteration 1: Use the original community (deterministic).
+\item Iterations 2..n_iter: For each species:
+\itemize{
+\item Unhappy species (AA = 0): always included with original
+abundance.
+\item Happy species (AA > 0): randomly included (50\\% probability)
+or excluded. Uses \code{RANDBETWEEN(0,1) * abundance}.
 }
-
-The rationale is that random exclusion of species explores the
-sensitivity of the diversity index to community composition. The
-maximum value represents the "potential" diversity of the community.
+\item Return the maximum of each component across all iterations.
+}
 }
 \examples{
 comm <- c(sp1 = 4, sp2 = 2, sp3 = 3, sp4 = 1, sp5 = 2)
@@ -68,18 +74,17 @@ tax <- data.frame(
   stringsAsFactors = FALSE
 )
 set.seed(42)
-ozkan_pto_resample(comm, tax, n_iter = 101)
+result <- ozkan_pto_resample(comm, tax, n_iter = 101)
+result$species_status  # Happy/unhappy classification
 
 }
 \references{
-Ozkan, K., Mert, A., Senol, A., Ozdemir, S. (2018). Macrotakdivozkan.
-\url{http://www.kantitatifekoloji.net/takdivozkan}
-
 Ozkan, K. (2018). A new proposed measure for estimating taxonomic
 diversity. Turkish Journal of Forestry, 19(4), 336-346.
 DOI: 10.18182/tjf.441061
 }
 \seealso{
-\code{\link[=ozkan_pto]{ozkan_pto()}} for the deterministic calculation,
-\code{\link[=ozkan_pto_sensitivity]{ozkan_pto_sensitivity()}} for Run 3 sensitivity analysis.
+\code{\link[=ozkan_pto_jackknife]{ozkan_pto_jackknife()}} for the jackknife step,
+\code{\link[=ozkan_pto_sensitivity]{ozkan_pto_sensitivity()}} for Run 3,
+\code{\link[=ozkan_pto_full]{ozkan_pto_full()}} for the full pipeline.
 }

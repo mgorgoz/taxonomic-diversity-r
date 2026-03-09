@@ -2,7 +2,7 @@
 % Please edit documentation in R/ozkan_pto_resample.R
 \name{ozkan_pto_sensitivity}
 \alias{ozkan_pto_sensitivity}
-\title{Sensitivity Analysis of Ozkan's pTO Index (Run 3)}
+\title{Sensitivity Analysis of Ozkan's pTO Index (Islem 3 / Run 3)}
 \usage{
 ozkan_pto_sensitivity(
   community,
@@ -27,45 +27,47 @@ ozkan_pto_sensitivity(
 A named list with components:
 \describe{
 \item{uTO_plus_max}{Maximum uTO+ across Run 1, 2, and 3}
-\item{TO_plus_max}{Maximum TO+ across Run 1, 2, and 3}
-\item{uTO_max}{Maximum uTO across Run 1, 2, and 3}
-\item{TO_max}{Maximum TO across Run 1, 2, and 3}
+\item{TO_plus_max}{Maximum TO+ across all runs}
+\item{uTO_max}{Maximum uTO across all runs}
+\item{TO_max}{Maximum TO across all runs}
 \item{run3_uTO_plus_max}{Maximum uTO+ from Run 3 only}
 \item{run3_TO_plus_max}{Maximum TO+ from Run 3 only}
+\item{run3_uTO_max}{Maximum uTO from Run 3 only}
+\item{run3_TO_max}{Maximum TO from Run 3 only}
 \item{n_iter}{Number of iterations performed}
-\item{species_probs}{Named vector of species-specific inclusion probabilities}
+\item{species_probs}{Named numeric vector of inclusion probabilities}
+\item{prob_happy}{Probability used for happy species}
+\item{prob_unhappy}{Probability used for unhappy species}
 \item{iteration_results}{Data frame with all Run 3 iteration results}
 }
 }
 \description{
-Implements the sensitivity analysis procedure from Ozkan et al. (2018)
-Excel macro (Run 3 / Islem 3). This procedure uses the results from
-Run 2 (\code{\link[=ozkan_pto_resample]{ozkan_pto_resample()}}) to perform a second round of resampling
-with species-specific inclusion probabilities based on how frequently
-each species was "selected" in Run 2.
+Implements the sensitivity analysis procedure from Ozkan's Excel macro
+(Islem 3). Uses the jackknife results from Run 2 to apply species-specific
+inclusion probabilities: unhappy species get \eqn{P = (S-1)/S}, happy
+species get a data-driven probability derived from Run 2 iteration results.
 }
 \details{
-The algorithm follows the Excel macro's Run 3 logic:
+The algorithm follows the Excel macro's Islem 3 logic:
 
-For each species, the inclusion probability depends on whether the
-species was "selected" (included in the max-scoring iteration) during
-Run 2:
+For each species, the inclusion probability depends on its jackknife
+classification from Islem 1:
 
 \itemize{
-\item \strong{Unselected species} (selection count = 0): Each is included
-with probability (S-1)/S, where S is the total number of species.
-This uses \code{RANDBETWEEN(1, S) > 1}.
-\item \strong{Selected species} (selection count > 0): Each is included
-with probability \code{selection_count / total_iterations}.
-This uses \code{L25 >= RANDBETWEEN(0, K22)}.
+\item \strong{Unhappy species} (AA = 0, non-contributing): Included with
+probability \eqn{(S-1)/S}, where S is total species count. In the Excel
+formula: \code{IF(RANDBETWEEN(1, S) > 1, H2, 0)}.
+\item \strong{Happy species} (AA > 0, contributing): Included with
+probability derived from Run 2 results. In the Excel formula:
+\code{IF(L25 >= RANDBETWEEN(0, K22), H2, 0)}, where L25 is a
+summary score from Run 2 and K22 is the iteration count.
 }
 
-The formula from Excel VBA (Module8):
-\preformatted{
-  IF(AA2=0,
-    IF(RANDBETWEEN(1,$K$13)>1, H2, 0),
-    IF($L$25>=RANDBETWEEN(0,$K$22), H2, 0))
-}
+The happy species probability is computed as:
+\deqn{P_{happy} = \frac{\max(0, N_{positive} - S) + 1}{N_{iter} + 1}}
+
+where \eqn{N_{positive}} is the number of Run 2 iterations that produced
+a positive uTO+ value and S is the species count.
 
 The maximum pTO across all three runs (Run 1, 2, 3) is the final result.
 }
@@ -83,9 +85,11 @@ ozkan_pto_sensitivity(comm, tax, run2, n_iter = 101)
 
 }
 \references{
-Ozkan, K., Mert, A., Senol, A., Ozdemir, S. (2018). Macrotakdivozkan.
-\url{http://www.kantitatifekoloji.net/takdivozkan}
+Ozkan, K. (2018). A new proposed measure for estimating taxonomic
+diversity. Turkish Journal of Forestry, 19(4), 336-346.
+DOI: 10.18182/tjf.441061
 }
 \seealso{
-\code{\link[=ozkan_pto]{ozkan_pto()}} for Run 1, \code{\link[=ozkan_pto_resample]{ozkan_pto_resample()}} for Run 2.
+\code{\link[=ozkan_pto_resample]{ozkan_pto_resample()}} for Run 2,
+\code{\link[=ozkan_pto_full]{ozkan_pto_full()}} for the full pipeline.
 }
