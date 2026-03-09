@@ -26,15 +26,15 @@
 #' The Excel macro (TD_OMD, Ozkan 2018a) counts the number of slicing
 #' steps where the Deng entropy product is non-zero (\code{n_active}),
 #' then assigns weights \code{n_active, n_active-1, ..., 1} to those
-#' steps only. Steps where <= 1 species survive are excluded entirely.
+#' steps only. Steps where 1 or fewer species survive are excluded entirely.
 #'
 #' In contrast, [ozkan_pto()] follows the published formula (Ozkan 2018,
 #' Eq. 4) which uses \code{n_s = max_abundance} for all steps, including
 #' single-species steps (with product = 1 by the postulation rule).
 #'
 #' The two functions give identical results when all slicing steps have
-#' >= 2 surviving species (\code{n_active == n_s}). They differ when
-#' some steps reduce to <= 1 species, which typically occurs in
+#' 2 or more surviving species (\code{n_active == n_s}). They differ when
+#' some steps reduce to 1 or fewer species, which typically occurs in
 #' species-poor or abundance-skewed communities.
 #'
 #' This function is provided for backward compatibility with results
