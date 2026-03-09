@@ -124,6 +124,7 @@ This package implements the Deng entropy-based taxonomic diversity measure propo
 - [x] CITATION file with BibTeX references
 - [x] R CMD check CRAN compliance
 - [x] GitHub Actions CI/CD
+- [ ] `ozkan_pto_macro()` fonksiyonunu kaldir — Makale formulune (Ozkan 2018, Denklem 4) sadik kalan `ozkan_pto()` kalici fonksiyondur. Makro uyumlu `ozkan_pto_macro()` gecici olarak pakette bulunmaktadir (`R/ozkan_pto_macro.R`). Karsilastirma tamamlanip makale formulu dogrulandiktan sonra `R/ozkan_pto_macro.R` ve `man/ozkan_pto_macro.Rd` silinip `devtools::document()` calistirilarak temizlenmelidir.
 - [ ] Funnel plots for AvTD/VarTD significance testing
 - [ ] Bias-corrected entropy estimators
 - [ ] CRAN submission
