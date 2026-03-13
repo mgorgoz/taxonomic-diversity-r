@@ -11,7 +11,8 @@ rarefaction_taxonomic(
   steps = 20,
   n_boot = 100,
   ci = 0.95,
-  seed = NULL
+  seed = NULL,
+  correction = c("none", "miller_madow", "grassberger", "chao_shen")
 )
 }
 \arguments{
@@ -32,6 +33,11 @@ is species names, subsequent columns are taxonomic ranks.}
 \item{ci}{Confidence interval width (default: 0.95).}
 
 \item{seed}{Optional random seed for reproducibility (default: NULL).}
+
+\item{correction}{Bias correction for the Shannon index. One of
+\code{"none"} (default), \code{"miller_madow"}, \code{"grassberger"}, or
+\code{"chao_shen"}. Only used when \code{index = "shannon"}. Passed to
+\code{\link[=shannon]{shannon()}}. See \code{\link[=shannon]{shannon()}} for details.}
 }
 \value{
 A data frame with columns:

@@ -4,30 +4,76 @@
 \alias{shannon}
 \title{Shannon Diversity Index}
 \usage{
-shannon(community, base = exp(1))
+shannon(
+  community,
+  base = exp(1),
+  correction = c("none", "miller_madow", "grassberger", "chao_shen")
+)
 }
 \arguments{
-\item{community}{A numeric vector of species abundances.}
+\item{community}{A numeric vector of species abundances (counts).}
 
 \item{base}{The logarithm base. Default is \code{exp(1)} (natural log).
 Use \code{2} for bits.}
+
+\item{correction}{Bias correction method. One of \code{"none"} (default,
+naive MLE), \code{"miller_madow"}, \code{"grassberger"}, or \code{"chao_shen"}.
+See Details.}
 }
 \value{
 A numeric value representing the Shannon diversity index.
 }
 \description{
-Calculates the Shannon-Wiener diversity index (H') for a community.
+Calculates the Shannon-Wiener diversity index (H') for a community,
+optionally applying a bias correction for small samples.
 }
 \details{
-The Shannon index is calculated as:
+The naive (MLE) Shannon index is calculated as:
 \deqn{H' = -\sum_{i=1}^{S} p_i \ln(p_i)}
-where \eqn{p_i} is the proportion of species \eqn{i} and \eqn{S}
-is the total number of species.
+where \eqn{p_i = n_i / N} is the proportion of species \eqn{i},
+\eqn{N} is the total number of individuals, and \eqn{S} is the
+number of species observed.
+
+The MLE estimator has a known negative bias that is significant for
+small samples. Three bias-correction methods are available:
+
+\strong{Miller-Madow} (1955): Adds a first-order bias correction term:
+\deqn{H_{MM} = H_{MLE} + \frac{S_{obs} - 1}{2N}}
+
+\strong{Grassberger} (2003): Uses the digamma function instead of the
+logarithm:
+\deqn{H_G = \ln(N) - \frac{1}{N} \sum_i n_i \psi(n_i)}
+where \eqn{\psi} is the digamma function.
+
+\strong{Chao-Shen} (2003): Applies a Good-Turing coverage correction
+with Horvitz-Thompson weighting:
+\deqn{\hat{C} = 1 - f_1 / N}
+\deqn{H_{CS} = -\sum_i \frac{\hat{p}_i \ln \hat{p}_i}{1 -
+  (1 - \hat{p}_i)^N}}
+where \eqn{\hat{p}_i = \hat{C} \cdot n_i / N} and \eqn{f_1} is
+the number of singletons.
+
+Bias corrections require integer abundance counts. A warning is
+issued if non-integer values are detected with \code{correction != "none"}.
 }
 \examples{
 comm <- c(10, 5, 8, 3, 12)
 shannon(comm)
+shannon(comm, correction = "miller_madow")
+shannon(comm, correction = "grassberger")
+shannon(comm, correction = "chao_shen")
 
+}
+\references{
+Miller, G.A. & Madow, W.G. (1954). On the maximum likelihood
+estimate of the Shannon-Wiener index of diversity. AFCRC-TR-54-75.
+
+Grassberger, P. (2003). Entropy estimates from insufficient
+samplings. arXiv:physics/0307138.
+
+Chao, A. & Shen, T.-J. (2003). Nonparametric estimation of
+Shannon's index of diversity when there are unseen species in
+sample. Environmental and Ecological Statistics, 10, 429-443.
 }
 \seealso{
 \code{\link[=simpson]{simpson()}} for Simpson diversity, \code{\link[=deng_entropy_level]{deng_entropy_level()}} for

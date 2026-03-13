@@ -23,6 +23,9 @@
 #'   it is wrapped in a list with name "Community".
 #' @param tax_tree A data frame representing the taxonomic hierarchy,
 #'   as produced by \code{\link{build_tax_tree}}.
+#' @param correction Bias correction for the Shannon index. One of
+#'   `"none"` (default), `"miller_madow"`, `"grassberger"`, or
+#'   `"chao_shen"`. Passed to [shannon()]. See [shannon()] for details.
 #' @param plot Logical. If \code{TRUE} and \pkg{ggplot2} is available,
 #'   returns a list with both the data frame and a ggplot object.
 #'   Default is \code{FALSE}.
@@ -60,7 +63,11 @@
 #'
 #' @importFrom rlang .data
 #' @export
-compare_indices <- function(communities, tax_tree, plot = FALSE) {
+compare_indices <- function(communities, tax_tree,
+                            correction = c("none", "miller_madow",
+                                           "grassberger", "chao_shen"),
+                            plot = FALSE) {
+  correction <- match.arg(correction)
 
   # --- Input validation ---
   if (!is.data.frame(tax_tree)) {
@@ -96,7 +103,7 @@ compare_indices <- function(communities, tax_tree, plot = FALSE) {
     sp_present <- names(comm[comm > 0])
 
     # Classical indices
-    H <- shannon(comm)
+    H <- shannon(comm, correction = correction)
     D <- simpson(comm)
 
     # Clarke & Warwick (need species in tax_tree)

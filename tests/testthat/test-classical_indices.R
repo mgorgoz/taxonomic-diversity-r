@@ -78,6 +78,94 @@ test_that("simpson validates input", {
 
 
 # =============================================================================
+# Shannon Yanlılık Düzeltme (Bias Correction) Testleri
+# =============================================================================
+
+test_that("shannon miller_madow adds positive correction", {
+  comm <- c(10, 5, 8, 3, 12)
+  H_naive <- shannon(comm)
+  H_mm <- shannon(comm, correction = "miller_madow")
+  expect_true(H_mm > H_naive)
+  N <- sum(comm)
+  S_obs <- length(comm)
+  expected <- H_naive + (S_obs - 1) / (2 * N)
+  expect_equal(H_mm, expected, tolerance = 1e-10)
+})
+
+test_that("shannon miller_madow respects base parameter", {
+  comm <- c(10, 5, 8, 3, 12)
+  H_mm_nat <- shannon(comm, correction = "miller_madow")
+  H_mm_2 <- shannon(comm, base = 2, correction = "miller_madow")
+  expect_equal(H_mm_2, H_mm_nat / log(2), tolerance = 1e-10)
+})
+
+test_that("shannon grassberger uses digamma", {
+  comm <- c(10, 5, 8, 3, 12)
+  H_g <- shannon(comm, correction = "grassberger")
+  N <- sum(comm)
+  expected <- log(N) - (1 / N) * sum(comm * digamma(comm))
+  expect_equal(H_g, expected, tolerance = 1e-10)
+})
+
+test_that("shannon grassberger respects base parameter", {
+  comm <- c(10, 5, 8, 3, 12)
+  H_g_nat <- shannon(comm, correction = "grassberger")
+  H_g_2 <- shannon(comm, base = 2, correction = "grassberger")
+  expect_equal(H_g_2, H_g_nat / log(2), tolerance = 1e-10)
+})
+
+test_that("shannon chao_shen applies coverage correction", {
+  comm <- c(10, 5, 8, 3, 12)
+  H_cs <- shannon(comm, correction = "chao_shen")
+  expect_type(H_cs, "double")
+  expect_true(is.finite(H_cs))
+  expect_true(H_cs > 0)
+})
+
+test_that("shannon chao_shen handles many singletons", {
+  comm <- c(1, 1, 1, 1, 5, 10)
+  H_cs <- shannon(comm, correction = "chao_shen")
+  expect_true(is.finite(H_cs))
+  expect_true(H_cs > 0)
+})
+
+test_that("shannon chao_shen handles all singletons", {
+  comm <- c(1, 1, 1, 1, 1)
+  H_cs <- shannon(comm, correction = "chao_shen")
+  expect_true(is.finite(H_cs))
+  expect_true(H_cs > 0)
+})
+
+test_that("all corrections return 0 for single species", {
+  for (corr in c("none", "miller_madow", "grassberger", "chao_shen")) {
+    expect_equal(shannon(c(10), correction = corr), 0)
+  }
+})
+
+test_that("all corrections converge for large equal samples", {
+  comm <- rep(1000, 5)
+  H_naive <- shannon(comm)
+  H_mm <- shannon(comm, correction = "miller_madow")
+  H_g <- shannon(comm, correction = "grassberger")
+  H_cs <- shannon(comm, correction = "chao_shen")
+  expect_equal(H_mm, H_naive, tolerance = 0.01)
+  expect_equal(H_g, H_naive, tolerance = 0.01)
+  expect_equal(H_cs, H_naive, tolerance = 0.01)
+})
+
+test_that("shannon warns for non-integer input with correction", {
+  comm <- c(0.5, 0.3, 0.2)
+  expect_warning(shannon(comm, correction = "miller_madow"),
+                 "non-integer|Non-integer")
+})
+
+test_that("shannon default correction is none (backward compatible)", {
+  comm <- c(10, 5, 8, 3, 12)
+  expect_equal(shannon(comm), shannon(comm, correction = "none"))
+})
+
+
+# =============================================================================
 # Clarke & Warwick İndeksleri
 # =============================================================================
 

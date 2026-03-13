@@ -56,3 +56,39 @@ test_that("deng_entropy_level validates input", {
   # Sayısal olmayan değer verilince hata vermeli
   expect_error(deng_entropy_level("abc"), "numeric")
 })
+
+
+# =============================================================================
+# Deng Entropisi — Yanlılık Düzeltme Testleri
+# =============================================================================
+
+test_that("deng_entropy_level passes correction to species level", {
+  comm <- c(10, 5, 8, 3, 12)
+  # Tür seviyesinde Deng(correction=X) = Shannon(correction=X) olmalı
+  for (corr in c("none", "miller_madow", "grassberger", "chao_shen")) {
+    expect_equal(
+      deng_entropy_level(comm, correction = corr),
+      shannon(comm, correction = corr),
+      tolerance = 1e-10
+    )
+  }
+})
+
+test_that("deng_entropy_level warns when correction used with group_sizes", {
+  expect_warning(
+    deng_entropy_level(c(9, 3, 7), group_sizes = c(3, 2, 3),
+                       correction = "chao_shen"),
+    "species level"
+  )
+})
+
+test_that("deng_entropy_level with group_sizes and correction falls back to none", {
+  # Uyarı verse bile sonuç, correction = "none" ile aynı olmalı
+  result_none <- deng_entropy_level(c(9, 3, 7), group_sizes = c(3, 2, 3),
+                                     correction = "none")
+  result_cs <- suppressWarnings(
+    deng_entropy_level(c(9, 3, 7), group_sizes = c(3, 2, 3),
+                       correction = "chao_shen")
+  )
+  expect_equal(result_cs, result_none)
+})

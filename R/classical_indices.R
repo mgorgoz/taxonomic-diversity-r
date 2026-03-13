@@ -1,18 +1,56 @@
 #' Shannon Diversity Index
 #'
-#' Calculates the Shannon-Wiener diversity index (H') for a community.
+#' Calculates the Shannon-Wiener diversity index (H') for a community,
+#' optionally applying a bias correction for small samples.
 #'
-#' @param community A numeric vector of species abundances.
+#' @param community A numeric vector of species abundances (counts).
 #' @param base The logarithm base. Default is `exp(1)` (natural log).
 #'   Use `2` for bits.
+#' @param correction Bias correction method. One of `"none"` (default,
+#'   naive MLE), `"miller_madow"`, `"grassberger"`, or `"chao_shen"`.
+#'   See Details.
 #'
 #' @return A numeric value representing the Shannon diversity index.
 #'
 #' @details
-#' The Shannon index is calculated as:
+#' The naive (MLE) Shannon index is calculated as:
 #' \deqn{H' = -\sum_{i=1}^{S} p_i \ln(p_i)}
-#' where \eqn{p_i} is the proportion of species \eqn{i} and \eqn{S}
-#' is the total number of species.
+#' where \eqn{p_i = n_i / N} is the proportion of species \eqn{i},
+#' \eqn{N} is the total number of individuals, and \eqn{S} is the
+#' number of species observed.
+#'
+#' The MLE estimator has a known negative bias that is significant for
+#' small samples. Three bias-correction methods are available:
+#'
+#' **Miller-Madow** (1955): Adds a first-order bias correction term:
+#' \deqn{H_{MM} = H_{MLE} + \frac{S_{obs} - 1}{2N}}
+#'
+#' **Grassberger** (2003): Uses the digamma function instead of the
+#' logarithm:
+#' \deqn{H_G = \ln(N) - \frac{1}{N} \sum_i n_i \psi(n_i)}
+#' where \eqn{\psi} is the digamma function.
+#'
+#' **Chao-Shen** (2003): Applies a Good-Turing coverage correction
+#' with Horvitz-Thompson weighting:
+#' \deqn{\hat{C} = 1 - f_1 / N}
+#' \deqn{H_{CS} = -\sum_i \frac{\hat{p}_i \ln \hat{p}_i}{1 -
+#'   (1 - \hat{p}_i)^N}}
+#' where \eqn{\hat{p}_i = \hat{C} \cdot n_i / N} and \eqn{f_1} is
+#' the number of singletons.
+#'
+#' Bias corrections require integer abundance counts. A warning is
+#' issued if non-integer values are detected with `correction != "none"`.
+#'
+#' @references
+#' Miller, G.A. & Madow, W.G. (1954). On the maximum likelihood
+#' estimate of the Shannon-Wiener index of diversity. AFCRC-TR-54-75.
+#'
+#' Grassberger, P. (2003). Entropy estimates from insufficient
+#' samplings. arXiv:physics/0307138.
+#'
+#' Chao, A. & Shen, T.-J. (2003). Nonparametric estimation of
+#' Shannon's index of diversity when there are unseen species in
+#' sample. Environmental and Ecological Statistics, 10, 429-443.
 #'
 #' @seealso [simpson()] for Simpson diversity, [deng_entropy_level()] for
 #'   Deng entropy (a generalization of Shannon).
@@ -20,9 +58,16 @@
 #' @examples
 #' comm <- c(10, 5, 8, 3, 12)
 #' shannon(comm)
+#' shannon(comm, correction = "miller_madow")
+#' shannon(comm, correction = "grassberger")
+#' shannon(comm, correction = "chao_shen")
 #'
 #' @export
-shannon <- function(community, base = exp(1)) {
+shannon <- function(community, base = exp(1),
+                    correction = c("none", "miller_madow",
+                                   "grassberger", "chao_shen")) {
+  correction <- match.arg(correction)
+
   if (!is.numeric(community) || any(community < 0)) {
     stop("'community' must be a numeric vector with non-negative values.",
          call. = FALSE)
@@ -31,12 +76,51 @@ shannon <- function(community, base = exp(1)) {
   # Remove zeros
   community <- community[community > 0]
 
-  if (length(community) == 0) {
-    return(0)
+  if (length(community) == 0) return(0)
+  if (length(community) == 1) return(0)
+
+  # Warn if non-integer counts are used with correction
+  if (correction != "none" && any(abs(community - round(community)) > 1e-9)) {
+    warning("Bias correction requires integer abundance counts. ",
+            "Non-integer values detected.", call. = FALSE)
   }
 
-  p <- community / sum(community)
-  -sum(p * log(p, base = base))
+  N <- sum(community)
+  S_obs <- length(community)
+
+  if (correction == "none") {
+    p <- community / N
+    return(-sum(p * log(p, base = base)))
+  }
+
+  if (correction == "miller_madow") {
+    p <- community / N
+    H_naive <- -sum(p * log(p, base = base))
+    # Bias term is in nats; convert to requested base
+    return(H_naive + (S_obs - 1) / (2 * N * log(base)))
+  }
+
+  if (correction == "grassberger") {
+    # H_G = log(N) - (1/N) * sum(n_i * digamma(n_i))
+    n <- community
+    H_G <- log(N) - (1 / N) * sum(n * digamma(n))
+    # Convert from nats to requested base
+    return(H_G / log(base))
+  }
+
+  if (correction == "chao_shen") {
+    n <- community
+    f1 <- sum(n == 1)  # number of singletons
+    C_hat <- 1 - f1 / N
+    # Guard: if all species are singletons, C_hat = 0
+    if (C_hat == 0) C_hat <- 1 / N
+    p_hat <- C_hat * n / N
+    # Horvitz-Thompson correction: avoid division by zero
+    ht_denom <- 1 - (1 - p_hat)^N
+    ht_denom[ht_denom == 0] <- 1e-10
+    H_CS <- -sum(p_hat * log(p_hat, base = base) / ht_denom)
+    return(H_CS)
+  }
 }
 
 

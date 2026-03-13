@@ -4,7 +4,12 @@
 \alias{compare_indices}
 \title{Compare All Diversity Indices Side by Side}
 \usage{
-compare_indices(communities, tax_tree, plot = FALSE)
+compare_indices(
+  communities,
+  tax_tree,
+  correction = c("none", "miller_madow", "grassberger", "chao_shen"),
+  plot = FALSE
+)
 }
 \arguments{
 \item{communities}{A named list of community vectors (named numeric),
@@ -13,6 +18,10 @@ it is wrapped in a list with name "Community".}
 
 \item{tax_tree}{A data frame representing the taxonomic hierarchy,
 as produced by \code{\link{build_tax_tree}}.}
+
+\item{correction}{Bias correction for the Shannon index. One of
+\code{"none"} (default), \code{"miller_madow"}, \code{"grassberger"}, or
+\code{"chao_shen"}. Passed to \code{\link[=shannon]{shannon()}}. See \code{\link[=shannon]{shannon()}} for details.}
 
 \item{plot}{Logical. If \code{TRUE} and \pkg{ggplot2} is available,
 returns a list with both the data frame and a ggplot object.

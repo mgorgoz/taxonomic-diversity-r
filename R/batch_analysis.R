@@ -37,6 +37,9 @@
 #'   \code{"Kingdom"} (case-insensitive).
 #' @param abundance_column Character string specifying the name of the
 #'   abundance column. Default is \code{"Abundance"} (case-insensitive match).
+#' @param correction Bias correction for the Shannon index. One of
+#'   `"none"` (default), `"miller_madow"`, `"grassberger"`, or
+#'   `"chao_shen"`. Passed to [shannon()]. See [shannon()] for details.
 #'
 #' @return A data frame with one row per site and columns:
 #'   \code{Site}, \code{Shannon}, \code{Simpson}, \code{Delta},
@@ -74,7 +77,10 @@
 batch_analysis <- function(data,
                            site_column = NULL,
                            tax_columns = NULL,
-                           abundance_column = "Abundance") {
+                           abundance_column = "Abundance",
+                           correction = c("none", "miller_madow",
+                                          "grassberger", "chao_shen")) {
+  correction <- match.arg(correction)
 
   # --- Input validation ---
   if (!is.data.frame(data)) {
@@ -213,7 +219,7 @@ batch_analysis <- function(data,
     rownames(tax_tree) <- NULL
 
     # Compute all indices
-    H <- shannon(community)
+    H <- shannon(community, correction = correction)
     D <- simpson(community)
     Delta_val <- delta(community, tax_tree)
     Delta_s <- delta_star(community, tax_tree)

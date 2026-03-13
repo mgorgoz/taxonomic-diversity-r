@@ -8,7 +8,8 @@ batch_analysis(
   data,
   site_column = NULL,
   tax_columns = NULL,
-  abundance_column = "Abundance"
+  abundance_column = "Abundance",
+  correction = c("none", "miller_madow", "grassberger", "chao_shen")
 )
 }
 \arguments{
@@ -30,6 +31,10 @@ function auto-detects columns named \code{"Species"}, \code{"Genus"},
 
 \item{abundance_column}{Character string specifying the name of the
 abundance column. Default is \code{"Abundance"} (case-insensitive match).}
+
+\item{correction}{Bias correction for the Shannon index. One of
+\code{"none"} (default), \code{"miller_madow"}, \code{"grassberger"}, or
+\code{"chao_shen"}. Passed to \code{\link[=shannon]{shannon()}}. See \code{\link[=shannon]{shannon()}} for details.}
 }
 \value{
 A data frame with one row per site and columns:

@@ -4,7 +4,11 @@
 \alias{deng_entropy_level}
 \title{Calculate Deng Entropy at a Single Taxonomic Level}
 \usage{
-deng_entropy_level(abundances, group_sizes = NULL)
+deng_entropy_level(
+  abundances,
+  group_sizes = NULL,
+  correction = c("none", "miller_madow", "grassberger", "chao_shen")
+)
 }
 \arguments{
 \item{abundances}{A numeric vector of abundances for each group
@@ -14,6 +18,12 @@ deng_entropy_level(abundances, group_sizes = NULL)
 (\verb{|Fi|}) for each group. At species level this is NULL (all sizes
 are 1, reducing to Shannon entropy). At higher taxonomic levels,
 each value represents the number of species within that group.}
+
+\item{correction}{Bias correction method for Shannon entropy
+estimation. Only applied at species level (\code{group_sizes = NULL}).
+One of \code{"none"} (default), \code{"miller_madow"}, \code{"grassberger"},
+or \code{"chao_shen"}. See \code{\link[=shannon]{shannon()}} for details. A warning is
+issued if correction is requested with non-NULL \code{group_sizes}.}
 }
 \value{
 A numeric value representing the Deng entropy at that level.
@@ -35,10 +45,18 @@ entropy reduces to Shannon entropy:
 At higher levels (genus, family, etc.), \eqn{|F_i|} equals the
 number of species within each group, and the mass function is
 the normalized proportion of total abundance in each group.
+
+Bias correction is only meaningful at the species level where Deng
+entropy equals Shannon entropy. At higher taxonomic levels the mass
+function has a different structure and bias-correction formulas do
+not apply.
 }
 \examples{
 # Shannon entropy (species level, |Fi| = 1 for all)
 deng_entropy_level(c(4, 2, 3, 1, 2, 3, 2, 2))
+
+# With bias correction at species level
+deng_entropy_level(c(4, 2, 3, 1, 2), correction = "chao_shen")
 
 # Deng entropy at genus level with group sizes
 deng_entropy_level(c(9, 3, 7), group_sizes = c(3, 2, 3))
@@ -49,5 +67,5 @@ Deng, Y. (2016). Deng entropy. Chaos, Solitons & Fractals, 91, 549-553.
 }
 \seealso{
 \code{\link[=ozkan_pto]{ozkan_pto()}} which uses this function internally,
-\code{\link[=shannon]{shannon()}} for classical Shannon entropy.
+\code{\link[=shannon]{shannon()}} for classical Shannon entropy and bias corrections.
 }

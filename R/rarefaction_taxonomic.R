@@ -16,6 +16,10 @@
 #' @param n_boot Number of bootstrap replicates per step (default: 100).
 #' @param ci Confidence interval width (default: 0.95).
 #' @param seed Optional random seed for reproducibility (default: NULL).
+#' @param correction Bias correction for the Shannon index. One of
+#'   `"none"` (default), `"miller_madow"`, `"grassberger"`, or
+#'   `"chao_shen"`. Only used when `index = "shannon"`. Passed to
+#'   [shannon()]. See [shannon()] for details.
 #'
 #' @return A data frame with columns:
 #'   \describe{
@@ -66,9 +70,13 @@ rarefaction_taxonomic <- function(community, tax_tree,
                                             "uTO", "TO", "uTO_plus",
                                             "TO_plus", "avtd"),
                                   steps = 20, n_boot = 100,
-                                  ci = 0.95, seed = NULL) {
+                                  ci = 0.95, seed = NULL,
+                                  correction = c("none", "miller_madow",
+                                                 "grassberger",
+                                                 "chao_shen")) {
 
   index <- match.arg(index)
+  correction <- match.arg(correction)
 
   # --- Input validation ---
   if (!is.numeric(community) || any(community < 0)) {
@@ -123,7 +131,7 @@ rarefaction_taxonomic <- function(community, tax_tree,
 
     switch(index,
       species = length(sub_comm),
-      shannon = shannon(sub_comm),
+      shannon = shannon(sub_comm, correction = correction),
       simpson = simpson(sub_comm),
       uTO = {
         result <- ozkan_pto(sub_comm, tax_tree)
