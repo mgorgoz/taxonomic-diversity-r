@@ -112,9 +112,7 @@ This package implements the Deng entropy-based taxonomic diversity measure propo
 
 ### Completed
 
-- [x] Core Deng entropy calculation
-- [x] Ozkan pTO formula with slicing procedure
-- [x] Ozkan pTO resampling and sensitivity analysis (Run 2/3)
+- [x] Ozkan pTO — Deng entropy-based taxonomic diversity with full statistical pipeline (jackknife, resampling, sensitivity)
 - [x] Classical diversity indices (Shannon, Simpson)
 - [x] Clarke & Warwick taxonomic distinctness (Delta, Delta*, AvTD, VarTD)
 - [x] Multi-community comparison (`compare_indices`)
