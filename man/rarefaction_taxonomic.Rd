@@ -12,7 +12,9 @@ rarefaction_taxonomic(
   n_boot = 100,
   ci = 0.95,
   seed = NULL,
-  correction = c("none", "miller_madow", "grassberger", "chao_shen")
+  correction = c("none", "miller_madow", "grassberger", "chao_shen"),
+  parallel = FALSE,
+  n_cores = NULL
 )
 }
 \arguments{
@@ -38,6 +40,12 @@ is species names, subsequent columns are taxonomic ranks.}
 \code{"none"} (default), \code{"miller_madow"}, \code{"grassberger"}, or
 \code{"chao_shen"}. Only used when \code{index = "shannon"}. Passed to
 \code{\link[=shannon]{shannon()}}. See \code{\link[=shannon]{shannon()}} for details.}
+
+\item{parallel}{Logical. If \code{TRUE}, use parallel processing to speed up
+bootstrap resampling across sample sizes. Default \code{FALSE}.}
+
+\item{n_cores}{Number of CPU cores to use when \code{parallel = TRUE}. Default
+\code{NULL} uses \code{parallel::detectCores() - 1}.}
 }
 \value{
 A data frame with columns:

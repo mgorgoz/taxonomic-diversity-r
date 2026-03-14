@@ -40,6 +40,10 @@
 #' @param correction Bias correction for the Shannon index. One of
 #'   `"none"` (default), `"miller_madow"`, `"grassberger"`, or
 #'   `"chao_shen"`. Passed to [shannon()]. See [shannon()] for details.
+#' @param parallel Logical. If `TRUE`, use parallel processing to compute
+#'   indices for multiple sites concurrently. Default `FALSE`.
+#' @param n_cores Number of CPU cores to use when `parallel = TRUE`. Default
+#'   `NULL` uses `parallel::detectCores() - 1`.
 #'
 #' @return A data frame with one row per site and columns:
 #'   \code{Site}, \code{Shannon}, \code{Simpson}, \code{Delta},
@@ -79,7 +83,9 @@ batch_analysis <- function(data,
                            tax_columns = NULL,
                            abundance_column = "Abundance",
                            correction = c("none", "miller_madow",
-                                          "grassberger", "chao_shen")) {
+                                          "grassberger", "chao_shen"),
+                           parallel = FALSE,
+                           n_cores = NULL) {
   correction <- match.arg(correction)
 
   # --- Input validation ---
@@ -186,8 +192,8 @@ batch_analysis <- function(data,
     site_list <- split(data, data[[site_col]])
   }
 
-  # --- Compute indices for each site ---
-  results <- lapply(names(site_list), function(site_name) {
+  # --- Worker function: compute indices for one site ---
+  compute_site <- function(site_name) {
     site_data <- site_list[[site_name]]
 
     # Build community vector
@@ -205,30 +211,26 @@ batch_analysis <- function(data,
     }
 
     # Build tax_tree for this site's species
-    # We need to find the taxonomy for each species present
     sp_present <- names(community)
-
-    # Get unique taxonomy rows for present species
     tax_rows <- site_data[match(sp_present, as.character(site_data[[species_col]])), ]
-    tax_tree <- tax_rows[, tax_cols, drop = FALSE]
+    tax_tree_site <- tax_rows[, tax_cols, drop = FALSE]
 
-    # Ensure all columns are character
-    for (j in seq_along(tax_tree)) {
-      tax_tree[[j]] <- as.character(tax_tree[[j]])
+    for (j in seq_along(tax_tree_site)) {
+      tax_tree_site[[j]] <- as.character(tax_tree_site[[j]])
     }
-    rownames(tax_tree) <- NULL
+    rownames(tax_tree_site) <- NULL
 
     # Compute all indices
     H <- shannon(community, correction = correction)
     D <- simpson(community)
-    Delta_val <- delta(community, tax_tree)
-    Delta_s <- delta_star(community, tax_tree)
+    Delta_val <- delta(community, tax_tree_site)
+    Delta_s <- delta_star(community, tax_tree_site)
 
     sp_names <- names(community)
-    AvTD_val <- avtd(sp_names, tax_tree)
-    VarTD_val <- vartd(sp_names, tax_tree)
+    AvTD_val <- avtd(sp_names, tax_tree_site)
+    VarTD_val <- vartd(sp_names, tax_tree_site)
 
-    pto <- pto_components(community, tax_tree)
+    pto <- pto_components(community, tax_tree_site)
 
     data.frame(
       Site       = site_name,
@@ -245,7 +247,33 @@ batch_analysis <- function(data,
       row.names  = NULL,
       stringsAsFactors = FALSE
     )
-  })
+  }
+
+  # --- Run: parallel or sequential ---
+  site_names <- names(site_list)
+
+  if (isTRUE(parallel) && length(site_names) > 1) {
+    n_cores_use <- if (is.null(n_cores)) max(1L, parallel::detectCores() - 1L) else max(1L, as.integer(n_cores))
+
+    if (.Platform$OS.type == "windows") {
+      cl <- parallel::makeCluster(n_cores_use)
+      on.exit(parallel::stopCluster(cl), add = TRUE)
+      parallel::clusterExport(cl, varlist = c(
+        "site_list", "species_col", "abd_col", "tax_cols", "correction"
+      ), envir = environment())
+      ns <- asNamespace(utils::packageName())
+      parallel::clusterExport(cl, varlist = c(
+        "shannon", "simpson", "delta", "delta_star",
+        "avtd", "vartd", "pto_components"
+      ), envir = ns)
+      results <- parallel::parLapply(cl, site_names, compute_site)
+    } else {
+      results <- parallel::mclapply(site_names, compute_site,
+                                     mc.cores = n_cores_use)
+    }
+  } else {
+    results <- lapply(site_names, compute_site)
+  }
 
   # Remove NULLs (skipped sites)
   results <- results[!vapply(results, is.null, logical(1))]

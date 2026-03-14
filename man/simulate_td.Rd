@@ -11,7 +11,9 @@ simulate_td(
   index = c("both", "avtd", "vartd"),
   weights = NULL,
   ci = 0.95,
-  seed = NULL
+  seed = NULL,
+  parallel = FALSE,
+  n_cores = NULL
 )
 }
 \arguments{
@@ -35,6 +37,12 @@ levels. Passed to \code{\link[=avtd]{avtd()}} and \code{\link[=vartd]{vartd()}}.
 \item{ci}{Confidence interval width (default 0.95).}
 
 \item{seed}{Optional random seed for reproducibility.}
+
+\item{parallel}{Logical. If \code{TRUE}, use parallel processing to speed up
+simulations. Default \code{FALSE}.}
+
+\item{n_cores}{Number of CPU cores to use when \code{parallel = TRUE}. Default
+\code{NULL} uses \code{parallel::detectCores() - 1}.}
 }
 \value{
 A data frame with class \code{"td_simulation"} containing

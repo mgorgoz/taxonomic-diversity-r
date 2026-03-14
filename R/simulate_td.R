@@ -20,6 +20,10 @@
 #'   levels. Passed to [avtd()] and [vartd()].
 #' @param ci Confidence interval width (default 0.95).
 #' @param seed Optional random seed for reproducibility.
+#' @param parallel Logical. If `TRUE`, use parallel processing to speed up
+#'   simulations. Default `FALSE`.
+#' @param n_cores Number of CPU cores to use when `parallel = TRUE`. Default
+#'   `NULL` uses `parallel::detectCores() - 1`.
 #'
 #' @return A data frame with class `"td_simulation"` containing
 #'   columns:
@@ -75,7 +79,9 @@ simulate_td <- function(tax_tree,
                          index = c("both", "avtd", "vartd"),
                          weights = NULL,
                          ci = 0.95,
-                         seed = NULL) {
+                         seed = NULL,
+                         parallel = FALSE,
+                         n_cores = NULL) {
 
   index <- match.arg(index)
 
@@ -122,27 +128,20 @@ simulate_td <- function(tax_tree,
   q_lo <- alpha / 2
   q_hi <- 1 - alpha / 2
 
-  results <- vector("list", length(s_range))
-
-  for (k in seq_along(s_range)) {
-    s <- s_range[k]
-
+  # --- Worker function for one richness value ---
+  sim_one_s <- function(s) {
     avtd_vals <- if (do_avtd) numeric(n_sim) else NULL
     vartd_vals <- if (do_vartd) numeric(n_sim) else NULL
 
     for (i in seq_len(n_sim)) {
       spp <- sample(all_species, s, replace = FALSE)
-
-      if (do_avtd) {
+      if (do_avtd)
         avtd_vals[i] <- avtd(spp, tax_tree, weights = weights)
-      }
-      if (do_vartd) {
+      if (do_vartd)
         vartd_vals[i] <- vartd(spp, tax_tree, weights = weights)
-      }
     }
 
     row <- list(s = s)
-
     if (do_avtd) {
       row$mean_avtd  <- mean(avtd_vals)
       row$lower_avtd <- stats::quantile(avtd_vals, q_lo, names = FALSE)
@@ -153,8 +152,34 @@ simulate_td <- function(tax_tree,
       row$lower_vartd <- stats::quantile(vartd_vals, q_lo, names = FALSE)
       row$upper_vartd <- stats::quantile(vartd_vals, q_hi, names = FALSE)
     }
+    as.data.frame(row)
+  }
 
-    results[[k]] <- as.data.frame(row)
+  # --- Run: parallel or sequential ---
+  if (isTRUE(parallel)) {
+    n_cores <- if (is.null(n_cores)) max(1L, parallel::detectCores() - 1L) else as.integer(n_cores)
+    n_cores <- max(1L, n_cores)
+
+    if (.Platform$OS.type == "windows") {
+      cl <- parallel::makeCluster(n_cores)
+      on.exit(parallel::stopCluster(cl), add = TRUE)
+      # Export required objects and functions to workers
+      parallel::clusterExport(cl, varlist = c(
+        "all_species", "n_sim", "do_avtd", "do_vartd",
+        "q_lo", "q_hi", "weights", "tax_tree"
+      ), envir = environment())
+      ns <- asNamespace(utils::packageName())
+      parallel::clusterExport(cl, varlist = c("avtd", "vartd"),
+                               envir = ns)
+      if (!is.null(seed)) parallel::clusterSetRNGStream(cl, seed)
+      results <- parallel::parLapply(cl, s_range, sim_one_s)
+    } else {
+      results <- parallel::mclapply(s_range, sim_one_s,
+                                     mc.cores = n_cores,
+                                     mc.set.seed = TRUE)
+    }
+  } else {
+    results <- lapply(s_range, sim_one_s)
   }
 
   out <- do.call(rbind, results)

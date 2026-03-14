@@ -20,6 +20,10 @@
 #'   `"none"` (default), `"miller_madow"`, `"grassberger"`, or
 #'   `"chao_shen"`. Only used when `index = "shannon"`. Passed to
 #'   [shannon()]. See [shannon()] for details.
+#' @param parallel Logical. If `TRUE`, use parallel processing to speed up
+#'   bootstrap resampling across sample sizes. Default `FALSE`.
+#' @param n_cores Number of CPU cores to use when `parallel = TRUE`. Default
+#'   `NULL` uses `parallel::detectCores() - 1`.
 #'
 #' @return A data frame with columns:
 #'   \describe{
@@ -73,7 +77,9 @@ rarefaction_taxonomic <- function(community, tax_tree,
                                   ci = 0.95, seed = NULL,
                                   correction = c("none", "miller_madow",
                                                  "grassberger",
-                                                 "chao_shen")) {
+                                                 "chao_shen"),
+                                  parallel = FALSE,
+                                  n_cores = NULL) {
 
   index <- match.arg(index)
   correction <- match.arg(correction)
@@ -157,47 +163,56 @@ rarefaction_taxonomic <- function(community, tax_tree,
     )
   }
 
-  # --- Bootstrap resampling at each sample size ---
-  results <- data.frame(
-    sample_size = integer(0),
-    mean = numeric(0),
-    lower = numeric(0),
-    upper = numeric(0),
-    sd = numeric(0)
-  )
-
-  for (n in sample_sizes) {
+  # --- Worker: bootstrap at one sample size ---
+  boot_one_step <- function(n) {
     boot_values <- numeric(n_boot)
-
     for (b in seq_len(n_boot)) {
-      # Draw n individuals without replacement
       sub_individuals <- sample(individuals, size = n, replace = FALSE)
-
-      # Tabulate to get abundance vector
       sub_comm <- table(sub_individuals)
       sub_comm <- setNames(as.numeric(sub_comm), names(sub_comm))
-
-      # Compute index
-      val <- tryCatch(
-        compute_index(sub_comm),
-        error = function(e) NA_real_
-      )
+      val <- tryCatch(compute_index(sub_comm), error = function(e) NA_real_)
       boot_values[b] <- val
     }
-
-    # Remove NAs
     boot_clean <- boot_values[!is.na(boot_values)]
     if (length(boot_clean) == 0) boot_clean <- 0
-
-    results <- rbind(results, data.frame(
+    data.frame(
       sample_size = n,
       mean = mean(boot_clean),
       lower = stats::quantile(boot_clean, q_lower, names = FALSE),
       upper = stats::quantile(boot_clean, q_upper, names = FALSE),
       sd = stats::sd(boot_clean)
-    ))
+    )
   }
 
+  # --- Run: parallel or sequential ---
+  if (isTRUE(parallel)) {
+    n_cores_use <- if (is.null(n_cores)) max(1L, parallel::detectCores() - 1L) else max(1L, as.integer(n_cores))
+
+    if (.Platform$OS.type == "windows") {
+      cl <- parallel::makeCluster(n_cores_use)
+      on.exit(parallel::stopCluster(cl), add = TRUE)
+      parallel::clusterExport(cl, varlist = c(
+        "individuals", "n_boot", "q_lower", "q_upper",
+        "compute_index"
+      ), envir = environment())
+      ns <- asNamespace(utils::packageName())
+      fns_to_export <- c("shannon", "simpson", "ozkan_pto", "avtd")
+      fns_to_export <- fns_to_export[vapply(fns_to_export, exists, logical(1), where = ns)]
+      if (length(fns_to_export) > 0) {
+        parallel::clusterExport(cl, varlist = fns_to_export, envir = ns)
+      }
+      if (!is.null(seed)) parallel::clusterSetRNGStream(cl, seed)
+      result_list <- parallel::parLapply(cl, sample_sizes, boot_one_step)
+    } else {
+      result_list <- parallel::mclapply(sample_sizes, boot_one_step,
+                                         mc.cores = n_cores_use,
+                                         mc.set.seed = TRUE)
+    }
+  } else {
+    result_list <- lapply(sample_sizes, boot_one_step)
+  }
+
+  results <- do.call(rbind, result_list)
   rownames(results) <- NULL
 
   # Add metadata as attributes

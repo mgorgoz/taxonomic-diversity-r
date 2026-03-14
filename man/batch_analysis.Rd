@@ -9,7 +9,9 @@ batch_analysis(
   site_column = NULL,
   tax_columns = NULL,
   abundance_column = "Abundance",
-  correction = c("none", "miller_madow", "grassberger", "chao_shen")
+  correction = c("none", "miller_madow", "grassberger", "chao_shen"),
+  parallel = FALSE,
+  n_cores = NULL
 )
 }
 \arguments{
@@ -35,6 +37,12 @@ abundance column. Default is \code{"Abundance"} (case-insensitive match).}
 \item{correction}{Bias correction for the Shannon index. One of
 \code{"none"} (default), \code{"miller_madow"}, \code{"grassberger"}, or
 \code{"chao_shen"}. Passed to \code{\link[=shannon]{shannon()}}. See \code{\link[=shannon]{shannon()}} for details.}
+
+\item{parallel}{Logical. If \code{TRUE}, use parallel processing to compute
+indices for multiple sites concurrently. Default \code{FALSE}.}
+
+\item{n_cores}{Number of CPU cores to use when \code{parallel = TRUE}. Default
+\code{NULL} uses \code{parallel::detectCores() - 1}.}
 }
 \value{
 A data frame with one row per site and columns:
