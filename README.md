@@ -135,7 +135,6 @@ This package implements the Deng entropy-based taxonomic diversity measure propo
 
 ### In Progress / Planned
 
-- [ ] Remove `ozkan_pto_macro()` — temporary backward-compatibility function, will be deprecated
 - [ ] S3 class system — `print()`, `summary()`, `plot()` methods for all output objects
 - [ ] Parallel computing support for `simulate_td`, `rarefaction_taxonomic`, `batch_analysis`
 - [ ] JOSS paper.md
