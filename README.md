@@ -110,36 +110,37 @@ This package implements the Deng entropy-based taxonomic diversity measure propo
 
 ## Roadmap
 
+### Completed
+
 - [x] Core Deng entropy calculation
 - [x] Ozkan pTO formula with slicing procedure
 - [x] Ozkan pTO resampling and sensitivity analysis (Run 2/3)
 - [x] Classical diversity indices (Shannon, Simpson)
 - [x] Clarke & Warwick taxonomic distinctness (Delta, Delta*, AvTD, VarTD)
-- [x] Multi-community comparison (compare_indices)
-- [x] Visualization suite (dendrogram, heatmap, bubble, radar, iteration)
-- [x] Excel template and data import support
-- [x] Turkish vignette (giris_rehberi)
-- [x] Taxonomic rarefaction with bootstrap CI
-- [x] Mathematical background vignette (LaTeX formulas)
+- [x] Multi-community comparison (`compare_indices`)
+- [x] Batch analysis from Excel/CSV (`batch_analysis`)
+- [x] Visualization suite — 7 plot types (dendrogram, heatmap, bubble, radar, iteration, rarefaction, funnel)
+- [x] Funnel plots for AvTD/VarTD significance testing (`simulate_td`, `plot_funnel`)
+- [x] Bias-corrected Shannon entropy (Miller-Madow, Grassberger, Chao-Shen)
+- [x] Taxonomic rarefaction with bootstrap CI (8 index options)
+- [x] Excel template with 4 sheets (`inst/templates/taxdiv_template.xlsx`)
+- [x] Example datasets — `anatolian_trees`, `gazi_comm`, `gazi_gytk`
+- [x] Turkish and English vignettes
+- [x] PAST validation (Delta, Delta*, AvTD, VarTD — 5 sites, exact match)
+- [x] Published formula vs Excel macro comparison (`ozkan_pto` vs `ozkan_pto_macro`)
 - [x] CITATION file with BibTeX references
-- [x] R CMD check CRAN compliance
+- [x] R CMD check: 0 errors, 0 warnings, 0 notes
 - [x] GitHub Actions CI/CD
-- [x] PAST dogrulama (Delta, Delta*, AvTD, VarTD — 5 alan, tez verisiyle birebir eslesme)
-- [x] Makale vs makro formul karsilastirmasi (ozkan_pto vs ozkan_pto_macro ayri fonksiyonlar)
-- [ ] `ozkan_pto_macro()` fonksiyonunu kaldir — Makale formulune (Ozkan 2018, Denklem 4) sadik kalan `ozkan_pto()` kalici fonksiyondur. Makro uyumlu `ozkan_pto_macro()` gecici olarak pakette bulunmaktadir (`R/ozkan_pto_macro.R`). Karsilastirma tamamlanip makale formulu dogrulandiktan sonra `R/ozkan_pto_macro.R` ve `man/ozkan_pto_macro.Rd` silinip `devtools::document()` calistirilarak temizlenmelidir.
-- [ ] Excel Islem 2/3 karsilastirmasi
-- [x] Ornek veri seti → .rda (anatolian_trees, gazi_comm, gazi_gytk)
-- [ ] JOSS paper.md hazirlama
-- [ ] Literature review — 10 makale
-- [ ] taxize paketi kesfi
-- [ ] pkgdown web sitesi
-- [ ] Funnel plots for AvTD/VarTD significance testing
-- [ ] Bias-corrected entropy estimators
-- [ ] Topluluk kesfi
-- [ ] ggtree arastirmasi
-- [ ] Topluluk katkisi
-- [ ] S3 sinif sistemi
-- [ ] Paralel hesaplama
+- [x] 467+ unit tests
+
+### In Progress / Planned
+
+- [ ] Remove `ozkan_pto_macro()` — temporary backward-compatibility function, will be deprecated
+- [ ] S3 class system — `print()`, `summary()`, `plot()` methods for all output objects
+- [ ] Parallel computing support for `simulate_td`, `rarefaction_taxonomic`, `batch_analysis`
+- [ ] JOSS paper.md
+- [ ] pkgdown documentation website
+- [ ] taxize integration — auto-fetch taxonomy from GBIF/ITIS
 - [ ] CRAN submission
 
 ## License
