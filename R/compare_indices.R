@@ -133,6 +133,7 @@ compare_indices <- function(communities, tax_tree,
   })
 
   result_df <- do.call(rbind, results)
+  class(result_df) <- c("compare_indices", "data.frame")
 
   # --- Return table only if plot = FALSE ---
   if (!plot) {

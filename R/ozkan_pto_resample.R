@@ -301,7 +301,7 @@ ozkan_pto_resample <- function(community, tax_tree, n_iter = 101L,
   # Count iterations with positive uTO+ (needed for Run 3 probability)
   n_positive <- sum(results[, "uTO_plus"] > 0, na.rm = TRUE)
 
-  return(list(
+  result <- list(
     uTO_plus_max      = unname(max_vals["uTO_plus"]),
     TO_plus_max       = unname(max_vals["TO_plus"]),
     uTO_max           = unname(max_vals["uTO"]),
@@ -315,7 +315,9 @@ ozkan_pto_resample <- function(community, tax_tree, n_iter = 101L,
     jackknife         = jk,
     n_positive        = n_positive,
     iteration_results = iter_df
-  ))
+  )
+  class(result) <- "ozkan_pto_resample"
+  return(result)
 }
 
 
@@ -510,7 +512,7 @@ ozkan_pto_sensitivity <- function(community, tax_tree, run2_result,
   iter_df$iteration <- seq_len(n_iter)
   iter_df <- iter_df[, c("iteration", "uTO_plus", "TO_plus", "uTO", "TO")]
 
-  return(list(
+  result <- list(
     uTO_plus_max      = unname(overall_max["uTO_plus"]),
     TO_plus_max       = unname(overall_max["TO_plus"]),
     uTO_max           = unname(overall_max["uTO"]),
@@ -524,7 +526,9 @@ ozkan_pto_sensitivity <- function(community, tax_tree, run2_result,
     prob_happy        = prob_happy,
     prob_unhappy      = prob_unhappy,
     iteration_results = iter_df
-  ))
+  )
+  class(result) <- "ozkan_pto_sensitivity"
+  return(result)
 }
 
 

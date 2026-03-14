@@ -205,6 +205,7 @@ rarefaction_taxonomic <- function(community, tax_tree,
   attr(results, "total_n") <- total_n
   attr(results, "n_boot") <- n_boot
   attr(results, "ci") <- ci
+  class(results) <- c("rarefaction_taxonomic", "data.frame")
 
   return(results)
 }

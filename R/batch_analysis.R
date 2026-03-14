@@ -256,6 +256,7 @@ batch_analysis <- function(data,
 
   result_df <- do.call(rbind, results)
   rownames(result_df) <- NULL
+  class(result_df) <- c("batch_analysis", "data.frame")
 
   return(result_df)
 }

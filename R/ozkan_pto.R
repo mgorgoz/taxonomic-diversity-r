@@ -110,11 +110,13 @@ ozkan_pto <- function(community, tax_tree) {
 
   # --- If only one species, pTO = 0 ---
   if (n_species == 1) {
-    return(list(
+    result <- list(
       uTO = 0, TO = 0, uTO_plus = 0, TO_plus = 0,
       Ed_levels = setNames(rep(0, n_levels + 1),
                            c("Species", names(tax_tree)[-1]))
-    ))
+    )
+    class(result) <- "ozkan_pto"
+    return(result)
   }
 
   # --- Helper: compute Deng entropy at all levels for a given set of
@@ -262,13 +264,15 @@ ozkan_pto <- function(community, tax_tree) {
   uTO <- log(sum_unweighted / denom)
   TO <- log(sum_weighted / denom)
 
-  return(list(
+  result <- list(
     uTO = uTO,
     TO = TO,
     uTO_plus = uTO_plus,
     TO_plus = TO_plus,
     Ed_levels = Ed
-  ))
+  )
+  class(result) <- "ozkan_pto"
+  return(result)
 }
 
 
