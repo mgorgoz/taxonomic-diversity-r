@@ -21,8 +21,8 @@ Useful links:
 
 Authors:
 \itemize{
-  \item Kursad Ozkan
   \item Mehmet Guvenc Negiz
+  \item Kursad Ozkan
 }
 
 }
