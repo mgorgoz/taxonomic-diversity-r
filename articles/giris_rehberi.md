@@ -123,6 +123,17 @@ cat("Ters Simpson (1/D):", round(inv_D, 4), "\n")
 **Yorum**: Shannon degeri ne kadar yuksekse topluluk o kadar cesitlidir.
 Simpson baskinlik degeri ne kadar dusukse o kadar iyi dagilim vardir.
 
+Shannon ve Simpson icin `correction = "chao_shen"` parametresiyle Chao &
+Shen (2003) yanliliksiz tahminci kullanilabilir:
+
+``` r
+H_duz <- shannon(topluluk, correction = "chao_shen")
+cat("Shannon (Chao-Shen duzeltmeli):", round(H_duz, 4), "\n")
+#> Shannon (Chao-Shen duzeltmeli): 2.17
+cat("Shannon (duzeltmesiz):         ", round(H, 4), "\n")
+#> Shannon (duzeltmesiz):          2.1692
+```
+
 ## Adim 2: Taksonomik Mesafe Matrisi
 
 Taksonomik cesitliligi hesaplamadan once turler arasi **taksonomik
@@ -265,8 +276,55 @@ for (i in seq_along(sonuc$Ed_levels)) {
 #>    Kingdom : 0
 ```
 
+### max_level parametresi
+
+[`ozkan_pto()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/ozkan_pto.md)
+fonksiyonunda `max_level` parametresi ile hesaplamada kullanilacak
+maksimum taksonomik seviye sinirlanabilir. Varsayilan `NULL` tum
+seviyeleri kullanir. `"auto"` bilgi icermeyen seviyeleri otomatik eler:
+
+``` r
+# Tum seviyeler (varsayilan)
+r_full <- ozkan_pto(topluluk, agac, max_level = NULL)
+cat("Tum seviyeler: uTO =", round(r_full$uTO, 4),
+    " TO =", round(r_full$TO, 4), "\n")
+#> Tum seviyeler: uTO = 8.6804  TO = 15.2596
+
+# Otomatik seviye secimi
+r_auto <- ozkan_pto(topluluk, agac, max_level = "auto")
+cat("Auto seviye:   uTO =", round(r_auto$uTO, 4),
+    " TO =", round(r_auto$TO, 4), "\n")
+#> Auto seviye:   uTO = 8.6804  TO = 15.2596
+cat("Bilgilendirici seviye:", r_auto$max_informative_level, "\n")
+#> Bilgilendirici seviye: 5
+
+# Sadece ilk 3 seviye
+r_3 <- ozkan_pto(topluluk, agac, max_level = 3)
+cat("Ilk 3 seviye:  uTO =", round(r_3$uTO, 4),
+    " TO =", round(r_3$TO, 4), "\n")
+#> Ilk 3 seviye:  uTO = 8.6804  TO = 15.2596
+```
+
+### 8 Bilesenli Cikti
+
+`max_level` kullanildiginda
+[`ozkan_pto()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/ozkan_pto.md)
+hem standart hem max_level degerlerini dondurur:
+
+``` r
+sonuc8 <- ozkan_pto(topluluk, agac, max_level = "auto")
+cat("Standart:  uTO =", round(sonuc8$uTO, 4),
+    " TO =", round(sonuc8$TO, 4), "\n")
+#> Standart:  uTO = 8.6804  TO = 15.2596
+cat("Max-level: uTO_max =", round(sonuc8$uTO_max, 4),
+    " TO_max =", round(sonuc8$TO_max, 4), "\n")
+#> Max-level: uTO_max = 8.6804  TO_max = 15.2596
+cat("Bilgilendirici seviye sayisi:", sonuc8$max_informative_level, "\n")
+#> Bilgilendirici seviye sayisi: 5
+```
+
 [`pto_components()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/pto_components.md)
-ile dort degeri tek satirda alabilirsiniz:
+ile tek satirda alabilirsiniz:
 
 ``` r
 pto_components(topluluk, agac)
@@ -366,36 +424,161 @@ print(veri_cercevesi, row.names = FALSE)
 #>     Carpinus_betulus    0.902
 ```
 
-## Tam Pipeline Ozeti
+## Adim 7: Tam Pipeline (ozkan_pto_full)
 
-Ozkan (2018) analiz hatti uc asamadan olusur:
+[`ozkan_pto_full()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/ozkan_pto_full.md)
+fonksiyonu uc islemi tek satirda calistirir:
 
 ``` r
+tam <- ozkan_pto_full(topluluk, agac, n_iter = 101, seed = 42)
+
 cat("Pipeline: Islem 1 -> Islem 2 -> Islem 3\n\n")
 #> Pipeline: Islem 1 -> Islem 2 -> Islem 3
-
 cat("          uTO+      TO+       uTO       TO\n")
 #>           uTO+      TO+       uTO       TO
 cat("Islem 1:", sprintf("%9.4f %9.4f %9.4f %9.4f",
-    islem2$uTO_plus_det, islem2$TO_plus_det,
-    islem2$uTO_det, islem2$TO_det), "\n")
+    tam$run1$uTO_plus, tam$run1$TO_plus,
+    tam$run1$uTO, tam$run1$TO), "\n")
 #> Islem 1:    8.9019   15.4812    8.6804   15.2596
 cat("Islem 2:", sprintf("%9.4f %9.4f %9.4f %9.4f",
-    islem2$uTO_plus_max, islem2$TO_plus_max,
-    islem2$uTO_max, islem2$TO_max), "\n")
+    tam$run2$uTO_plus_max, tam$run2$TO_plus_max,
+    tam$run2$uTO_max, tam$run2$TO_max), "\n")
 #> Islem 2:    8.9019   15.4812    8.6804   15.2596
 cat("Islem 3:", sprintf("%9.4f %9.4f %9.4f %9.4f",
-    islem3$uTO_plus_max, islem3$TO_plus_max,
-    islem3$uTO_max, islem3$TO_max), "\n")
-#> Islem 3:    9.4113   15.9905    9.0047   15.5839
+    tam$run3$uTO_plus_max, tam$run3$TO_plus_max,
+    tam$run3$uTO_max, tam$run3$TO_max), "\n")
+#> Islem 3:    9.3926   15.9718    9.0047   15.5839
 ```
 
 Her asama bir oncekine esit veya daha buyuk deger uretir.
 
+## Adim 8: Jackknife Yanliliksiz Tahmin
+
+[`ozkan_pto_jackknife()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/ozkan_pto_jackknife.md)
+birer birer tur cikararak (leave-one-out) yanliliksiz pTO tahmini
+hesaplar:
+
+``` r
+jk <- ozkan_pto_jackknife(topluluk, agac)
+
+cat("Tam sonuc uTO+:", round(jk$full_result$uTO_plus, 4), "\n")
+#> Tam sonuc uTO+: 8.9019
+cat("Tam sonuc TO+: ", round(jk$full_result$TO_plus, 4), "\n")
+#> Tam sonuc TO+:  15.4812
+cat("Mutlu turler:  ", jk$n_happy, "/", jk$n_happy + jk$n_unhappy, "\n\n")
+#> Mutlu turler:   4 / 10
+
+# Her turun cikarildiginda sonuc nasil degisiyor?
+head(jk$jackknife_results)
+#>               species uTO_plus  TO_plus      uTO       TO is_happy
+#> 1   Quercus_coccifera 8.733962 15.31321 8.559784 15.13901     TRUE
+#> 2  Quercus_infectoria 8.733962 15.31321 8.582377 15.16162     TRUE
+#> 3        Pinus_brutia 9.285601 15.86485 8.875835 15.45488    FALSE
+#> 4         Pinus_nigra 9.285601 15.86485 8.843811 15.42306    FALSE
+#> 5   Juniperus_excelsa 9.112068 15.69132 8.731124 15.31037    FALSE
+#> 6 Juniperus_oxycedrus 9.112068 15.69132 8.764605 15.34385    FALSE
+```
+
+## Adim 9: Toplu Analiz (batch_analysis)
+
+Birden fazla ornek alani ayni anda analiz etmek icin
+[`batch_analysis()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/batch_analysis.md)
+kullanilir. Her ornek alan icin tur sayisi ve 14 cesitlilik indeksini
+otomatik hesaplar:
+
+``` r
+# Coklu ornek alan verisi
+veri <- data.frame(
+  Site = rep(c("Alan_A", "Alan_B"), each = 5),
+  Species = rep(c("Pinus_brutia", "Pinus_nigra", "Quercus_coccifera",
+                  "Juniperus_excelsa", "Cedrus_libani"), 2),
+  Abundance = c(30, 12, 25, 8, 15, 5, 40, 10, 3, 2),
+  Genus = rep(c("Pinus", "Pinus", "Quercus", "Juniperus", "Cedrus"), 2),
+  Family = rep(c("Pinaceae", "Pinaceae", "Fagaceae",
+                 "Cupressaceae", "Pinaceae"), 2),
+  Order = rep(c("Pinales", "Pinales", "Fagales", "Pinales", "Pinales"), 2)
+)
+
+sonuc_batch <- batch_analysis(veri)
+print(sonuc_batch)
+#> taxdiv -- Batch Analysis
+#>   Sites: 2 
+#>   Indices: 14 
+#> 
+#>    Site N_Species  Shannon  Simpson    Delta Delta_star AvTD VarTD      uTO
+#>  Alan_A         5 1.504443 0.758272 1.963296   2.560404  2.6  0.44 5.444330
+#>  Alan_B         5 1.039172 0.517222 1.301130   2.473684  2.6  0.44 4.330512
+#>        TO uTO_plus  TO_plus  uTO_max   TO_max uTO_plus_max TO_plus_max
+#>  8.622250 5.845169 9.023223 5.444330 8.622250     5.845169    9.023223
+#>  7.501388 5.845169 9.023223 4.330512 7.501388     5.845169    9.023223
+```
+
+Cikti 16 sutundan olusur: Site, N_Species ve 14 cesitlilik indeksi.
+
+## Adim 10: Rarefaction (Seyreltme)
+
+Rarefaction, farkli orneklem buyukluklerinin cesitlilik tahminleri
+uzerindeki etkisini degerlendirir. Egri duzlestiyse orneklemeniz
+yeterlidir:
+
+``` r
+rare <- rarefaction_taxonomic(topluluk, agac,
+                               index = "shannon",
+                               steps = 10, n_boot = 100, seed = 42)
+cat("Rarefaction sonuclari (Shannon):\n")
+#> Rarefaction sonuclari (Shannon):
+print(round(rare, 4))
+#> taxdiv -- Rarefaction Curve
+#>   Index: shannon 
+#>   Total N: 150 
+#>   Bootstrap: 100 replicates
+#>   CI: 95 %
+#>   Steps: 10 
+#> 
+#>  sample_size   mean  lower  upper     sd
+#>            5 1.3380 0.9503 1.6094 0.2354
+#>           21 1.9429 1.5955 2.1907 0.1521
+#>           37 2.0616 1.8675 2.1989 0.0926
+#>           53 2.1004 1.9616 2.2042 0.0640
+#>           69 2.1268 2.0265 2.1993 0.0470
+#>           86 2.1421 2.0617 2.2006 0.0375
+#>          102 2.1525 2.0814 2.1980 0.0298
+#>          118 2.1596 2.1205 2.2018 0.0214
+#>          134 2.1664 2.1307 2.1929 0.0159
+#>          150 2.1692 2.1692 2.1692 0.0000
+```
+
+## Adim 11: Simuelasyon ve Huni Grafigi (Funnel Plot)
+
+[`simulate_td()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/simulate_td.md)
+ile belirli bir tur havuzundan rastgele topluluklar olusturarak beklenen
+indeks dagilimini hesaplayabilirsiniz. Bu dagilim huni grafigi ile
+gorsellestirilerek gercek toplulugun beklenen aralikta olup olmadigi
+degerlendirilir:
+
+``` r
+sim <- simulate_td(agac, n_sim = 100, seed = 42)
+summary(sim)
+#>        s        mean_avtd       lower_avtd      upper_avtd      mean_vartd   
+#>  Min.   : 2   Min.   :4.295   Min.   :1.000   Min.   :4.311   Min.   :0.000  
+#>  1st Qu.: 4   1st Qu.:4.302   1st Qu.:2.500   1st Qu.:4.464   1st Qu.:3.213  
+#>  Median : 6   Median :4.315   Median :3.600   Median :4.667   Median :3.468  
+#>  Mean   : 6   Mean   :4.338   Mean   :3.209   Mean   :4.787   Mean   :2.930  
+#>  3rd Qu.: 8   3rd Qu.:4.380   3rd Qu.:3.929   3rd Qu.:5.000   3rd Qu.:3.486  
+#>  Max.   :10   Max.   :4.423   Max.   :4.311   Max.   :6.000   Max.   :3.505  
+#>   lower_vartd      upper_vartd   
+#>  Min.   :0.0000   Min.   :0.000  
+#>  1st Qu.:0.5833   1st Qu.:3.731  
+#>  Median :2.7556   Median :4.032  
+#>  Mean   :2.1336   Mean   :3.841  
+#>  3rd Qu.:3.1671   3rd Qu.:4.596  
+#>  Max.   :3.5032   Max.   :5.556
+```
+
 ## Gorsellestime
 
-taxdiv paketi ggplot2 tabanli cesitli gorsellestirme fonksiyonlari
-sunar.
+taxdiv paketi ggplot2 tabanli yedi ozel gorsellestirme fonksiyonu sunar.
+Her biri farkli bir analitik soruya cevap verir.
 
 ### Taksonomik Agac (Dendogram)
 
@@ -412,7 +595,7 @@ dendogrami](giris_rehberi_files/figure-html/dendogram-1.png)
 
 **Nasil okunur:** Ayni daldan cikan turler taksonomik olarak yakindir.
 Parantez icindeki sayilar bolluk degerleridir. Renkler familyalari
-gosterir.
+gosterir. Uzun dallar daha buyuk taksonomik mesafeyi temsil eder.
 
 ### Taksonomik Mesafe Isi Haritasi (Heatmap)
 
@@ -427,14 +610,16 @@ plot_heatmap(agac, label_size = 2.8,
 haritasi](giris_rehberi_files/figure-html/heatmap-1.png)
 
 **Nasil okunur:** Koyu kirmizi = uzak turler, beyaz = yakin turler. Her
-hucredeki sayi taksonomik mesafe degerini gosterir.
+hucredeki sayi taksonomik mesafe degerini gosterir. Kosegen her zaman
+sifirdir.
 
 ### Indeks Karsilastirma (Bar Plot)
 
-Birden fazla toplulugu tum indeksler uzerinden karsilastirir:
+Birden fazla toplulugu tum indeksler uzerinden karsilastirir. Ikinci bir
+topluluk olusturuyoruz: ayni turler ama bir tur baskin:
 
 ``` r
-# Ikinci topluluk: tek tur baskin
+# Baskin topluluk: ayni turler, farkli bolluk dagilimi
 baskin_topluluk <- c(
   Quercus_coccifera   = 80, Quercus_infectoria  = 5,
   Pinus_brutia        = 3,  Pinus_nigra         = 2,
@@ -447,20 +632,24 @@ topluluklar <- list(
   Cesitli = topluluk,
   Baskin  = baskin_topluluk
 )
+```
 
+``` r
 sonuc_plot <- compare_indices(topluluklar, agac, plot = TRUE)
 sonuc_plot$plot
 ```
 
-![Cesitli ve baskin topluluklar icin cesitlilik indekslerinin cubuk
+![Cesitli ve baskin topluluklar icin 14 cesitlilik indeksinin cubuk
 grafigi
 karsilastirmasi](giris_rehberi_files/figure-html/karsilastirma-1.png)
 
-**Nasil okunur:** Cesitli toplulugun Shannon, Simpson, Delta degerleri
-yuksek. Ama AvTD, VarTD, uTO+, TO+ ayni cunku iki toplulukta da ayni
-turler var — sadece bolluk dagilimi farkli.
+**Nasil okunur:** Bolluga bagimli indeksler (Shannon, Simpson, Delta,
+TO) iki topluluk arasinda belirgin farklilik gosterir. Bolluktan
+bagimsiz indeksler (AvTD, VarTD, uTO+, TO+) aynidir cunku iki toplulukta
+da ayni turler vardir — sadece bolluk dagilimi farklidir. Bu, her iki
+olcu turununun neden birlikte gerekli oldugunu gosterir.
 
-### Tablo ciktisi:
+Tablo ciktisi:
 
 ``` r
 sonuc_plot$table
@@ -482,7 +671,7 @@ Her iterasyondaki pTO degerlerini gosterir:
 
 ``` r
 plot_iteration(islem2, component = "TO",
-               title = "Islem 2 - TO Degerleri (200 Iterasyon)")
+               title = "Islem 2 - TO Degerleri")
 ```
 
 ![Islem 2 stokastik yeniden orneklemedeki TO degerlerinin iterasyon
@@ -490,11 +679,13 @@ grafigi](giris_rehberi_files/figure-html/iterasyon-1.png)
 
 **Nasil okunur:**
 
-- **Gri noktalar**: Her iterasyondaki deger
+- **Gri noktalar**: Her iterasyondaki deger (rastgele tur alt kumesi)
 - **Kirmizi cizgi**: Deterministik (Islem 1) degeri
 - **Mavi cizgi**: Tum iterasyonlar arasindaki maksimum
 
-Dusuk noktalar = az tur dahil edildigi durumlar (cesitlilik duser).
+Dusuk noktalar = az tur dahil edildigi durumlar. Kirmizi cizginin
+ustundeki noktalar, bazi turlerin cikarilmasinin cesitliligi artirdigini
+gosterir.
 
 ### Tur Katki Baloncuk Grafigi (Bubble Chart)
 
@@ -532,7 +723,45 @@ plot_radar(topluluklar, agac,
 degerlerinin radar grafigi](giris_rehberi_files/figure-html/radar-1.png)
 
 **Nasil okunur:** Her eksen bir indeksi temsil eder. Degerler 0-1
-arasinda normalize edilmistir. Buyuk alan = yuksek cesitlilik.
+arasinda normalize edilmistir. Buyuk alan = yuksek cesitlilik. Iki
+poligonun bolluk bagimsiz indekslerde ustuste binip bolluk bagimli
+indekslerde ayrilmasi, ayni tur havuzunun farkli dagilimlarini dogrular.
+
+### Seyreltme Egrisi (Rarefaction Curve)
+
+Cesitlilik tahminlerinin orneklem buyuklugune gore degisimini gosterir:
+
+``` r
+plot_rarefaction(rare)
+```
+
+![Shannon indeksi icin orneklem buyuklugune karsi seyreltme
+egrisi](giris_rehberi_files/figure-html/rarefaction_plot-1.png)
+
+**Nasil okunur:** X ekseni orneklenen birey sayisi, Y ekseni tahmini
+cesitlilik indeksidir. Golgelenmis bant %95 bootstrap guven araligini
+gosterir. Egri duzlestiyse orneklemeniz yeterlidir. Sag kenardaki dik
+egri daha fazla ornekleme gerektigini gosterir.
+
+### Huni Grafigi (Funnel Plot)
+
+Gercek toplulugu simule edilmis beklenen aralikla karsilastirir:
+
+``` r
+plot_funnel(sim, observed = data.frame(
+              site  = "Akdeniz Ormani",
+              s     = length(topluluk),
+              value = avg_td),
+            index = "avtd",
+            title = "AvTD - Huni Grafigi")
+```
+
+![AvTD icin beklenen aralik ve gercek deger gosteren huni
+grafigi](giris_rehberi_files/figure-html/huni-1.png)
+
+**Nasil okunur:** Gri bant beklenen aralik, kirmizi nokta gercek
+degerdir. Bant icinde ise topluluk beklenen cesitlilik araligindadir.
+Bantin disinda ise cesitlilik beklenenden onemli olcude farklidir.
 
 ## Matematiksel Arka Plan
 
@@ -548,13 +777,11 @@ onermistir:
 $$H\prime = - \sum\limits_{i = 1}^{S}p_{i}\ln\left( p_{i} \right)$$
 
 - $S$ = toplam tur sayisi
-- $p_{i}$ = $i$. turun oransal bolluğu ($n_{i}/N$)
+- $p_{i}$ = $i$. turun oransal bollugu ($n_{i}/N$)
 - $N$ = toplam birey sayisi
 
 Shannon entropisi her turu **bireysel bir olay** olarak ele alir. Turler
-arasindaki akrabalik iliskilerini gormez. Yani Pinus nigra ile Pinus
-brutia arasindaki akrabalik, Pinus nigra ile Quercus cerris arasindaki
-akrabalik kadar uzak kabul edilir.
+arasindaki akrabalik iliskilerini gormez.
 
 ### Simpson Indeksi
 
@@ -593,13 +820,14 @@ seviyeye esittir (Cins = 1, Familya = 2, …, Alem = 6).
 
 **Onemli:** $\Delta^{+}$ ve $\Lambda^{+}$ bolluk bilgisi kullanmaz. Bu
 sayede farkli orneklem buyuklugundeki alanlari dogrudan
-karsilastirabilirsiniz.
+karsilastirabilirsiniz (Clarke & Warwick, 1998, 2001).
 
 ### Deng Entropisi
 
 Deng (2016), Shannon entropisini Dempster-Shafer kanit teorisi
-cercevesinde genellestirmistir. Temel fark: Shannon’da her olay (tur)
-atomiktir. Deng entropisinde olaylar **kume yapisi** icerebilir.
+(Dempster, 1967; Shafer, 1976) cercevesinde genellestirmistir. Temel
+fark: Shannon’da her olay (tur) atomiktir. Deng entropisinde olaylar
+**kume yapisi** icerebilir.
 
 Bir taksonomik seviyedeki Deng entropisi:
 
@@ -647,28 +875,9 @@ ihtiyac duymaz cunku tur listesiyle calisir.
 
 $$pT_{O} = \ln\left( \frac{\sum\limits_{k = 0}^{n_{s}}\left( n_{s} - n_{k} \right)\prod\limits_{i = 1}^{L}\left( w_{i} \cdot \left( \frac{\left( e^{E_{d}^{S}} \right)^{2}}{e^{E_{d}^{i}}} + 1 \right) \right)}{n_{s} + \sum n_{k}} \right)$$
 
-Dilim proseduru (slicing): nk = 0, 1, …, n_s icin bolluğu $\leq n_{k}$
+Dilim proseduru (slicing): nk = 0, 1, …, n_s icin bollugu $\leq n_{k}$
 olan turler elenir. Her dilimde hayatta kalan turlerle Deng entropisi
 yeniden hesaplanir. Boylece bolluk bilgisi dolayli olarak sisteme girer.
-
-### Rarefaction (Seyreltme)
-
-Rarefaction, farkli orneklem buyukluklerinin cesitlilik tahminleri
-uzerindeki etkisini degerlendirmek icin kullanilir (Gotelli & Colwell,
-2001).
-
-Klasik rarefaction formulu (Hurlbert, 1971):
-
-$$E\left( S_{n} \right) = S - \sum\limits_{i = 1}^{S}\frac{\left( \frac{N - N_{i}}{n} \right)}{\left( \frac{N}{n} \right)}$$
-
-- $E\left( S_{n} \right)$ = $n$ birey icin beklenen tur sayisi
-- $N_{i}$ = $i$. turun birey sayisi
-- $\left( \frac{a}{b} \right)$ = kombinasyon
-
-Bu paket, rarefaction’i **taksonomik indekslere** genisletir. Bootstrap
-yeniden ornekleme ile herhangi bir indeks icin (Shannon, Simpson, pTO,
-AvTD vb.) seyreltme egrisi hesaplar. Egri duzlestiyse orneklemeniz
-yeterlidir.
 
 ## Adim Adim Hesaplama Ornegi
 
@@ -771,8 +980,8 @@ cat("  Pinus_nigra - Pinus_brutia: Ayni cins -> mesafe = 1\n")
 #>   Pinus_nigra - Pinus_brutia: Ayni cins -> mesafe = 1
 cat("  Pinus_nigra - Cedrus_libani: Ayni familya (Pinaceae) -> mesafe = 2\n")
 #>   Pinus_nigra - Cedrus_libani: Ayni familya (Pinaceae) -> mesafe = 2
-cat("  Pinus_nigra - Quercus_cerris: Ayni takim degil (Pinales vs Fagales) -> mesafe = 3\n")
-#>   Pinus_nigra - Quercus_cerris: Ayni takim degil (Pinales vs Fagales) -> mesafe = 3
+cat("  Pinus_nigra - Quercus_cerris: Farkli takim (Pinales vs Fagales) -> mesafe = 3\n")
+#>   Pinus_nigra - Quercus_cerris: Farkli takim (Pinales vs Fagales) -> mesafe = 3
 ```
 
 ### Adim 3: AvTD (Elle)
@@ -880,72 +1089,81 @@ for (i in seq_along(pto_sonuc$Ed_levels)) {
 #>    Order : 2.28
 ```
 
-### Adim 6: Rarefaction
-
-``` r
-# 12 bireylik toplulugun seyreltme egrisi
-rare <- rarefaction_taxonomic(ornek_topluluk, ornek_agac,
-                               index = "shannon",
-                               steps = 10, n_boot = 100, seed = 42)
-cat("Rarefaction sonuclari (Shannon):\n")
-#> Rarefaction sonuclari (Shannon):
-print(round(rare, 4))
-#> taxdiv -- Rarefaction Curve
-#>   Index: shannon 
-#>   Total N: 12 
-#>   Bootstrap: 100 replicates
-#>   CI: 95 %
-#>   Steps: 10 
-#> 
-#>  sample_size   mean  lower  upper     sd
-#>            2 0.6308 0.0000 0.6931 0.1994
-#>            3 0.9213 0.6365 1.0986 0.2410
-#>            4 1.0166 0.5623 1.3863 0.2363
-#>            5 1.2125 0.8047 1.6094 0.2060
-#>            6 1.2570 0.8676 1.5607 0.1797
-#>            8 1.3973 1.0599 1.5596 0.1465
-#>            9 1.4366 1.2149 1.5811 0.1049
-#>           10 1.4717 1.2799 1.5571 0.0913
-#>           11 1.4891 1.3421 1.5466 0.0627
-#>           12 1.5171 1.5171 1.5171 0.0000
-```
-
-``` r
-plot_rarefaction(rare)
-```
-
-![Shannon indeksi icin orneklem buyuklugune karsi seyreltme
-egrisi](giris_rehberi_files/figure-html/ornek_rare_plot-1.png)
-
-**Yorum:** 12 bireylik kucuk bir orneklemde egri henuz tam duzlesmemis.
-Bu, daha fazla ornekleme yapilsa cesitlilik degerinin biraz daha
-artabilecegini gosterir.
-
 ## Fonksiyon Listesi
 
-| Fonksiyon                                                                                                       | Ne yapar                                                         |
-|-----------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------|
-| [`build_tax_tree()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/build_tax_tree.md)               | Taksonomik hiyerarsi tablosu olusturur                           |
-| [`tax_distance_matrix()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/tax_distance_matrix.md)     | Turler arasi taksonomik mesafe matrisi hesaplar                  |
-| [`shannon()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/shannon.md)                             | Shannon cesitlilik indeksi                                       |
-| [`simpson()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/simpson.md)                             | Simpson indeksleri (baskinlik, Gini-Simpson, ters Simpson)       |
-| [`delta()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/delta.md)                                 | Clarke & Warwick Delta (taksonomik cesitlilik, bolluk agirlikli) |
-| [`delta_star()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/delta_star.md)                       | Clarke & Warwick Delta\* (taksonomik ayirt edicilik)             |
-| [`avtd()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/avtd.md)                                   | Ortalama taksonomik ayirt edicilik AvTD / Delta+                 |
-| [`vartd()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/vartd.md)                                 | Taksonomik ayirt edicilik varyasyonu VarTD / Lambda+             |
-| [`deng_entropy_level()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/deng_entropy_level.md)       | Belirli bir taksonomik seviyede Deng entropisi                   |
-| [`ozkan_pto()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/ozkan_pto.md)                         | Ozkan pTO hesaplama (Islem 1)                                    |
-| [`pto_components()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/pto_components.md)               | pTO dort bileseni (uTO, TO, uTO+, TO+)                           |
-| [`ozkan_pto_resample()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/ozkan_pto_resample.md)       | Stokastik yeniden ornekleme (Islem 2)                            |
-| [`ozkan_pto_sensitivity()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/ozkan_pto_sensitivity.md) | Duyarlilik analizi (Islem 3)                                     |
-| [`compare_indices()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/compare_indices.md)             | Tum indeksleri yan yana karsilastirir                            |
-| [`plot_taxonomic_tree()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/plot_taxonomic_tree.md)     | Taksonomik agac dendogrami                                       |
-| [`plot_heatmap()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/plot_heatmap.md)                   | Taksonomik mesafe isi haritasi                                   |
-| [`plot_iteration()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/plot_iteration.md)               | Islem 2/3 iterasyon grafigi                                      |
-| [`plot_bubble()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/plot_bubble.md)                     | Tur katkilari balon grafigi                                      |
-| [`plot_radar()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/plot_radar.md)                       | Radar/orumcek grafigi                                            |
-| [`rarefaction_taxonomic()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/rarefaction_taxonomic.md) | Taksonomik cesitlilik icin seyreltme egrisi hesaplar             |
-| [`plot_rarefaction()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/plot_rarefaction.md)           | Seyreltme egrisini guven araliklariyla gosterir                  |
+### Klasik Indeksler
+
+| Fonksiyon                                                                           | Ne yapar                                                   |
+|-------------------------------------------------------------------------------------|------------------------------------------------------------|
+| [`shannon()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/shannon.md) | Shannon cesitlilik indeksi (correction destekli)           |
+| [`simpson()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/simpson.md) | Simpson indeksleri (baskinlik, Gini-Simpson, ters Simpson) |
+
+### Clarke & Warwick Taksonomik Ayirt Edicilik
+
+| Fonksiyon                                                                                 | Ne yapar                                               |
+|-------------------------------------------------------------------------------------------|--------------------------------------------------------|
+| [`delta()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/delta.md)           | Delta — taksonomik cesitlilik (bolluk agirlikli)       |
+| [`delta_star()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/delta_star.md) | Delta\* — taksonomik ayirt edicilik                    |
+| [`avtd()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/avtd.md)             | AvTD / Delta+ — ortalama taksonomik ayirt edicilik     |
+| [`vartd()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/vartd.md)           | VarTD / Lambda+ — taksonomik ayirt edicilik varyasyonu |
+
+### Ozkan pTO (Deng Entropisi)
+
+| Fonksiyon                                                                                                 | Ne yapar                                             |
+|-----------------------------------------------------------------------------------------------------------|------------------------------------------------------|
+| [`ozkan_pto()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/ozkan_pto.md)                   | Islem 1: pTO hesaplama (max_level destekli, 8 cikti) |
+| [`pto_components()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/pto_components.md)         | pTO dort/sekiz bileseni tek satirda                  |
+| [`deng_entropy_level()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/deng_entropy_level.md) | Belirli bir taksonomik seviyede Deng entropisi       |
+
+### Ozkan pTO Pipeline
+
+| Fonksiyon                                                                                                       | Ne yapar                                   |
+|-----------------------------------------------------------------------------------------------------------------|--------------------------------------------|
+| [`ozkan_pto_resample()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/ozkan_pto_resample.md)       | Islem 2: stokastik yeniden ornekleme       |
+| [`ozkan_pto_sensitivity()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/ozkan_pto_sensitivity.md) | Islem 3: duyarlilik analizi                |
+| [`ozkan_pto_full()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/ozkan_pto_full.md)               | Islem 1+2+3 tam pipeline tek satirda       |
+| [`ozkan_pto_jackknife()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/ozkan_pto_jackknife.md)     | Leave-one-out jackknife yanliliksiz tahmin |
+
+### Toplu Analiz ve Karsilastirma
+
+| Fonksiyon                                                                                           | Ne yapar                                        |
+|-----------------------------------------------------------------------------------------------------|-------------------------------------------------|
+| [`batch_analysis()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/batch_analysis.md)   | Coklu ornek alan toplu analizi (16 sutun cikti) |
+| [`compare_indices()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/compare_indices.md) | Tum indeksleri yan yana karsilastirir           |
+
+### Simulasyon ve Rarefaction
+
+| Fonksiyon                                                                                                       | Ne yapar                                    |
+|-----------------------------------------------------------------------------------------------------------------|---------------------------------------------|
+| [`simulate_td()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/simulate_td.md)                     | Huni grafigi icin null dagilim simulasyonu  |
+| [`rarefaction_taxonomic()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/rarefaction_taxonomic.md) | Taksonomik cesitlilik icin seyreltme egrisi |
+
+### Gorsellestime (7 plot tipi)
+
+| Fonksiyon                                                                                                   | Ne yapar                               |
+|-------------------------------------------------------------------------------------------------------------|----------------------------------------|
+| [`plot_taxonomic_tree()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/plot_taxonomic_tree.md) | Taksonomik agac dendogrami             |
+| [`plot_heatmap()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/plot_heatmap.md)               | Taksonomik mesafe isi haritasi         |
+| [`plot_funnel()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/plot_funnel.md)                 | Huni grafigi (beklenen aralik)         |
+| [`plot_iteration()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/plot_iteration.md)           | Islem 2/3 iterasyon grafigi            |
+| [`plot_bubble()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/plot_bubble.md)                 | Tur katkilari balon grafigi            |
+| [`plot_radar()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/plot_radar.md)                   | Radar/orumcek grafigi                  |
+| [`plot_rarefaction()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/plot_rarefaction.md)       | Seyreltme egrisi (guven araliklariyla) |
+
+### Yardimci Fonksiyonlar
+
+| Fonksiyon                                                                                                   | Ne yapar                               |
+|-------------------------------------------------------------------------------------------------------------|----------------------------------------|
+| [`build_tax_tree()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/build_tax_tree.md)           | Taksonomik hiyerarsi tablosu olusturur |
+| [`tax_distance_matrix()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/tax_distance_matrix.md) | Turler arasi taksonomik mesafe matrisi |
+
+### Veri Setleri
+
+| Veri Seti         | Aciklama                                        |
+|-------------------|-------------------------------------------------|
+| `anatolian_trees` | Anadolu agac turleri taksonomik hiyerarsisi     |
+| `gazi_comm`       | Gazi Universitesi kampus ormani topluluk verisi |
+| `gazi_gytk`       | Gazi Universitesi kampus ormani taksonomik agac |
 
 ## Kaynaklar
 
@@ -954,34 +1172,43 @@ artabilecegini gosterir.
 - Shannon, C.E. (1948). A mathematical theory of communication. *Bell
   System Technical Journal*, 27, 379-423.
 - Simpson, E.H. (1949). Measurement of diversity. *Nature*, 163, 688.
-- Pielou, E.C. (1966). The measurement of diversity in different types
-  of biological collections. *Journal of Theoretical Biology*, 13,
-  131-144.
 
 ### Taksonomik Farklilik
 
+- Warwick, R.M. & Clarke, K.R. (1995). New ‘biodiversity’ measures
+  reveal a decrease in taxonomic distinctness with increasing stress.
+  *Marine Ecology Progress Series*, 129, 301-305.
 - Clarke, K.R. & Warwick, R.M. (1998). A taxonomic distinctness index
   and its statistical properties. *Journal of Applied Ecology*, 35,
   523-531.
+- Clarke, K.R. & Warwick, R.M. (1999). The taxonomic distinctness
+  measure of biodiversity: weighting of step lengths between
+  hierarchical levels. *Marine Ecology Progress Series*, 184, 21-29.
 - Clarke, K.R. & Warwick, R.M. (2001). A further biodiversity index
   applicable to species lists: variation in taxonomic distinctness.
   *Marine Ecology Progress Series*, 216, 265-278.
 
 ### Deng Entropisi ve Kanit Teorisi
 
-- Deng, Y. (2016). Deng entropy. *Chaos, Solitons & Fractals*, 91,
-  549-553.
 - Dempster, A.P. (1967). Upper and lower probabilities induced by a
   multivalued mapping. *The Annals of Mathematical Statistics*, 38,
   325-339.
 - Shafer, G. (1976). *A Mathematical Theory of Evidence*. Princeton
   University Press.
+- Deng, Y. (2016). Deng entropy. *Chaos, Solitons & Fractals*, 91,
+  549-553.
 
 ### Ozkan pTO Indeksi
 
 - Ozkan, K. (2018). Yeni bir taksonomik cesitlilik olcusu onerisi.
   *Turkish Journal of Forestry*, 19(4), 336-346. DOI:
   10.18182/tjf.441061
+
+### Yanliliksiz Tahmin
+
+- Chao, A. & Shen, T.J. (2003). Nonparametric estimation of Shannon’s
+  index of diversity when there are unseen species in sample.
+  *Environmental and Ecological Statistics*, 10, 429-443.
 
 ### Rarefaction (Seyreltme)
 
@@ -990,8 +1217,3 @@ artabilecegini gosterir.
   richness. *Ecology Letters*, 4, 379-391.
 - Hurlbert, S.H. (1971). The nonconcept of species diversity: a critique
   and alternative parameters. *Ecology*, 52, 577-586.
-
-### Genel Ekoloji ve Biyocesitlilik
-
-- Magurran, A.E. (2004). *Measuring Biological Diversity*. Blackwell
-  Publishing, Oxford.

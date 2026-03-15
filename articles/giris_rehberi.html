@@ -188,6 +188,15 @@ bolluklarini</strong> kullanir. Taksonomik yapiyi dikkate almazlar.</p>
 <p><strong>Yorum</strong>: Shannon degeri ne kadar yuksekse topluluk o
 kadar cesitlidir. Simpson baskinlik degeri ne kadar dusukse o kadar iyi
 dagilim vardir.</p>
+<p>Shannon ve Simpson icin <code>correction = "chao_shen"</code>
+parametresiyle Chao &amp; Shen (2003) yanliliksiz tahminci
+kullanilabilir:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">H_duz</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/shannon.html">shannon</a></span><span class="op">(</span><span class="va">topluluk</span>, correction <span class="op">=</span> <span class="st">"chao_shen"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Shannon (Chao-Shen duzeltmeli):"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">H_duz</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Shannon (Chao-Shen duzeltmeli): 2.17</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Shannon (duzeltmesiz):         "</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">H</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Shannon (duzeltmesiz):          2.1692</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="adim-2-taksonomik-mesafe-matrisi">Adim 2: Taksonomik Mesafe Matrisi<a class="anchor" aria-label="anchor" href="#adim-2-taksonomik-mesafe-matrisi"></a>
@@ -196,7 +205,7 @@ dagilim vardir.</p>
 <strong>taksonomik mesafeyi</strong> hesaplamamiz gerekir. Bu mesafe,
 iki turun taksonomik hiyerarsideki ilk ortak atalarinin seviyesine gore
 belirlenir.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mesafe</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tax_distance_matrix.html">tax_distance_matrix</a></span><span class="op">(</span><span class="va">agac</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">mesafe</span>, <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                     Quercus_coccifera Quercus_infectoria Pinus_brutia</span></span>
@@ -265,7 +274,7 @@ uzak mesafe)</li>
 <h2 id="adim-3-clarke-warwick-taksonomik-ayirt-edicilik">Adim 3: Clarke &amp; Warwick Taksonomik Ayirt Edicilik<a class="anchor" aria-label="anchor" href="#adim-3-clarke-warwick-taksonomik-ayirt-edicilik"></a>
 </h2>
 <p>Clarke &amp; Warwick (1998) dort farkli olcu onerir:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Delta: Taksonomik cesitlilik (bolluk agirlikli)</span></span>
 <span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/delta.html">delta</a></span><span class="op">(</span><span class="va">topluluk</span>, <span class="va">agac</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Delta (taksonomik cesitlilik):"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">d</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
@@ -315,7 +324,7 @@ listesi)</li>
 <li>
 <strong>TO+</strong>: Agirlikli taksonomik uzaklik</li>
 </ul>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sonuc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ozkan_pto.html">ozkan_pto</a></span><span class="op">(</span><span class="va">topluluk</span>, <span class="va">agac</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"uTO  (agirliksiz cesitlilik):"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">sonuc</span><span class="op">$</span><span class="va">uTO</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
@@ -327,7 +336,7 @@ listesi)</li>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"TO+  (agirlikli uzaklik):"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">sonuc</span><span class="op">$</span><span class="va">TO_plus</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; TO+  (agirlikli uzaklik): 15.4812</span></span></code></pre></div>
 <p>Her taksonomik seviyedeki Deng entropisi degerleri:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Taksonomik seviye bazinda Deng entropisi:\n"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Taksonomik seviye bazinda Deng entropisi:</span></span>
 <span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">sonuc</span><span class="op">$</span><span class="va">Ed_levels</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
@@ -341,14 +350,57 @@ listesi)</li>
 <span><span class="co">#&gt;    Class : 4.2421 </span></span>
 <span><span class="co">#&gt;    Phylum : 4.2421 </span></span>
 <span><span class="co">#&gt;    Kingdom : 0</span></span></code></pre></div>
-<p><code><a href="../reference/pto_components.html">pto_components()</a></code> ile dort degeri tek satirda
-alabilirsiniz:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="section level3">
+<h3 id="max_level-parametresi">max_level parametresi<a class="anchor" aria-label="anchor" href="#max_level-parametresi"></a>
+</h3>
+<p><code><a href="../reference/ozkan_pto.html">ozkan_pto()</a></code> fonksiyonunda <code>max_level</code>
+parametresi ile hesaplamada kullanilacak maksimum taksonomik seviye
+sinirlanabilir. Varsayilan <code>NULL</code> tum seviyeleri kullanir.
+<code>"auto"</code> bilgi icermeyen seviyeleri otomatik eler:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Tum seviyeler (varsayilan)</span></span>
+<span><span class="va">r_full</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ozkan_pto.html">ozkan_pto</a></span><span class="op">(</span><span class="va">topluluk</span>, <span class="va">agac</span>, max_level <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Tum seviyeler: uTO ="</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">r_full</span><span class="op">$</span><span class="va">uTO</span>, <span class="fl">4</span><span class="op">)</span>,</span>
+<span>    <span class="st">" TO ="</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">r_full</span><span class="op">$</span><span class="va">TO</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Tum seviyeler: uTO = 8.6804  TO = 15.2596</span></span>
+<span></span>
+<span><span class="co"># Otomatik seviye secimi</span></span>
+<span><span class="va">r_auto</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ozkan_pto.html">ozkan_pto</a></span><span class="op">(</span><span class="va">topluluk</span>, <span class="va">agac</span>, max_level <span class="op">=</span> <span class="st">"auto"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Auto seviye:   uTO ="</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">r_auto</span><span class="op">$</span><span class="va">uTO</span>, <span class="fl">4</span><span class="op">)</span>,</span>
+<span>    <span class="st">" TO ="</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">r_auto</span><span class="op">$</span><span class="va">TO</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Auto seviye:   uTO = 8.6804  TO = 15.2596</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Bilgilendirici seviye:"</span>, <span class="va">r_auto</span><span class="op">$</span><span class="va">max_informative_level</span>, <span class="st">"\n"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Bilgilendirici seviye: 5</span></span>
+<span></span>
+<span><span class="co"># Sadece ilk 3 seviye</span></span>
+<span><span class="va">r_3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ozkan_pto.html">ozkan_pto</a></span><span class="op">(</span><span class="va">topluluk</span>, <span class="va">agac</span>, max_level <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Ilk 3 seviye:  uTO ="</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">r_3</span><span class="op">$</span><span class="va">uTO</span>, <span class="fl">4</span><span class="op">)</span>,</span>
+<span>    <span class="st">" TO ="</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">r_3</span><span class="op">$</span><span class="va">TO</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Ilk 3 seviye:  uTO = 8.6804  TO = 15.2596</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="bilesenli-cikti">8 Bilesenli Cikti<a class="anchor" aria-label="anchor" href="#bilesenli-cikti"></a>
+</h3>
+<p><code>max_level</code> kullanildiginda <code><a href="../reference/ozkan_pto.html">ozkan_pto()</a></code> hem
+standart hem max_level degerlerini dondurur:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sonuc8</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ozkan_pto.html">ozkan_pto</a></span><span class="op">(</span><span class="va">topluluk</span>, <span class="va">agac</span>, max_level <span class="op">=</span> <span class="st">"auto"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Standart:  uTO ="</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">sonuc8</span><span class="op">$</span><span class="va">uTO</span>, <span class="fl">4</span><span class="op">)</span>,</span>
+<span>    <span class="st">" TO ="</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">sonuc8</span><span class="op">$</span><span class="va">TO</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Standart:  uTO = 8.6804  TO = 15.2596</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Max-level: uTO_max ="</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">sonuc8</span><span class="op">$</span><span class="va">uTO_max</span>, <span class="fl">4</span><span class="op">)</span>,</span>
+<span>    <span class="st">" TO_max ="</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">sonuc8</span><span class="op">$</span><span class="va">TO_max</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Max-level: uTO_max = 8.6804  TO_max = 15.2596</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Bilgilendirici seviye sayisi:"</span>, <span class="va">sonuc8</span><span class="op">$</span><span class="va">max_informative_level</span>, <span class="st">"\n"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Bilgilendirici seviye sayisi: 5</span></span></code></pre></div>
+<p><code><a href="../reference/pto_components.html">pto_components()</a></code> ile tek satirda alabilirsiniz:</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/pto_components.html">pto_components</a></span><span class="op">(</span><span class="va">topluluk</span>, <span class="va">agac</span><span class="op">)</span></span>
 <span><span class="co">#&gt;          uTO           TO     uTO_plus      TO_plus      uTO_max       TO_max </span></span>
 <span><span class="co">#&gt;     8.680386    15.259632     8.901929    15.481180     8.680386    15.259632 </span></span>
 <span><span class="co">#&gt; uTO_plus_max  TO_plus_max </span></span>
 <span><span class="co">#&gt;     8.901929    15.481180</span></span></code></pre></div>
+</div>
 </div>
 <div class="section level2">
 <h2 id="adim-5-stokastik-yeniden-ornekleme-islem-2-run-2">Adim 5: Stokastik Yeniden Ornekleme (Islem 2 / Run 2)<a class="anchor" aria-label="anchor" href="#adim-5-stokastik-yeniden-ornekleme-islem-2-run-2"></a>
@@ -358,7 +410,7 @@ degistirirsek cesitlilik nasil etkilenir?</p>
 <p><strong>Islem 2</strong> bunu test eder: Her turde %50 olasilikla
 dahil/haric birakarak rastgele alt topluluklar olusturur. Birden fazla
 iterasyon yapilir ve <strong>maksimum</strong> pTO degeri alinir.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">islem2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ozkan_pto_resample.html">ozkan_pto_resample</a></span><span class="op">(</span><span class="va">topluluk</span>, <span class="va">agac</span>, n_iter <span class="op">=</span> <span class="fl">101</span>, seed <span class="op">=</span> <span class="fl">42</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"=== Islem 1 (deterministik) ===\n"</span><span class="op">)</span></span>
@@ -391,7 +443,7 @@ deterministik hesaplama ilk iterasyon olarak dahil edilir.</p>
 <p>Islem 3, Islem 2 sonuclarina gore <strong>tur bazli dahil etme
 olasiliklari</strong> hesaplar. Cesitlilige daha cok katki saglayan
 turler farkli olasilikla dahil edilir.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">islem3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ozkan_pto_sensitivity.html">ozkan_pto_sensitivity</a></span><span class="op">(</span><span class="va">topluluk</span>, <span class="va">agac</span>, <span class="va">islem2</span>, seed <span class="op">=</span> <span class="fl">123</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"=== Islem 3 (duyarlilik analizi) ===\n"</span><span class="op">)</span></span>
@@ -415,7 +467,7 @@ turler farkli olasilikla dahil edilir.</p>
 <h3 id="tur-dahil-etme-olasiliklari">Tur Dahil Etme Olasiliklari<a class="anchor" aria-label="anchor" href="#tur-dahil-etme-olasiliklari"></a>
 </h3>
 <p>Her turun Islem 3’te dahil edilme olasiligi:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">olasiliklar</span> <span class="op">&lt;-</span> <span class="va">islem3</span><span class="op">$</span><span class="va">species_probs</span></span>
 <span><span class="va">veri_cercevesi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  Tur <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">olasiliklar</span><span class="op">)</span>,</span>
@@ -436,65 +488,185 @@ turler farkli olasilikla dahil edilir.</p>
 </div>
 </div>
 <div class="section level2">
-<h2 id="tam-pipeline-ozeti">Tam Pipeline Ozeti<a class="anchor" aria-label="anchor" href="#tam-pipeline-ozeti"></a>
+<h2 id="adim-7-tam-pipeline-ozkan_pto_full">Adim 7: Tam Pipeline (ozkan_pto_full)<a class="anchor" aria-label="anchor" href="#adim-7-tam-pipeline-ozkan_pto_full"></a>
 </h2>
-<p>Ozkan (2018) analiz hatti uc asamadan olusur:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Pipeline: Islem 1 -&gt; Islem 2 -&gt; Islem 3\n\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Pipeline: Islem 1 -&gt; Islem 2 -&gt; Islem 3</span></span>
+<p><code><a href="../reference/ozkan_pto_full.html">ozkan_pto_full()</a></code> fonksiyonu uc islemi tek satirda
+calistirir:</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">tam</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ozkan_pto_full.html">ozkan_pto_full</a></span><span class="op">(</span><span class="va">topluluk</span>, <span class="va">agac</span>, n_iter <span class="op">=</span> <span class="fl">101</span>, seed <span class="op">=</span> <span class="fl">42</span><span class="op">)</span></span>
 <span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Pipeline: Islem 1 -&gt; Islem 2 -&gt; Islem 3\n\n"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Pipeline: Islem 1 -&gt; Islem 2 -&gt; Islem 3</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"          uTO+      TO+       uTO       TO\n"</span><span class="op">)</span></span>
 <span><span class="co">#&gt;           uTO+      TO+       uTO       TO</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Islem 1:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%9.4f %9.4f %9.4f %9.4f"</span>,</span>
-<span>    <span class="va">islem2</span><span class="op">$</span><span class="va">uTO_plus_det</span>, <span class="va">islem2</span><span class="op">$</span><span class="va">TO_plus_det</span>,</span>
-<span>    <span class="va">islem2</span><span class="op">$</span><span class="va">uTO_det</span>, <span class="va">islem2</span><span class="op">$</span><span class="va">TO_det</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
+<span>    <span class="va">tam</span><span class="op">$</span><span class="va">run1</span><span class="op">$</span><span class="va">uTO_plus</span>, <span class="va">tam</span><span class="op">$</span><span class="va">run1</span><span class="op">$</span><span class="va">TO_plus</span>,</span>
+<span>    <span class="va">tam</span><span class="op">$</span><span class="va">run1</span><span class="op">$</span><span class="va">uTO</span>, <span class="va">tam</span><span class="op">$</span><span class="va">run1</span><span class="op">$</span><span class="va">TO</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Islem 1:    8.9019   15.4812    8.6804   15.2596</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Islem 2:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%9.4f %9.4f %9.4f %9.4f"</span>,</span>
-<span>    <span class="va">islem2</span><span class="op">$</span><span class="va">uTO_plus_max</span>, <span class="va">islem2</span><span class="op">$</span><span class="va">TO_plus_max</span>,</span>
-<span>    <span class="va">islem2</span><span class="op">$</span><span class="va">uTO_max</span>, <span class="va">islem2</span><span class="op">$</span><span class="va">TO_max</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
+<span>    <span class="va">tam</span><span class="op">$</span><span class="va">run2</span><span class="op">$</span><span class="va">uTO_plus_max</span>, <span class="va">tam</span><span class="op">$</span><span class="va">run2</span><span class="op">$</span><span class="va">TO_plus_max</span>,</span>
+<span>    <span class="va">tam</span><span class="op">$</span><span class="va">run2</span><span class="op">$</span><span class="va">uTO_max</span>, <span class="va">tam</span><span class="op">$</span><span class="va">run2</span><span class="op">$</span><span class="va">TO_max</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Islem 2:    8.9019   15.4812    8.6804   15.2596</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Islem 3:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%9.4f %9.4f %9.4f %9.4f"</span>,</span>
-<span>    <span class="va">islem3</span><span class="op">$</span><span class="va">uTO_plus_max</span>, <span class="va">islem3</span><span class="op">$</span><span class="va">TO_plus_max</span>,</span>
-<span>    <span class="va">islem3</span><span class="op">$</span><span class="va">uTO_max</span>, <span class="va">islem3</span><span class="op">$</span><span class="va">TO_max</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Islem 3:    9.4113   15.9905    9.0047   15.5839</span></span></code></pre></div>
+<span>    <span class="va">tam</span><span class="op">$</span><span class="va">run3</span><span class="op">$</span><span class="va">uTO_plus_max</span>, <span class="va">tam</span><span class="op">$</span><span class="va">run3</span><span class="op">$</span><span class="va">TO_plus_max</span>,</span>
+<span>    <span class="va">tam</span><span class="op">$</span><span class="va">run3</span><span class="op">$</span><span class="va">uTO_max</span>, <span class="va">tam</span><span class="op">$</span><span class="va">run3</span><span class="op">$</span><span class="va">TO_max</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Islem 3:    9.3926   15.9718    9.0047   15.5839</span></span></code></pre></div>
 <p>Her asama bir oncekine esit veya daha buyuk deger uretir.</p>
+</div>
+<div class="section level2">
+<h2 id="adim-8-jackknife-yanliliksiz-tahmin">Adim 8: Jackknife Yanliliksiz Tahmin<a class="anchor" aria-label="anchor" href="#adim-8-jackknife-yanliliksiz-tahmin"></a>
+</h2>
+<p><code><a href="../reference/ozkan_pto_jackknife.html">ozkan_pto_jackknife()</a></code> birer birer tur cikararak
+(leave-one-out) yanliliksiz pTO tahmini hesaplar:</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">jk</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ozkan_pto_jackknife.html">ozkan_pto_jackknife</a></span><span class="op">(</span><span class="va">topluluk</span>, <span class="va">agac</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Tam sonuc uTO+:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">jk</span><span class="op">$</span><span class="va">full_result</span><span class="op">$</span><span class="va">uTO_plus</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Tam sonuc uTO+: 8.9019</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Tam sonuc TO+: "</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">jk</span><span class="op">$</span><span class="va">full_result</span><span class="op">$</span><span class="va">TO_plus</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Tam sonuc TO+:  15.4812</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Mutlu turler:  "</span>, <span class="va">jk</span><span class="op">$</span><span class="va">n_happy</span>, <span class="st">"/"</span>, <span class="va">jk</span><span class="op">$</span><span class="va">n_happy</span> <span class="op">+</span> <span class="va">jk</span><span class="op">$</span><span class="va">n_unhappy</span>, <span class="st">"\n\n"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Mutlu turler:   4 / 10</span></span>
+<span></span>
+<span><span class="co"># Her turun cikarildiginda sonuc nasil degisiyor?</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">jk</span><span class="op">$</span><span class="va">jackknife_results</span><span class="op">)</span></span>
+<span><span class="co">#&gt;               species uTO_plus  TO_plus      uTO       TO is_happy</span></span>
+<span><span class="co">#&gt; 1   Quercus_coccifera 8.733962 15.31321 8.559784 15.13901     TRUE</span></span>
+<span><span class="co">#&gt; 2  Quercus_infectoria 8.733962 15.31321 8.582377 15.16162     TRUE</span></span>
+<span><span class="co">#&gt; 3        Pinus_brutia 9.285601 15.86485 8.875835 15.45488    FALSE</span></span>
+<span><span class="co">#&gt; 4         Pinus_nigra 9.285601 15.86485 8.843811 15.42306    FALSE</span></span>
+<span><span class="co">#&gt; 5   Juniperus_excelsa 9.112068 15.69132 8.731124 15.31037    FALSE</span></span>
+<span><span class="co">#&gt; 6 Juniperus_oxycedrus 9.112068 15.69132 8.764605 15.34385    FALSE</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="adim-9-toplu-analiz-batch_analysis">Adim 9: Toplu Analiz (batch_analysis)<a class="anchor" aria-label="anchor" href="#adim-9-toplu-analiz-batch_analysis"></a>
+</h2>
+<p>Birden fazla ornek alani ayni anda analiz etmek icin
+<code><a href="../reference/batch_analysis.html">batch_analysis()</a></code> kullanilir. Her ornek alan icin tur sayisi
+ve 14 cesitlilik indeksini otomatik hesaplar:</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Coklu ornek alan verisi</span></span>
+<span><span class="va">veri</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  Site <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Alan_A"</span>, <span class="st">"Alan_B"</span><span class="op">)</span>, each <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>,</span>
+<span>  Species <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Pinus_brutia"</span>, <span class="st">"Pinus_nigra"</span>, <span class="st">"Quercus_coccifera"</span>,</span>
+<span>                  <span class="st">"Juniperus_excelsa"</span>, <span class="st">"Cedrus_libani"</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span>  Abundance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">30</span>, <span class="fl">12</span>, <span class="fl">25</span>, <span class="fl">8</span>, <span class="fl">15</span>, <span class="fl">5</span>, <span class="fl">40</span>, <span class="fl">10</span>, <span class="fl">3</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span>  Genus <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Pinus"</span>, <span class="st">"Pinus"</span>, <span class="st">"Quercus"</span>, <span class="st">"Juniperus"</span>, <span class="st">"Cedrus"</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span>  Family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Pinaceae"</span>, <span class="st">"Pinaceae"</span>, <span class="st">"Fagaceae"</span>,</span>
+<span>                 <span class="st">"Cupressaceae"</span>, <span class="st">"Pinaceae"</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span>  Order <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Pinales"</span>, <span class="st">"Pinales"</span>, <span class="st">"Fagales"</span>, <span class="st">"Pinales"</span>, <span class="st">"Pinales"</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">sonuc_batch</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/batch_analysis.html">batch_analysis</a></span><span class="op">(</span><span class="va">veri</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">sonuc_batch</span><span class="op">)</span></span>
+<span><span class="co">#&gt; taxdiv -- Batch Analysis</span></span>
+<span><span class="co">#&gt;   Sites: 2 </span></span>
+<span><span class="co">#&gt;   Indices: 14 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;    Site N_Species  Shannon  Simpson    Delta Delta_star AvTD VarTD      uTO</span></span>
+<span><span class="co">#&gt;  Alan_A         5 1.504443 0.758272 1.963296   2.560404  2.6  0.44 5.444330</span></span>
+<span><span class="co">#&gt;  Alan_B         5 1.039172 0.517222 1.301130   2.473684  2.6  0.44 4.330512</span></span>
+<span><span class="co">#&gt;        TO uTO_plus  TO_plus  uTO_max   TO_max uTO_plus_max TO_plus_max</span></span>
+<span><span class="co">#&gt;  8.622250 5.845169 9.023223 5.444330 8.622250     5.845169    9.023223</span></span>
+<span><span class="co">#&gt;  7.501388 5.845169 9.023223 4.330512 7.501388     5.845169    9.023223</span></span></code></pre></div>
+<p>Cikti 16 sutundan olusur: Site, N_Species ve 14 cesitlilik
+indeksi.</p>
+</div>
+<div class="section level2">
+<h2 id="adim-10-rarefaction-seyreltme">Adim 10: Rarefaction (Seyreltme)<a class="anchor" aria-label="anchor" href="#adim-10-rarefaction-seyreltme"></a>
+</h2>
+<p>Rarefaction, farkli orneklem buyukluklerinin cesitlilik tahminleri
+uzerindeki etkisini degerlendirir. Egri duzlestiyse orneklemeniz
+yeterlidir:</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">rare</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rarefaction_taxonomic.html">rarefaction_taxonomic</a></span><span class="op">(</span><span class="va">topluluk</span>, <span class="va">agac</span>,</span>
+<span>                               index <span class="op">=</span> <span class="st">"shannon"</span>,</span>
+<span>                               steps <span class="op">=</span> <span class="fl">10</span>, n_boot <span class="op">=</span> <span class="fl">100</span>, seed <span class="op">=</span> <span class="fl">42</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Rarefaction sonuclari (Shannon):\n"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Rarefaction sonuclari (Shannon):</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">rare</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; taxdiv -- Rarefaction Curve</span></span>
+<span><span class="co">#&gt;   Index: shannon </span></span>
+<span><span class="co">#&gt;   Total N: 150 </span></span>
+<span><span class="co">#&gt;   Bootstrap: 100 replicates</span></span>
+<span><span class="co">#&gt;   CI: 95 %</span></span>
+<span><span class="co">#&gt;   Steps: 10 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;  sample_size   mean  lower  upper     sd</span></span>
+<span><span class="co">#&gt;            5 1.3380 0.9503 1.6094 0.2354</span></span>
+<span><span class="co">#&gt;           21 1.9429 1.5955 2.1907 0.1521</span></span>
+<span><span class="co">#&gt;           37 2.0616 1.8675 2.1989 0.0926</span></span>
+<span><span class="co">#&gt;           53 2.1004 1.9616 2.2042 0.0640</span></span>
+<span><span class="co">#&gt;           69 2.1268 2.0265 2.1993 0.0470</span></span>
+<span><span class="co">#&gt;           86 2.1421 2.0617 2.2006 0.0375</span></span>
+<span><span class="co">#&gt;          102 2.1525 2.0814 2.1980 0.0298</span></span>
+<span><span class="co">#&gt;          118 2.1596 2.1205 2.2018 0.0214</span></span>
+<span><span class="co">#&gt;          134 2.1664 2.1307 2.1929 0.0159</span></span>
+<span><span class="co">#&gt;          150 2.1692 2.1692 2.1692 0.0000</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="adim-11-simuelasyon-ve-huni-grafigi-funnel-plot">Adim 11: Simuelasyon ve Huni Grafigi (Funnel Plot)<a class="anchor" aria-label="anchor" href="#adim-11-simuelasyon-ve-huni-grafigi-funnel-plot"></a>
+</h2>
+<p><code><a href="../reference/simulate_td.html">simulate_td()</a></code> ile belirli bir tur havuzundan rastgele
+topluluklar olusturarak beklenen indeks dagilimini hesaplayabilirsiniz.
+Bu dagilim huni grafigi ile gorsellestirilerek gercek toplulugun
+beklenen aralikta olup olmadigi degerlendirilir:</p>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate_td.html">simulate_td</a></span><span class="op">(</span><span class="va">agac</span>, n_sim <span class="op">=</span> <span class="fl">100</span>, seed <span class="op">=</span> <span class="fl">42</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">sim</span><span class="op">)</span></span>
+<span><span class="co">#&gt;        s        mean_avtd       lower_avtd      upper_avtd      mean_vartd   </span></span>
+<span><span class="co">#&gt;  Min.   : 2   Min.   :4.295   Min.   :1.000   Min.   :4.311   Min.   :0.000  </span></span>
+<span><span class="co">#&gt;  1st Qu.: 4   1st Qu.:4.302   1st Qu.:2.500   1st Qu.:4.464   1st Qu.:3.213  </span></span>
+<span><span class="co">#&gt;  Median : 6   Median :4.315   Median :3.600   Median :4.667   Median :3.468  </span></span>
+<span><span class="co">#&gt;  Mean   : 6   Mean   :4.338   Mean   :3.209   Mean   :4.787   Mean   :2.930  </span></span>
+<span><span class="co">#&gt;  3rd Qu.: 8   3rd Qu.:4.380   3rd Qu.:3.929   3rd Qu.:5.000   3rd Qu.:3.486  </span></span>
+<span><span class="co">#&gt;  Max.   :10   Max.   :4.423   Max.   :4.311   Max.   :6.000   Max.   :3.505  </span></span>
+<span><span class="co">#&gt;   lower_vartd      upper_vartd   </span></span>
+<span><span class="co">#&gt;  Min.   :0.0000   Min.   :0.000  </span></span>
+<span><span class="co">#&gt;  1st Qu.:0.5833   1st Qu.:3.731  </span></span>
+<span><span class="co">#&gt;  Median :2.7556   Median :4.032  </span></span>
+<span><span class="co">#&gt;  Mean   :2.1336   Mean   :3.841  </span></span>
+<span><span class="co">#&gt;  3rd Qu.:3.1671   3rd Qu.:4.596  </span></span>
+<span><span class="co">#&gt;  Max.   :3.5032   Max.   :5.556</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="gorsellestime">Gorsellestime<a class="anchor" aria-label="anchor" href="#gorsellestime"></a>
 </h2>
-<p>taxdiv paketi ggplot2 tabanli cesitli gorsellestirme fonksiyonlari
-sunar.</p>
+<p>taxdiv paketi ggplot2 tabanli yedi ozel gorsellestirme fonksiyonu
+sunar. Her biri farkli bir analitik soruya cevap verir.</p>
 <div class="section level3">
 <h3 id="taksonomik-agac-dendogram">Taksonomik Agac (Dendogram)<a class="anchor" aria-label="anchor" href="#taksonomik-agac-dendogram"></a>
 </h3>
 <p>Turlerin taksonomik yakinligini dendogram olarak gosterir:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_taxonomic_tree.html">plot_taxonomic_tree</a></span><span class="op">(</span><span class="va">agac</span>, community <span class="op">=</span> <span class="va">topluluk</span>,</span>
 <span>                    color_by <span class="op">=</span> <span class="st">"Family"</span>, label_size <span class="op">=</span> <span class="fl">3.5</span>,</span>
 <span>                    title <span class="op">=</span> <span class="st">"Akdeniz Ormani - Familya Bazinda"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="giris_rehberi_files/figure-html/dendogram-1.png" class="r-plt" alt="Akdeniz ormani turlerinin familya bazinda taksonomik agac dendogrami" width="864"></p>
 <p><strong>Nasil okunur:</strong> Ayni daldan cikan turler taksonomik
 olarak yakindir. Parantez icindeki sayilar bolluk degerleridir. Renkler
-familyalari gosterir.</p>
+familyalari gosterir. Uzun dallar daha buyuk taksonomik mesafeyi temsil
+eder.</p>
 </div>
 <div class="section level3">
 <h3 id="taksonomik-mesafe-isi-haritasi-heatmap">Taksonomik Mesafe Isi Haritasi (Heatmap)<a class="anchor" aria-label="anchor" href="#taksonomik-mesafe-isi-haritasi-heatmap"></a>
 </h3>
 <p>Turler arasi mesafe matrisini renkli olarak gosterir:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_heatmap.html">plot_heatmap</a></span><span class="op">(</span><span class="va">agac</span>, label_size <span class="op">=</span> <span class="fl">2.8</span>,</span>
 <span>             title <span class="op">=</span> <span class="st">"Taksonomik Mesafe Isi Haritasi"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="giris_rehberi_files/figure-html/heatmap-1.png" class="r-plt" alt="Turler arasi taksonomik mesafeleri gosteren isi haritasi" width="864"></p>
 <p><strong>Nasil okunur:</strong> Koyu kirmizi = uzak turler, beyaz =
-yakin turler. Her hucredeki sayi taksonomik mesafe degerini
-gosterir.</p>
+yakin turler. Her hucredeki sayi taksonomik mesafe degerini gosterir.
+Kosegen her zaman sifirdir.</p>
 </div>
 <div class="section level3">
 <h3 id="indeks-karsilastirma-bar-plot">Indeks Karsilastirma (Bar Plot)<a class="anchor" aria-label="anchor" href="#indeks-karsilastirma-bar-plot"></a>
 </h3>
-<p>Birden fazla toplulugu tum indeksler uzerinden karsilastirir:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Ikinci topluluk: tek tur baskin</span></span>
+<p>Birden fazla toplulugu tum indeksler uzerinden karsilastirir. Ikinci
+bir topluluk olusturuyoruz: ayni turler ama bir tur baskin:</p>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Baskin topluluk: ayni turler, farkli bolluk dagilimi</span></span>
 <span><span class="va">baskin_topluluk</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>  Quercus_coccifera   <span class="op">=</span> <span class="fl">80</span>, Quercus_infectoria  <span class="op">=</span> <span class="fl">5</span>,</span>
 <span>  Pinus_brutia        <span class="op">=</span> <span class="fl">3</span>,  Pinus_nigra         <span class="op">=</span> <span class="fl">2</span>,</span>
@@ -506,19 +678,18 @@ gosterir.</p>
 <span><span class="va">topluluklar</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>  Cesitli <span class="op">=</span> <span class="va">topluluk</span>,</span>
 <span>  Baskin  <span class="op">=</span> <span class="va">baskin_topluluk</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">sonuc_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/compare_indices.html">compare_indices</a></span><span class="op">(</span><span class="va">topluluklar</span>, <span class="va">agac</span>, plot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sonuc_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/compare_indices.html">compare_indices</a></span><span class="op">(</span><span class="va">topluluklar</span>, <span class="va">agac</span>, plot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="va">sonuc_plot</span><span class="op">$</span><span class="va">plot</span></span></code></pre></div>
-<p><img src="giris_rehberi_files/figure-html/karsilastirma-1.png" class="r-plt" alt="Cesitli ve baskin topluluklar icin cesitlilik indekslerinin cubuk grafigi karsilastirmasi" width="960"></p>
-<p><strong>Nasil okunur:</strong> Cesitli toplulugun Shannon, Simpson,
-Delta degerleri yuksek. Ama AvTD, VarTD, uTO+, TO+ ayni cunku iki
-toplulukta da ayni turler var — sadece bolluk dagilimi farkli.</p>
-</div>
-<div class="section level3">
-<h3 id="tablo-ciktisi">Tablo ciktisi:<a class="anchor" aria-label="anchor" href="#tablo-ciktisi"></a>
-</h3>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<p><img src="giris_rehberi_files/figure-html/karsilastirma-1.png" class="r-plt" alt="Cesitli ve baskin topluluklar icin 14 cesitlilik indeksinin cubuk grafigi karsilastirmasi" width="960"></p>
+<p><strong>Nasil okunur:</strong> Bolluga bagimli indeksler (Shannon,
+Simpson, Delta, TO) iki topluluk arasinda belirgin farklilik gosterir.
+Bolluktan bagimsiz indeksler (AvTD, VarTD, uTO+, TO+) aynidir cunku iki
+toplulukta da ayni turler vardir — sadece bolluk dagilimi farklidir. Bu,
+her iki olcu turununun neden birlikte gerekli oldugunu gosterir.</p>
+<p>Tablo ciktisi:</p>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sonuc_plot</span><span class="op">$</span><span class="va">table</span></span>
 <span><span class="co">#&gt; taxdiv -- Index Comparison</span></span>
 <span><span class="co">#&gt;   Communities: 2 </span></span>
@@ -535,28 +706,30 @@ toplulukta da ayni turler var — sadece bolluk dagilimi farkli.</p>
 <h3 id="islem-2-iterasyon-grafigi">Islem 2 Iterasyon Grafigi<a class="anchor" aria-label="anchor" href="#islem-2-iterasyon-grafigi"></a>
 </h3>
 <p>Her iterasyondaki pTO degerlerini gosterir:</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_iteration.html">plot_iteration</a></span><span class="op">(</span><span class="va">islem2</span>, component <span class="op">=</span> <span class="st">"TO"</span>,</span>
-<span>               title <span class="op">=</span> <span class="st">"Islem 2 - TO Degerleri (200 Iterasyon)"</span><span class="op">)</span></span></code></pre></div>
+<span>               title <span class="op">=</span> <span class="st">"Islem 2 - TO Degerleri"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="giris_rehberi_files/figure-html/iterasyon-1.png" class="r-plt" alt="Islem 2 stokastik yeniden orneklemedeki TO degerlerinin iterasyon grafigi" width="864"></p>
 <p><strong>Nasil okunur:</strong></p>
 <ul>
 <li>
-<strong>Gri noktalar</strong>: Her iterasyondaki deger</li>
+<strong>Gri noktalar</strong>: Her iterasyondaki deger (rastgele tur
+alt kumesi)</li>
 <li>
 <strong>Kirmizi cizgi</strong>: Deterministik (Islem 1) degeri</li>
 <li>
 <strong>Mavi cizgi</strong>: Tum iterasyonlar arasindaki
 maksimum</li>
 </ul>
-<p>Dusuk noktalar = az tur dahil edildigi durumlar (cesitlilik
-duser).</p>
+<p>Dusuk noktalar = az tur dahil edildigi durumlar. Kirmizi cizginin
+ustundeki noktalar, bazi turlerin cikarilmasinin cesitliligi artirdigini
+gosterir.</p>
 </div>
 <div class="section level3">
 <h3 id="tur-katki-baloncuk-grafigi-bubble-chart">Tur Katki Baloncuk Grafigi (Bubble Chart)<a class="anchor" aria-label="anchor" href="#tur-katki-baloncuk-grafigi-bubble-chart"></a>
 </h3>
 <p>Her turun topluluk cesitliligine katkisini gosterir:</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_bubble.html">plot_bubble</a></span><span class="op">(</span><span class="va">topluluk</span>, <span class="va">agac</span>, color_by <span class="op">=</span> <span class="st">"Family"</span>,</span>
 <span>            title <span class="op">=</span> <span class="st">"Tur Katkilari - Familya Bazinda"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="giris_rehberi_files/figure-html/balon-1.png" class="r-plt" alt="Her turun cesitlilige katkisini gosteren familya bazinda balon grafigi" width="960"></p>
@@ -578,7 +751,7 @@ uzak)</li>
 </h3>
 <p>Birden fazla toplulugu tum indeksler uzerinden radar seklinde
 karsilastirir:</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_radar.html">plot_radar</a></span><span class="op">(</span><span class="va">topluluklar</span>, <span class="va">agac</span>,</span>
 <span>           title <span class="op">=</span> <span class="st">"Cesitli vs Baskin - Radar Karsilastirmasi"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning: Removed 2 rows containing missing values or values outside the scale range</span></span>
@@ -586,7 +759,39 @@ karsilastirir:</p>
 <p><img src="giris_rehberi_files/figure-html/radar-1.png" class="r-plt" alt="Cesitli ve baskin topluluklar icin normalize edilmis indeks degerlerinin radar grafigi" width="768"></p>
 <p><strong>Nasil okunur:</strong> Her eksen bir indeksi temsil eder.
 Degerler 0-1 arasinda normalize edilmistir. Buyuk alan = yuksek
-cesitlilik.</p>
+cesitlilik. Iki poligonun bolluk bagimsiz indekslerde ustuste binip
+bolluk bagimli indekslerde ayrilmasi, ayni tur havuzunun farkli
+dagilimlarini dogrular.</p>
+</div>
+<div class="section level3">
+<h3 id="seyreltme-egrisi-rarefaction-curve">Seyreltme Egrisi (Rarefaction Curve)<a class="anchor" aria-label="anchor" href="#seyreltme-egrisi-rarefaction-curve"></a>
+</h3>
+<p>Cesitlilik tahminlerinin orneklem buyuklugune gore degisimini
+gosterir:</p>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_rarefaction.html">plot_rarefaction</a></span><span class="op">(</span><span class="va">rare</span><span class="op">)</span></span></code></pre></div>
+<p><img src="giris_rehberi_files/figure-html/rarefaction_plot-1.png" class="r-plt" alt="Shannon indeksi icin orneklem buyuklugune karsi seyreltme egrisi" width="768"></p>
+<p><strong>Nasil okunur:</strong> X ekseni orneklenen birey sayisi, Y
+ekseni tahmini cesitlilik indeksidir. Golgelenmis bant %95 bootstrap
+guven araligini gosterir. Egri duzlestiyse orneklemeniz yeterlidir. Sag
+kenardaki dik egri daha fazla ornekleme gerektigini gosterir.</p>
+</div>
+<div class="section level3">
+<h3 id="huni-grafigi-funnel-plot">Huni Grafigi (Funnel Plot)<a class="anchor" aria-label="anchor" href="#huni-grafigi-funnel-plot"></a>
+</h3>
+<p>Gercek toplulugu simule edilmis beklenen aralikla karsilastirir:</p>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_funnel.html">plot_funnel</a></span><span class="op">(</span><span class="va">sim</span>, observed <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>              site  <span class="op">=</span> <span class="st">"Akdeniz Ormani"</span>,</span>
+<span>              s     <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">topluluk</span><span class="op">)</span>,</span>
+<span>              value <span class="op">=</span> <span class="va">avg_td</span><span class="op">)</span>,</span>
+<span>            index <span class="op">=</span> <span class="st">"avtd"</span>,</span>
+<span>            title <span class="op">=</span> <span class="st">"AvTD - Huni Grafigi"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="giris_rehberi_files/figure-html/huni-1.png" class="r-plt" alt="AvTD icin beklenen aralik ve gercek deger gosteren huni grafigi" width="864"></p>
+<p><strong>Nasil okunur:</strong> Gri bant beklenen aralik, kirmizi
+nokta gercek degerdir. Bant icinde ise topluluk beklenen cesitlilik
+araligindadir. Bantin disinda ise cesitlilik beklenenden onemli olcude
+farklidir.</p>
 </div>
 </div>
 <div class="section level2">
@@ -609,16 +814,14 @@ icin su formulu onermistir:</p>
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>p</mi><mi>i</mi></msub><annotation encoding="application/x-tex">p_i</annotation></semantics></math>
 =
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>.
-turun oransal bolluğu
+turun oransal bollugu
 (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>n</mi><mi>i</mi></msub><mi>/</mi><mi>N</mi></mrow><annotation encoding="application/x-tex">n_i / N</annotation></semantics></math>)</li>
 <li>
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>N</mi><annotation encoding="application/x-tex">N</annotation></semantics></math>
 = toplam birey sayisi</li>
 </ul>
 <p>Shannon entropisi her turu <strong>bireysel bir olay</strong> olarak
-ele alir. Turler arasindaki akrabalik iliskilerini gormez. Yani Pinus
-nigra ile Pinus brutia arasindaki akrabalik, Pinus nigra ile Quercus
-cerris arasindaki akrabalik kadar uzak kabul edilir.</p>
+ele alir. Turler arasindaki akrabalik iliskilerini gormez.</p>
 </div>
 <div class="section level3">
 <h3 id="simpson-indeksi">Simpson Indeksi<a class="anchor" aria-label="anchor" href="#simpson-indeksi"></a>
@@ -656,15 +859,16 @@ agacta ilk birlestigi seviyeye esittir (Cins = 1, Familya = 2, …, Alem =
 ve
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>Λ</mi><mo>+</mo></msup><annotation encoding="application/x-tex">\Lambda^+</annotation></semantics></math>
 bolluk bilgisi kullanmaz. Bu sayede farkli orneklem buyuklugundeki
-alanlari dogrudan karsilastirabilirsiniz.</p>
+alanlari dogrudan karsilastirabilirsiniz (Clarke &amp; Warwick, 1998,
+2001).</p>
 </div>
 <div class="section level3">
 <h3 id="deng-entropisi">Deng Entropisi<a class="anchor" aria-label="anchor" href="#deng-entropisi"></a>
 </h3>
 <p>Deng (2016), Shannon entropisini Dempster-Shafer kanit teorisi
-cercevesinde genellestirmistir. Temel fark: Shannon’da her olay (tur)
-atomiktir. Deng entropisinde olaylar <strong>kume yapisi</strong>
-icerebilir.</p>
+(Dempster, 1967; Shafer, 1976) cercevesinde genellestirmistir. Temel
+fark: Shannon’da her olay (tur) atomiktir. Deng entropisinde olaylar
+<strong>kume yapisi</strong> icerebilir.</p>
 <p>Bir taksonomik seviyedeki Deng entropisi:</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>E</mi><mi>d</mi></msub><mo>=</mo><mo>−</mo><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>K</mi></munderover><mi>m</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>F</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>⋅</mo><mo>ln</mo><mfrac><mrow><mi>m</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>F</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><mrow><msup><mn>2</mn><mrow><mo stretchy="true" form="prefix">|</mo><msub><mi>F</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">|</mo></mrow></msup><mo>−</mo><mn>1</mn></mrow></mfrac></mrow><annotation encoding="application/x-tex">E_d = -\sum_{i=1}^{K} m(F_i) \cdot \ln\frac{m(F_i)}{2^{|F_i|} - 1}</annotation></semantics></math></p>
 <ul>
@@ -728,39 +932,11 @@ ihtiyac duymaz cunku tur listesiyle calisir.</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><msub><mi>T</mi><mi>O</mi></msub><mo>=</mo><mo>ln</mo><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mrow><munderover><mo>∑</mo><mrow><mi>k</mi><mo>=</mo><mn>0</mn></mrow><msub><mi>n</mi><mi>s</mi></msub></munderover><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>n</mi><mi>s</mi></msub><mo>−</mo><msub><mi>n</mi><mi>k</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><munderover><mo>∏</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>L</mi></munderover><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>w</mi><mi>i</mi></msub><mo>⋅</mo><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><msup><mrow><mo stretchy="true" form="prefix">(</mo><msup><mi>e</mi><msubsup><mi>E</mi><mi>d</mi><mi>S</mi></msubsup></msup><mo stretchy="true" form="postfix">)</mo></mrow><mn>2</mn></msup><msup><mi>e</mi><msubsup><mi>E</mi><mi>d</mi><mi>i</mi></msubsup></msup></mfrac><mo>+</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mrow><mrow><msub><mi>n</mi><mi>s</mi></msub><mo>+</mo><mo>∑</mo><msub><mi>n</mi><mi>k</mi></msub></mrow></mfrac><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">pT_O = \ln \left( \frac{\sum_{k=0}^{n_s} (n_s - n_k)
 \prod_{i=1}^{L} \left( w_i \cdot \left( \frac{(e^{E_d^S})^2}
 {e^{E_d^i}} + 1 \right) \right)}{n_s + \sum n_k} \right)</annotation></semantics></math></p>
-<p>Dilim proseduru (slicing): nk = 0, 1, …, n_s icin bolluğu
+<p>Dilim proseduru (slicing): nk = 0, 1, …, n_s icin bollugu
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>≤</mo><msub><mi>n</mi><mi>k</mi></msub></mrow><annotation encoding="application/x-tex">\leq n_k</annotation></semantics></math>
 olan turler elenir. Her dilimde hayatta kalan turlerle Deng entropisi
 yeniden hesaplanir. Boylece bolluk bilgisi dolayli olarak sisteme
 girer.</p>
-</div>
-<div class="section level3">
-<h3 id="rarefaction-seyreltme">Rarefaction (Seyreltme)<a class="anchor" aria-label="anchor" href="#rarefaction-seyreltme"></a>
-</h3>
-<p>Rarefaction, farkli orneklem buyukluklerinin cesitlilik tahminleri
-uzerindeki etkisini degerlendirmek icin kullanilir (Gotelli &amp;
-Colwell, 2001).</p>
-<p>Klasik rarefaction formulu (Hurlbert, 1971):</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>E</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>S</mi><mi>n</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>S</mi><mo>−</mo><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>S</mi></munderover><mfrac><mrow><mo stretchy="true" form="prefix">(</mo><mfrac linethickness="0"><mrow><mi>N</mi><mo>−</mo><msub><mi>N</mi><mi>i</mi></msub></mrow><mi>n</mi></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo stretchy="true" form="prefix">(</mo><mfrac linethickness="0"><mi>N</mi><mi>n</mi></mfrac><mo stretchy="true" form="postfix">)</mo></mrow></mfrac></mrow><annotation encoding="application/x-tex">E(S_n) = S - \sum_{i=1}^{S} \frac{\binom{N - N_i}{n}}{\binom{N}{n}}</annotation></semantics></math></p>
-<ul>
-<li>
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>E</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>S</mi><mi>n</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">E(S_n)</annotation></semantics></math>
-=
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math>
-birey icin beklenen tur sayisi</li>
-<li>
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>N</mi><mi>i</mi></msub><annotation encoding="application/x-tex">N_i</annotation></semantics></math>
-=
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>.
-turun birey sayisi</li>
-<li>
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="true" form="prefix">(</mo><mfrac linethickness="0"><mi>a</mi><mi>b</mi></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\binom{a}{b}</annotation></semantics></math>
-= kombinasyon</li>
-</ul>
-<p>Bu paket, rarefaction’i <strong>taksonomik indekslere</strong>
-genisletir. Bootstrap yeniden ornekleme ile herhangi bir indeks icin
-(Shannon, Simpson, pTO, AvTD vb.) seyreltme egrisi hesaplar. Egri
-duzlestiyse orneklemeniz yeterlidir.</p>
 </div>
 </div>
 <div class="section level2">
@@ -771,7 +947,7 @@ fonksiyonlarin arkasindaki mantigi gosteriyoruz.</p>
 <div class="section level3">
 <h3 id="veri">Veri<a class="anchor" aria-label="anchor" href="#veri"></a>
 </h3>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># 5 turlu kucuk bir topluluk</span></span>
 <span><span class="va">ornek_topluluk</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>  Pinus_nigra     <span class="op">=</span> <span class="fl">4</span>,</span>
@@ -809,7 +985,7 @@ fonksiyonlarin arkasindaki mantigi gosteriyoruz.</p>
 <div class="section level3">
 <h3 id="adim-1-shannon">Adim 1: Shannon<a class="anchor" aria-label="anchor" href="#adim-1-shannon"></a>
 </h3>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Toplam birey: 4 + 3 + 2 + 1 + 2 = 12</span></span>
 <span><span class="va">N</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">ornek_topluluk</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Toplam birey (N):"</span>, <span class="va">N</span>, <span class="st">"\n\n"</span><span class="op">)</span></span>
@@ -840,7 +1016,7 @@ fonksiyonlarin arkasindaki mantigi gosteriyoruz.</p>
 <div class="section level3">
 <h3 id="adim-2-taksonomik-mesafe">Adim 2: Taksonomik Mesafe<a class="anchor" aria-label="anchor" href="#adim-2-taksonomik-mesafe"></a>
 </h3>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Mesafe matrisi</span></span>
 <span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tax_distance_matrix.html">tax_distance_matrix</a></span><span class="op">(</span><span class="va">ornek_agac</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Taksonomik mesafe matrisi:\n"</span><span class="op">)</span></span>
@@ -865,13 +1041,13 @@ fonksiyonlarin arkasindaki mantigi gosteriyoruz.</p>
 <span><span class="co">#&gt;   Pinus_nigra - Pinus_brutia: Ayni cins -&gt; mesafe = 1</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"  Pinus_nigra - Cedrus_libani: Ayni familya (Pinaceae) -&gt; mesafe = 2\n"</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   Pinus_nigra - Cedrus_libani: Ayni familya (Pinaceae) -&gt; mesafe = 2</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"  Pinus_nigra - Quercus_cerris: Ayni takim degil (Pinales vs Fagales) -&gt; mesafe = 3\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   Pinus_nigra - Quercus_cerris: Ayni takim degil (Pinales vs Fagales) -&gt; mesafe = 3</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"  Pinus_nigra - Quercus_cerris: Farkli takim (Pinales vs Fagales) -&gt; mesafe = 3\n"</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   Pinus_nigra - Quercus_cerris: Farkli takim (Pinales vs Fagales) -&gt; mesafe = 3</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="adim-3-avtd-elle">Adim 3: AvTD (Elle)<a class="anchor" aria-label="anchor" href="#adim-3-avtd-elle"></a>
 </h3>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># AvTD = tum tur ciftleri arasindaki ortalama mesafe</span></span>
 <span><span class="co"># S = 5, S*(S-1)/2 = 10 cift</span></span>
 <span><span class="va">S</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">ornek_topluluk</span><span class="op">)</span></span>
@@ -914,7 +1090,7 @@ fonksiyonlarin arkasindaki mantigi gosteriyoruz.</p>
 <div class="section level3">
 <h3 id="adim-4-deng-entropisi-tur-seviyesinde">Adim 4: Deng Entropisi (Tur Seviyesinde)<a class="anchor" aria-label="anchor" href="#adim-4-deng-entropisi-tur-seviyesinde"></a>
 </h3>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Tur seviyesinde: her tur tek basina bir grup (|F_i| = 1)</span></span>
 <span><span class="co"># Esit agirlik: m_i = 1/S = 1/5 = 0.2</span></span>
 <span><span class="co"># Ed = -sum(m_i * ln(m_i / (2^1 - 1))) = -sum(0.2 * ln(0.2)) = ln(5)</span></span>
@@ -947,7 +1123,7 @@ fonksiyonlarin arkasindaki mantigi gosteriyoruz.</p>
 <div class="section level3">
 <h3 id="adim-5-ozkan-pto">Adim 5: Ozkan pTO<a class="anchor" aria-label="anchor" href="#adim-5-ozkan-pto"></a>
 </h3>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Fonksiyonla hesapla</span></span>
 <span><span class="va">pto_sonuc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ozkan_pto.html">ozkan_pto</a></span><span class="op">(</span><span class="va">ornek_topluluk</span>, <span class="va">ornek_agac</span><span class="op">)</span></span>
 <span></span>
@@ -973,46 +1149,13 @@ fonksiyonlarin arkasindaki mantigi gosteriyoruz.</p>
 <span><span class="co">#&gt;    Family : 2.28 </span></span>
 <span><span class="co">#&gt;    Order : 2.28</span></span></code></pre></div>
 </div>
-<div class="section level3">
-<h3 id="adim-6-rarefaction">Adim 6: Rarefaction<a class="anchor" aria-label="anchor" href="#adim-6-rarefaction"></a>
-</h3>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># 12 bireylik toplulugun seyreltme egrisi</span></span>
-<span><span class="va">rare</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rarefaction_taxonomic.html">rarefaction_taxonomic</a></span><span class="op">(</span><span class="va">ornek_topluluk</span>, <span class="va">ornek_agac</span>,</span>
-<span>                               index <span class="op">=</span> <span class="st">"shannon"</span>,</span>
-<span>                               steps <span class="op">=</span> <span class="fl">10</span>, n_boot <span class="op">=</span> <span class="fl">100</span>, seed <span class="op">=</span> <span class="fl">42</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Rarefaction sonuclari (Shannon):\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Rarefaction sonuclari (Shannon):</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">rare</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; taxdiv -- Rarefaction Curve</span></span>
-<span><span class="co">#&gt;   Index: shannon </span></span>
-<span><span class="co">#&gt;   Total N: 12 </span></span>
-<span><span class="co">#&gt;   Bootstrap: 100 replicates</span></span>
-<span><span class="co">#&gt;   CI: 95 %</span></span>
-<span><span class="co">#&gt;   Steps: 10 </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  sample_size   mean  lower  upper     sd</span></span>
-<span><span class="co">#&gt;            2 0.6308 0.0000 0.6931 0.1994</span></span>
-<span><span class="co">#&gt;            3 0.9213 0.6365 1.0986 0.2410</span></span>
-<span><span class="co">#&gt;            4 1.0166 0.5623 1.3863 0.2363</span></span>
-<span><span class="co">#&gt;            5 1.2125 0.8047 1.6094 0.2060</span></span>
-<span><span class="co">#&gt;            6 1.2570 0.8676 1.5607 0.1797</span></span>
-<span><span class="co">#&gt;            8 1.3973 1.0599 1.5596 0.1465</span></span>
-<span><span class="co">#&gt;            9 1.4366 1.2149 1.5811 0.1049</span></span>
-<span><span class="co">#&gt;           10 1.4717 1.2799 1.5571 0.0913</span></span>
-<span><span class="co">#&gt;           11 1.4891 1.3421 1.5466 0.0627</span></span>
-<span><span class="co">#&gt;           12 1.5171 1.5171 1.5171 0.0000</span></span></code></pre></div>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_rarefaction.html">plot_rarefaction</a></span><span class="op">(</span><span class="va">rare</span><span class="op">)</span></span></code></pre></div>
-<p><img src="giris_rehberi_files/figure-html/ornek_rare_plot-1.png" class="r-plt" alt="Shannon indeksi icin orneklem buyuklugune karsi seyreltme egrisi" width="768"></p>
-<p><strong>Yorum:</strong> 12 bireylik kucuk bir orneklemde egri henuz
-tam duzlesmemis. Bu, daha fazla ornekleme yapilsa cesitlilik degerinin
-biraz daha artabilecegini gosterir.</p>
-</div>
 </div>
 <div class="section level2">
 <h2 id="fonksiyon-listesi">Fonksiyon Listesi<a class="anchor" aria-label="anchor" href="#fonksiyon-listesi"></a>
 </h2>
+<div class="section level3">
+<h3 id="klasik-indeksler">Klasik Indeksler<a class="anchor" aria-label="anchor" href="#klasik-indeksler"></a>
+</h3>
 <table class="table">
 <colgroup>
 <col width="52%">
@@ -1024,62 +1167,153 @@ biraz daha artabilecegini gosterir.</p>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td><code><a href="../reference/build_tax_tree.html">build_tax_tree()</a></code></td>
-<td>Taksonomik hiyerarsi tablosu olusturur</td>
-</tr>
-<tr class="even">
-<td><code><a href="../reference/tax_distance_matrix.html">tax_distance_matrix()</a></code></td>
-<td>Turler arasi taksonomik mesafe matrisi hesaplar</td>
-</tr>
-<tr class="odd">
 <td><code><a href="../reference/shannon.html">shannon()</a></code></td>
-<td>Shannon cesitlilik indeksi</td>
+<td>Shannon cesitlilik indeksi (correction destekli)</td>
 </tr>
 <tr class="even">
 <td><code><a href="../reference/simpson.html">simpson()</a></code></td>
 <td>Simpson indeksleri (baskinlik, Gini-Simpson, ters Simpson)</td>
 </tr>
+</tbody>
+</table>
+</div>
+<div class="section level3">
+<h3 id="clarke-warwick-taksonomik-ayirt-edicilik-1">Clarke &amp; Warwick Taksonomik Ayirt Edicilik<a class="anchor" aria-label="anchor" href="#clarke-warwick-taksonomik-ayirt-edicilik-1"></a>
+</h3>
+<table class="table">
+<thead><tr class="header">
+<th>Fonksiyon</th>
+<th>Ne yapar</th>
+</tr></thead>
+<tbody>
 <tr class="odd">
 <td><code><a href="../reference/delta.html">delta()</a></code></td>
-<td>Clarke &amp; Warwick Delta (taksonomik cesitlilik, bolluk
-agirlikli)</td>
+<td>Delta — taksonomik cesitlilik (bolluk agirlikli)</td>
 </tr>
 <tr class="even">
 <td><code><a href="../reference/delta_star.html">delta_star()</a></code></td>
-<td>Clarke &amp; Warwick Delta* (taksonomik ayirt edicilik)</td>
+<td>Delta* — taksonomik ayirt edicilik</td>
 </tr>
 <tr class="odd">
 <td><code><a href="../reference/avtd.html">avtd()</a></code></td>
-<td>Ortalama taksonomik ayirt edicilik AvTD / Delta+</td>
+<td>AvTD / Delta+ — ortalama taksonomik ayirt edicilik</td>
 </tr>
 <tr class="even">
 <td><code><a href="../reference/vartd.html">vartd()</a></code></td>
-<td>Taksonomik ayirt edicilik varyasyonu VarTD / Lambda+</td>
+<td>VarTD / Lambda+ — taksonomik ayirt edicilik varyasyonu</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level3">
+<h3 id="ozkan-pto-deng-entropisi">Ozkan pTO (Deng Entropisi)<a class="anchor" aria-label="anchor" href="#ozkan-pto-deng-entropisi"></a>
+</h3>
+<table class="table">
+<colgroup>
+<col width="52%">
+<col width="47%">
+</colgroup>
+<thead><tr class="header">
+<th>Fonksiyon</th>
+<th>Ne yapar</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><code><a href="../reference/ozkan_pto.html">ozkan_pto()</a></code></td>
+<td>Islem 1: pTO hesaplama (max_level destekli, 8 cikti)</td>
+</tr>
+<tr class="even">
+<td><code><a href="../reference/pto_components.html">pto_components()</a></code></td>
+<td>pTO dort/sekiz bileseni tek satirda</td>
 </tr>
 <tr class="odd">
 <td><code><a href="../reference/deng_entropy_level.html">deng_entropy_level()</a></code></td>
 <td>Belirli bir taksonomik seviyede Deng entropisi</td>
 </tr>
-<tr class="even">
-<td><code><a href="../reference/ozkan_pto.html">ozkan_pto()</a></code></td>
-<td>Ozkan pTO hesaplama (Islem 1)</td>
-</tr>
+</tbody>
+</table>
+</div>
+<div class="section level3">
+<h3 id="ozkan-pto-pipeline">Ozkan pTO Pipeline<a class="anchor" aria-label="anchor" href="#ozkan-pto-pipeline"></a>
+</h3>
+<table class="table">
+<thead><tr class="header">
+<th>Fonksiyon</th>
+<th>Ne yapar</th>
+</tr></thead>
+<tbody>
 <tr class="odd">
-<td><code><a href="../reference/pto_components.html">pto_components()</a></code></td>
-<td>pTO dort bileseni (uTO, TO, uTO+, TO+)</td>
-</tr>
-<tr class="even">
 <td><code><a href="../reference/ozkan_pto_resample.html">ozkan_pto_resample()</a></code></td>
-<td>Stokastik yeniden ornekleme (Islem 2)</td>
+<td>Islem 2: stokastik yeniden ornekleme</td>
+</tr>
+<tr class="even">
+<td><code><a href="../reference/ozkan_pto_sensitivity.html">ozkan_pto_sensitivity()</a></code></td>
+<td>Islem 3: duyarlilik analizi</td>
 </tr>
 <tr class="odd">
-<td><code><a href="../reference/ozkan_pto_sensitivity.html">ozkan_pto_sensitivity()</a></code></td>
-<td>Duyarlilik analizi (Islem 3)</td>
+<td><code><a href="../reference/ozkan_pto_full.html">ozkan_pto_full()</a></code></td>
+<td>Islem 1+2+3 tam pipeline tek satirda</td>
+</tr>
+<tr class="even">
+<td><code><a href="../reference/ozkan_pto_jackknife.html">ozkan_pto_jackknife()</a></code></td>
+<td>Leave-one-out jackknife yanliliksiz tahmin</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level3">
+<h3 id="toplu-analiz-ve-karsilastirma">Toplu Analiz ve Karsilastirma<a class="anchor" aria-label="anchor" href="#toplu-analiz-ve-karsilastirma"></a>
+</h3>
+<table class="table">
+<thead><tr class="header">
+<th>Fonksiyon</th>
+<th>Ne yapar</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><code><a href="../reference/batch_analysis.html">batch_analysis()</a></code></td>
+<td>Coklu ornek alan toplu analizi (16 sutun cikti)</td>
 </tr>
 <tr class="even">
 <td><code><a href="../reference/compare_indices.html">compare_indices()</a></code></td>
 <td>Tum indeksleri yan yana karsilastirir</td>
 </tr>
+</tbody>
+</table>
+</div>
+<div class="section level3">
+<h3 id="simulasyon-ve-rarefaction">Simulasyon ve Rarefaction<a class="anchor" aria-label="anchor" href="#simulasyon-ve-rarefaction"></a>
+</h3>
+<table class="table">
+<colgroup>
+<col width="52%">
+<col width="47%">
+</colgroup>
+<thead><tr class="header">
+<th>Fonksiyon</th>
+<th>Ne yapar</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><code><a href="../reference/simulate_td.html">simulate_td()</a></code></td>
+<td>Huni grafigi icin null dagilim simulasyonu</td>
+</tr>
+<tr class="even">
+<td><code><a href="../reference/rarefaction_taxonomic.html">rarefaction_taxonomic()</a></code></td>
+<td>Taksonomik cesitlilik icin seyreltme egrisi</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level3">
+<h3 id="gorsellestime-7-plot-tipi">Gorsellestime (7 plot tipi)<a class="anchor" aria-label="anchor" href="#gorsellestime-7-plot-tipi"></a>
+</h3>
+<table class="table">
+<thead><tr class="header">
+<th>Fonksiyon</th>
+<th>Ne yapar</th>
+</tr></thead>
+<tbody>
 <tr class="odd">
 <td><code><a href="../reference/plot_taxonomic_tree.html">plot_taxonomic_tree()</a></code></td>
 <td>Taksonomik agac dendogrami</td>
@@ -1089,27 +1323,72 @@ agirlikli)</td>
 <td>Taksonomik mesafe isi haritasi</td>
 </tr>
 <tr class="odd">
+<td><code><a href="../reference/plot_funnel.html">plot_funnel()</a></code></td>
+<td>Huni grafigi (beklenen aralik)</td>
+</tr>
+<tr class="even">
 <td><code><a href="../reference/plot_iteration.html">plot_iteration()</a></code></td>
 <td>Islem 2/3 iterasyon grafigi</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code><a href="../reference/plot_bubble.html">plot_bubble()</a></code></td>
 <td>Tur katkilari balon grafigi</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code><a href="../reference/plot_radar.html">plot_radar()</a></code></td>
 <td>Radar/orumcek grafigi</td>
 </tr>
-<tr class="even">
-<td><code><a href="../reference/rarefaction_taxonomic.html">rarefaction_taxonomic()</a></code></td>
-<td>Taksonomik cesitlilik icin seyreltme egrisi hesaplar</td>
-</tr>
 <tr class="odd">
 <td><code><a href="../reference/plot_rarefaction.html">plot_rarefaction()</a></code></td>
-<td>Seyreltme egrisini guven araliklariyla gosterir</td>
+<td>Seyreltme egrisi (guven araliklariyla)</td>
 </tr>
 </tbody>
 </table>
+</div>
+<div class="section level3">
+<h3 id="yardimci-fonksiyonlar">Yardimci Fonksiyonlar<a class="anchor" aria-label="anchor" href="#yardimci-fonksiyonlar"></a>
+</h3>
+<table class="table">
+<thead><tr class="header">
+<th>Fonksiyon</th>
+<th>Ne yapar</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><code><a href="../reference/build_tax_tree.html">build_tax_tree()</a></code></td>
+<td>Taksonomik hiyerarsi tablosu olusturur</td>
+</tr>
+<tr class="even">
+<td><code><a href="../reference/tax_distance_matrix.html">tax_distance_matrix()</a></code></td>
+<td>Turler arasi taksonomik mesafe matrisi</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level3">
+<h3 id="veri-setleri">Veri Setleri<a class="anchor" aria-label="anchor" href="#veri-setleri"></a>
+</h3>
+<table class="table">
+<thead><tr class="header">
+<th>Veri Seti</th>
+<th>Aciklama</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><code>anatolian_trees</code></td>
+<td>Anadolu agac turleri taksonomik hiyerarsisi</td>
+</tr>
+<tr class="even">
+<td><code>gazi_comm</code></td>
+<td>Gazi Universitesi kampus ormani topluluk verisi</td>
+</tr>
+<tr class="odd">
+<td><code>gazi_gytk</code></td>
+<td>Gazi Universitesi kampus ormani taksonomik agac</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 <div class="section level2">
 <h2 id="kaynaklar">Kaynaklar<a class="anchor" aria-label="anchor" href="#kaynaklar"></a>
@@ -1122,18 +1401,21 @@ agirlikli)</td>
 <em>Bell System Technical Journal</em>, 27, 379-423.</li>
 <li>Simpson, E.H. (1949). Measurement of diversity. <em>Nature</em>,
 163, 688.</li>
-<li>Pielou, E.C. (1966). The measurement of diversity in different types
-of biological collections. <em>Journal of Theoretical Biology</em>, 13,
-131-144.</li>
 </ul>
 </div>
 <div class="section level3">
 <h3 id="taksonomik-farklilik">Taksonomik Farklilik<a class="anchor" aria-label="anchor" href="#taksonomik-farklilik"></a>
 </h3>
 <ul>
+<li>Warwick, R.M. &amp; Clarke, K.R. (1995). New ‘biodiversity’ measures
+reveal a decrease in taxonomic distinctness with increasing stress.
+<em>Marine Ecology Progress Series</em>, 129, 301-305.</li>
 <li>Clarke, K.R. &amp; Warwick, R.M. (1998). A taxonomic distinctness
 index and its statistical properties. <em>Journal of Applied
 Ecology</em>, 35, 523-531.</li>
+<li>Clarke, K.R. &amp; Warwick, R.M. (1999). The taxonomic distinctness
+measure of biodiversity: weighting of step lengths between hierarchical
+levels. <em>Marine Ecology Progress Series</em>, 184, 21-29.</li>
 <li>Clarke, K.R. &amp; Warwick, R.M. (2001). A further biodiversity
 index applicable to species lists: variation in taxonomic distinctness.
 <em>Marine Ecology Progress Series</em>, 216, 265-278.</li>
@@ -1143,13 +1425,13 @@ index applicable to species lists: variation in taxonomic distinctness.
 <h3 id="deng-entropisi-ve-kanit-teorisi">Deng Entropisi ve Kanit Teorisi<a class="anchor" aria-label="anchor" href="#deng-entropisi-ve-kanit-teorisi"></a>
 </h3>
 <ul>
-<li>Deng, Y. (2016). Deng entropy. <em>Chaos, Solitons &amp;
-Fractals</em>, 91, 549-553.</li>
 <li>Dempster, A.P. (1967). Upper and lower probabilities induced by a
 multivalued mapping. <em>The Annals of Mathematical Statistics</em>, 38,
 325-339.</li>
 <li>Shafer, G. (1976). <em>A Mathematical Theory of Evidence</em>.
 Princeton University Press.</li>
+<li>Deng, Y. (2016). Deng entropy. <em>Chaos, Solitons &amp;
+Fractals</em>, 91, 549-553.</li>
 </ul>
 </div>
 <div class="section level3">
@@ -1162,7 +1444,16 @@ Princeton University Press.</li>
 </ul>
 </div>
 <div class="section level3">
-<h3 id="rarefaction-seyreltme-1">Rarefaction (Seyreltme)<a class="anchor" aria-label="anchor" href="#rarefaction-seyreltme-1"></a>
+<h3 id="yanliliksiz-tahmin">Yanliliksiz Tahmin<a class="anchor" aria-label="anchor" href="#yanliliksiz-tahmin"></a>
+</h3>
+<ul>
+<li>Chao, A. &amp; Shen, T.J. (2003). Nonparametric estimation of
+Shannon’s index of diversity when there are unseen species in sample.
+<em>Environmental and Ecological Statistics</em>, 10, 429-443.</li>
+</ul>
+</div>
+<div class="section level3">
+<h3 id="rarefaction-seyreltme">Rarefaction (Seyreltme)<a class="anchor" aria-label="anchor" href="#rarefaction-seyreltme"></a>
 </h3>
 <ul>
 <li>Gotelli, N.J. &amp; Colwell, R.K. (2001). Quantifying biodiversity:
@@ -1170,14 +1461,6 @@ procedures and pitfalls in the measurement and comparison of species
 richness. <em>Ecology Letters</em>, 4, 379-391.</li>
 <li>Hurlbert, S.H. (1971). The nonconcept of species diversity: a
 critique and alternative parameters. <em>Ecology</em>, 52, 577-586.</li>
-</ul>
-</div>
-<div class="section level3">
-<h3 id="genel-ekoloji-ve-biyocesitlilik">Genel Ekoloji ve Biyocesitlilik<a class="anchor" aria-label="anchor" href="#genel-ekoloji-ve-biyocesitlilik"></a>
-</h3>
-<ul>
-<li>Magurran, A.E. (2004). <em>Measuring Biological Diversity</em>.
-Blackwell Publishing, Oxford.</li>
 </ul>
 </div>
 </div>
