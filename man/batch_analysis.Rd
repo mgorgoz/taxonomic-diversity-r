@@ -46,7 +46,7 @@ indices for multiple sites concurrently. Default \code{FALSE}.}
 }
 \value{
 A data frame with one row per site and columns:
-\code{Site}, \code{Shannon}, \code{Simpson}, \code{Delta},
+\code{Site}, \code{N_Species}, \code{Shannon}, \code{Simpson}, \code{Delta},
 \code{Delta_star}, \code{AvTD}, \code{VarTD}, \code{uTO}, \code{TO},
 \code{uTO_plus}, \code{TO_plus}, \code{uTO_max}, \code{TO_max},
 \code{uTO_plus_max}, \code{TO_plus_max}.
@@ -55,7 +55,8 @@ A data frame with one row per site and columns:
 Computes all diversity indices for one or more sample sites from a single
 data frame (e.g., imported from Excel). The function automatically detects
 the site column, taxonomic columns, and abundance column, splits the data
-by site, and returns a summary data frame with 14 diversity indices per site.
+by site, and returns a summary data frame with species count and 14
+diversity indices per site.
 }
 \details{
 When no site column is present (or all values are identical), the entire

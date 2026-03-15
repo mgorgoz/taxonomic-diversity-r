@@ -121,6 +121,7 @@ compare_indices <- function(communities, tax_tree,
 
     data.frame(
       Community    = nm,
+      N_Species    = length(sp_present),
       Shannon      = round(H, 6),
       Simpson      = round(D, 6),
       Delta        = round(Delta, 6),
@@ -156,7 +157,7 @@ compare_indices <- function(communities, tax_tree,
   }
 
   # Reshape to long format for ggplot
-  index_cols <- setdiff(names(result_df), "Community")
+  index_cols <- setdiff(names(result_df), c("Community", "N_Species"))
   long_df <- data.frame(
     Community = rep(result_df$Community, each = length(index_cols)),
     Index     = rep(index_cols, times = nrow(result_df)),

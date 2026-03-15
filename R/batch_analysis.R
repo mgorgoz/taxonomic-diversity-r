@@ -3,7 +3,8 @@
 #' Computes all diversity indices for one or more sample sites from a single
 #' data frame (e.g., imported from Excel). The function automatically detects
 #' the site column, taxonomic columns, and abundance column, splits the data
-#' by site, and returns a summary data frame with 14 diversity indices per site.
+#' by site, and returns a summary data frame with species count and 14
+#' diversity indices per site.
 #'
 #' When no site column is present (or all values are identical), the entire
 #' data set is treated as a single community.
@@ -50,7 +51,7 @@
 #'   `NULL` uses `parallel::detectCores() - 1`.
 #'
 #' @return A data frame with one row per site and columns:
-#'   \code{Site}, \code{Shannon}, \code{Simpson}, \code{Delta},
+#'   \code{Site}, \code{N_Species}, \code{Shannon}, \code{Simpson}, \code{Delta},
 #'   \code{Delta_star}, \code{AvTD}, \code{VarTD}, \code{uTO}, \code{TO},
 #'   \code{uTO_plus}, \code{TO_plus}, \code{uTO_max}, \code{TO_max},
 #'   \code{uTO_plus_max}, \code{TO_plus_max}.
@@ -239,6 +240,7 @@ batch_analysis <- function(data,
 
     data.frame(
       Site         = site_name,
+      N_Species    = length(community),
       Shannon      = round(H, 6),
       Simpson      = round(D, 6),
       Delta        = round(Delta_val, 6),

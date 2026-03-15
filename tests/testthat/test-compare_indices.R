@@ -29,8 +29,11 @@ test_that("tek topluluk vektoru dogru tablo dondurur", {
   # 1 satır olmalı (tek topluluk)
   expect_equal(nrow(result), 1)
 
-  # 15 sütun: Community + 14 indeks (6 klasik + 4 PTO + 4 PTO max)
-  expect_equal(ncol(result), 15)
+  # 16 sütun: Community + N_Species + 14 indeks (6 klasik + 4 PTO + 4 PTO max)
+  expect_equal(ncol(result), 16)
+
+  # N_Species kontrol
+  expect_equal(result$N_Species, 4L)
 
   # Community sütunu "Community" olmalı
   expect_equal(result$Community, "Community")

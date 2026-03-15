@@ -45,11 +45,14 @@ test_that("tek alan verisi dogru sonuc dondurur", {
   # 1 satir olmali (tek alan)
   expect_equal(nrow(result), 1)
 
-  # 15 sutun: Site + 14 indeks (6 klasik + 4 PTO + 4 PTO max)
-  expect_equal(ncol(result), 15)
+  # 16 sutun: Site + N_Species + 14 indeks (6 klasik + 4 PTO + 4 PTO max)
+  expect_equal(ncol(result), 16)
 
   # Site sutunu "All" olmali (otomatik)
   expect_equal(result$Site, "All")
+
+  # N_Species olmali
+  expect_equal(result$N_Species, 4L)
 
   # Tum indeks sutunlari sayisal olmali
   index_cols <- setdiff(names(result), "Site")
@@ -70,8 +73,11 @@ test_that("coklu alan verisi dogru sonuc dondurur", {
   # Site isimleri korunmali
   expect_equal(result$Site, c("A", "B"))
 
-  # Her satirin 15 sutunu olmali
-  expect_equal(ncol(result), 15)
+  # Her satirin 16 sutunu olmali
+  expect_equal(ncol(result), 16)
+
+  # Her site icin N_Species
+  expect_equal(result$N_Species, c(4L, 4L))
 })
 
 

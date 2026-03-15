@@ -4,7 +4,7 @@
 #' @export
 print.compare_indices <- function(x, ...) {
   n_comm <- nrow(x)
-  index_cols <- setdiff(names(x), "Community")
+  index_cols <- setdiff(names(x), c("Community", "N_Species"))
 
   cat("taxdiv -- Index Comparison\n")
   cat("  Communities:", n_comm, "\n")
@@ -19,7 +19,7 @@ print.compare_indices <- function(x, ...) {
 #' @method summary compare_indices
 #' @export
 summary.compare_indices <- function(object, ...) {
-  index_cols <- setdiff(names(object), "Community")
+  index_cols <- setdiff(names(object), c("Community", "N_Species"))
   n_comm <- nrow(object)
 
   cat("taxdiv -- Index Comparison Summary\n")
@@ -53,7 +53,7 @@ plot.compare_indices <- function(x, ...) {
     stop("Package 'ggplot2' is required for plotting.", call. = FALSE)
   }
 
-  index_cols <- setdiff(names(x), "Community")
+  index_cols <- setdiff(names(x), c("Community", "N_Species"))
   long_df <- data.frame(
     Community = rep(x$Community, each = length(index_cols)),
     Index     = rep(index_cols, times = nrow(x)),
@@ -85,7 +85,7 @@ plot.compare_indices <- function(x, ...) {
 #' @export
 print.batch_analysis <- function(x, ...) {
   n_sites <- nrow(x)
-  index_cols <- setdiff(names(x), "Site")
+  index_cols <- setdiff(names(x), c("Site", "N_Species"))
 
   cat("taxdiv -- Batch Analysis\n")
   cat("  Sites:", n_sites, "\n")
@@ -105,7 +105,7 @@ print.batch_analysis <- function(x, ...) {
 #' @method summary batch_analysis
 #' @export
 summary.batch_analysis <- function(object, ...) {
-  index_cols <- setdiff(names(object), "Site")
+  index_cols <- setdiff(names(object), c("Site", "N_Species"))
   n_sites <- nrow(object)
 
   cat("taxdiv -- Batch Analysis Summary\n")
