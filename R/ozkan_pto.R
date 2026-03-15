@@ -11,14 +11,26 @@
 #'   is species names, subsequent columns are taxonomic ranks from
 #'   lowest to highest (e.g., Species, Genus, Family, Order, Class,
 #'   Phylum, Kingdom).
+#' @param max_level Integer or \code{NULL}. Maximum number of taxonomic
+#'   levels (above Species) to include in the product formula. When
+#'   \code{NULL} (default), all available levels are used. When set to
+#'   \code{"auto"}, the function automatically detects the highest
+#'   informative level (where Deng entropy > 0 at nk=0) and truncates
+#'   the product there. A positive integer limits to that many levels
+#'   (e.g., \code{max_level = 2} uses only Genus and Family).
 #'
 #' @return A named list with components:
 #'   \describe{
-#'     \item{uTO}{Unweighted taxonomic diversity}
-#'     \item{TO}{Weighted taxonomic diversity}
-#'     \item{uTO_plus}{Unweighted taxonomic distance}
-#'     \item{TO_plus}{Weighted taxonomic distance}
+#'     \item{uTO}{Unweighted taxonomic diversity (all levels)}
+#'     \item{TO}{Weighted taxonomic diversity (all levels)}
+#'     \item{uTO_plus}{Unweighted taxonomic distance (all levels)}
+#'     \item{TO_plus}{Weighted taxonomic distance (all levels)}
+#'     \item{uTO_max}{Unweighted taxonomic diversity (max informative level)}
+#'     \item{TO_max}{Weighted taxonomic diversity (max informative level)}
+#'     \item{uTO_plus_max}{Unweighted taxonomic distance (max informative level)}
+#'     \item{TO_plus_max}{Weighted taxonomic distance (max informative level)}
 #'     \item{Ed_levels}{Deng entropy at each taxonomic level (nk=0 slice)}
+#'     \item{max_informative_level}{Integer: highest level with Ed > 0}
 #'   }
 #'
 #' @details
@@ -72,8 +84,11 @@
 #' )
 #' ozkan_pto(comm, tax)
 #'
+#' # With auto max-level detection
+#' ozkan_pto(comm, tax, max_level = "auto")
+#'
 #' @export
-ozkan_pto <- function(community, tax_tree) {
+ozkan_pto <- function(community, tax_tree, max_level = NULL) {
   # --- Input validation ---
   if (!is.numeric(community) || any(community < 0)) {
     stop("'community' must be a numeric vector with non-negative values.",
@@ -108,12 +123,31 @@ ozkan_pto <- function(community, tax_tree) {
   n_species <- length(community)
   n_levels <- ncol(tax_tree) - 1  # Excluding species column
 
+  # --- Validate max_level ---
+  use_auto_max <- FALSE
+  if (!is.null(max_level)) {
+    if (is.character(max_level) && tolower(max_level) == "auto") {
+      use_auto_max <- TRUE
+    } else if (is.numeric(max_level)) {
+      max_level <- as.integer(max_level)
+      if (max_level < 1 || max_level > n_levels) {
+        stop("'max_level' must be between 1 and ", n_levels,
+             " (number of taxonomic ranks above Species).", call. = FALSE)
+      }
+    } else {
+      stop("'max_level' must be NULL, \"auto\", or a positive integer.",
+           call. = FALSE)
+    }
+  }
+
   # --- If only one species, pTO = 0 ---
   if (n_species == 1) {
     result <- list(
       uTO = 0, TO = 0, uTO_plus = 0, TO_plus = 0,
+      uTO_max = 0, TO_max = 0, uTO_plus_max = 0, TO_plus_max = 0,
       Ed_levels = setNames(rep(0, n_levels + 1),
-                           c("Species", names(tax_tree)[-1]))
+                           c("Species", names(tax_tree)[-1])),
+      max_informative_level = 0L
     )
     class(result) <- "ozkan_pto"
     return(result)
@@ -178,37 +212,62 @@ ozkan_pto <- function(community, tax_tree) {
   Ed <- result_nk0$Ed
   active_levels <- result_nk0$active
 
-  # --- Step 2: Compute the core product (pTO+) using nk=0 entropies ---
-  Ed_S <- Ed[1]  # Species-level entropy = ln(S)
-  e_Ed_S_sq <- (exp(Ed_S))^2  # S^2
+  # --- Determine max informative level (highest level with Ed > 0) ---
+  # active_levels contains 1-based indices of levels with Ed > 0
+  # Species level (index 1) is always active; we want the highest rank level
+  max_info_level <- if (length(active_levels) > 0) max(active_levels) else 1L
 
-  core_unweighted <- 1
-  core_weighted <- 1
-
-  for (lv in seq_along(active_levels)) {
-    lev_idx <- active_levels[lv]
-    Ed_i <- Ed[lev_idx]
-    ratio <- e_Ed_S_sq / exp(Ed_i) + 1
-
-    # Unweighted: wi = 1
-    core_unweighted <- core_unweighted * (1 * ratio)
-
-    # Weighted: wi = rank index (species=1, genus=2, ..., kingdom=7)
-    w_i <- lev_idx
-    core_weighted <- core_weighted * (w_i * ratio)
+  # Determine which levels to use for "max" calculation
+  if (use_auto_max) {
+    max_active <- active_levels  # only levels with Ed > 0
+  } else if (is.integer(max_level)) {
+    # max_level = number of rank levels above species to include
+    # active_levels indices: 1=Species, 2=Genus, 3=Family, ...
+    # So we keep active_levels where index <= max_level + 1
+    max_active <- active_levels[active_levels <= (max_level + 1L)]
+  } else {
+    # NULL: max version uses auto-detected informative levels
+    max_active <- active_levels
   }
 
-  # pTO+ (taxonomic distance, presence/absence based)
-  uTO_plus <- unname(log(core_unweighted))
-  TO_plus <- unname(log(core_weighted))
+  # --- Helper: compute core product for a set of active levels ---
+  compute_product <- function(Ed_vec, levels_to_use) {
+    Ed_S_local <- Ed_vec[1]
+    e_Ed_S_sq_local <- (exp(Ed_S_local))^2
+    core_u <- 1
+    core_w <- 1
+    for (lv in seq_along(levels_to_use)) {
+      lev_idx <- levels_to_use[lv]
+      Ed_i <- Ed_vec[lev_idx]
+      ratio <- e_Ed_S_sq_local / exp(Ed_i) + 1
+      core_u <- core_u * (1 * ratio)
+      w_i <- lev_idx
+      core_w <- core_w * (w_i * ratio)
+    }
+    list(unweighted = core_u, weighted = core_w)
+  }
+
+  # --- Step 2: Compute the core product (pTO+) using nk=0 entropies ---
+  # Full version (all active levels)
+  prod_full <- compute_product(Ed, active_levels)
+  uTO_plus <- unname(log(prod_full$unweighted))
+  TO_plus <- unname(log(prod_full$weighted))
+
+  # Max version (informative levels only)
+  prod_max <- compute_product(Ed, max_active)
+  uTO_plus_max <- unname(log(prod_max$unweighted))
+  TO_plus_max <- unname(log(prod_max$weighted))
 
   # --- Step 3: Slicing procedure for pTO ---
   max_abundance <- max(community)
   abundances <- as.numeric(community)
   n_s <- max_abundance
 
-  sum_weighted <- 0
-  sum_unweighted <- 0
+  # Accumulators for full (all levels) and max (informative levels)
+  sum_u_full <- 0
+  sum_w_full <- 0
+  sum_u_max <- 0
+  sum_w_max <- 0
 
   for (step in seq_len(n_s)) {
     nk <- step - 1  # Amount subtracted (0-indexed: step 1 = nk 0)
@@ -226,8 +285,10 @@ ozkan_pto <- function(community, tax_tree) {
     if (n_present <= 1) {
       # Single species: Ed = 0 at all levels, product = 1+1 = 2
       ratio_species <- 0 + 1  # (e^0)^2 / e^0 + 1 = 1/1 + 1 = 2
-      core_u_step <- 1 * ratio_species
-      core_w_step <- 1 * ratio_species
+      core_u_full <- 1 * ratio_species
+      core_w_full <- 1 * ratio_species
+      core_u_max <- core_u_full
+      core_w_max <- core_w_full
     } else {
       # Compute full Deng entropy at all levels for this slice
       result_step <- compute_deng_all_levels(
@@ -235,54 +296,69 @@ ozkan_pto <- function(community, tax_tree) {
       Ed_step <- result_step$Ed
       active_step <- result_step$active
 
-      Ed_S_step <- Ed_step[1]
-      e_Ed_S_sq_step <- (exp(Ed_S_step))^2
-
-      core_u_step <- 1
-      core_w_step <- 1
-
-      for (a in seq_along(active_step)) {
-        lev_idx <- active_step[a]
-        Ed_i_step <- Ed_step[lev_idx]
-        ratio_step <- e_Ed_S_sq_step / exp(Ed_i_step) + 1
-
-        core_u_step <- core_u_step * (1 * ratio_step)
-
-        w_i <- lev_idx
-        core_w_step <- core_w_step * (w_i * ratio_step)
+      # Determine max-active levels for this slice
+      if (use_auto_max) {
+        max_active_step <- active_step
+      } else if (is.integer(max_level)) {
+        max_active_step <- active_step[active_step <= (max_level + 1L)]
+      } else {
+        max_active_step <- active_step
       }
+
+      # Full product (all active levels)
+      prod_step_full <- compute_product(Ed_step, active_step)
+      core_u_full <- prod_step_full$unweighted
+      core_w_full <- prod_step_full$weighted
+
+      # Max product (informative levels only)
+      prod_step_max <- compute_product(Ed_step, max_active_step)
+      core_u_max <- prod_step_max$unweighted
+      core_w_max <- prod_step_max$weighted
     }
 
-    sum_unweighted <- sum_unweighted + factor_val * core_u_step
-    sum_weighted <- sum_weighted + factor_val * core_w_step
+    sum_u_full <- sum_u_full + factor_val * core_u_full
+    sum_w_full <- sum_w_full + factor_val * core_w_full
+    sum_u_max <- sum_u_max + factor_val * core_u_max
+    sum_w_max <- sum_w_max + factor_val * core_w_max
   }
 
   # Denominator: ns + sum(nk) = ns + sum(0:(ns-1)) = ns + ns*(ns-1)/2
   denom <- n_s + sum(0:(n_s - 1))
 
   # pTO = ln(numerator / denominator)
-  uTO <- log(sum_unweighted / denom)
-  TO <- log(sum_weighted / denom)
+  uTO <- unname(log(sum_u_full / denom))
+  TO <- unname(log(sum_w_full / denom))
+  uTO_max <- unname(log(sum_u_max / denom))
+  TO_max <- unname(log(sum_w_max / denom))
 
   result <- list(
     uTO = uTO,
     TO = TO,
     uTO_plus = uTO_plus,
     TO_plus = TO_plus,
-    Ed_levels = Ed
+    uTO_max = uTO_max,
+    TO_max = TO_max,
+    uTO_plus_max = uTO_plus_max,
+    TO_plus_max = TO_plus_max,
+    Ed_levels = Ed,
+    max_informative_level = as.integer(max_info_level - 1L)
   )
   class(result) <- "ozkan_pto"
   return(result)
 }
 
 
-#' Calculate All Four pTO Components (Convenience Wrapper)
+#' Calculate All Eight pTO Components (Convenience Wrapper)
 #'
-#' Returns a named numeric vector with all four Ozkan (2018) components.
+#' Returns a named numeric vector with all eight Ozkan (2018) components:
+#' four using all taxonomic levels and four using only the informative
+#' levels (max version), matching the Excel macro's Run 1+2+3 output.
 #'
 #' @inheritParams ozkan_pto
 #'
-#' @return A named numeric vector with uTO, TO, uTO_plus, TO_plus.
+#' @return A named numeric vector with eight elements:
+#'   \code{uTO}, \code{TO}, \code{uTO_plus}, \code{TO_plus},
+#'   \code{uTO_max}, \code{TO_max}, \code{uTO_plus_max}, \code{TO_plus_max}.
 #'
 #' @seealso [ozkan_pto()] for the full result including per-level entropy.
 #'
@@ -298,9 +374,13 @@ ozkan_pto <- function(community, tax_tree) {
 #'
 #' @export
 pto_components <- function(community, tax_tree) {
-  result <- ozkan_pto(community, tax_tree)
-  c(uTO = unname(result$uTO),
-    TO = unname(result$TO),
-    uTO_plus = unname(result$uTO_plus),
-    TO_plus = unname(result$TO_plus))
+  result <- ozkan_pto(community, tax_tree, max_level = "auto")
+  c(uTO          = unname(result$uTO),
+    TO           = unname(result$TO),
+    uTO_plus     = unname(result$uTO_plus),
+    TO_plus      = unname(result$TO_plus),
+    uTO_max      = unname(result$uTO_max),
+    TO_max       = unname(result$TO_max),
+    uTO_plus_max = unname(result$uTO_plus_max),
+    TO_plus_max  = unname(result$TO_plus_max))
 }

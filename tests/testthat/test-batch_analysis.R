@@ -45,8 +45,8 @@ test_that("tek alan verisi dogru sonuc dondurur", {
   # 1 satir olmali (tek alan)
   expect_equal(nrow(result), 1)
 
-  # 11 sutun: Site + 10 indeks
-  expect_equal(ncol(result), 11)
+  # 15 sutun: Site + 14 indeks (6 klasik + 4 PTO + 4 PTO max)
+  expect_equal(ncol(result), 15)
 
   # Site sutunu "All" olmali (otomatik)
   expect_equal(result$Site, "All")
@@ -70,8 +70,8 @@ test_that("coklu alan verisi dogru sonuc dondurur", {
   # Site isimleri korunmali
   expect_equal(result$Site, c("A", "B"))
 
-  # Her satirin 11 sutunu olmali
-  expect_equal(ncol(result), 11)
+  # Her satirin 15 sutunu olmali
+  expect_equal(ncol(result), 15)
 })
 
 
@@ -107,6 +107,12 @@ test_that("tek alan sonuclari compare_indices ile eslesir", {
   expect_equal(batch_result$TO, ci_result$TO)
   expect_equal(batch_result$uTO_plus, ci_result$uTO_plus)
   expect_equal(batch_result$TO_plus, ci_result$TO_plus)
+
+  # pTO max bilesenleri
+  expect_equal(batch_result$uTO_max, ci_result$uTO_max)
+  expect_equal(batch_result$TO_max, ci_result$TO_max)
+  expect_equal(batch_result$uTO_plus_max, ci_result$uTO_plus_max)
+  expect_equal(batch_result$TO_plus_max, ci_result$TO_plus_max)
 })
 
 

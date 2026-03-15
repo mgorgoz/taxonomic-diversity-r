@@ -336,11 +336,15 @@ test_that("pto_components matches ozkan_pto for real data", {
   full   <- ozkan_pto(community, tax_tree)       # tam sonuç (liste)
   simple <- pto_components(community, tax_tree)   # kısa sonuç (vektör)
 
-  # 4 bileşen birebir eşleşmeli
+  # 8 bileşen birebir eşleşmeli (full + max)
   expect_equal(simple[["uTO"]], unname(full$uTO), tolerance = 1e-10)
   expect_equal(simple[["TO"]], unname(full$TO), tolerance = 1e-10)
   expect_equal(simple[["uTO_plus"]], unname(full$uTO_plus), tolerance = 1e-10)
   expect_equal(simple[["TO_plus"]], unname(full$TO_plus), tolerance = 1e-10)
+  expect_equal(simple[["uTO_max"]], unname(full$uTO_max), tolerance = 1e-10)
+  expect_equal(simple[["TO_max"]], unname(full$TO_max), tolerance = 1e-10)
+  expect_equal(simple[["uTO_plus_max"]], unname(full$uTO_plus_max), tolerance = 1e-10)
+  expect_equal(simple[["TO_plus_max"]], unname(full$TO_plus_max), tolerance = 1e-10)
 })
 
 

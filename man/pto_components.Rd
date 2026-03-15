@@ -2,7 +2,7 @@
 % Please edit documentation in R/ozkan_pto.R
 \name{pto_components}
 \alias{pto_components}
-\title{Calculate All Four pTO Components (Convenience Wrapper)}
+\title{Calculate All Eight pTO Components (Convenience Wrapper)}
 \usage{
 pto_components(community, tax_tree)
 }
@@ -16,10 +16,14 @@ lowest to highest (e.g., Species, Genus, Family, Order, Class,
 Phylum, Kingdom).}
 }
 \value{
-A named numeric vector with uTO, TO, uTO_plus, TO_plus.
+A named numeric vector with eight elements:
+\code{uTO}, \code{TO}, \code{uTO_plus}, \code{TO_plus},
+\code{uTO_max}, \code{TO_max}, \code{uTO_plus_max}, \code{TO_plus_max}.
 }
 \description{
-Returns a named numeric vector with all four Ozkan (2018) components.
+Returns a named numeric vector with all eight Ozkan (2018) components:
+four using all taxonomic levels and four using only the informative
+levels (max version), matching the Excel macro's Run 1+2+3 output.
 }
 \examples{
 comm <- c(sp1 = 4, sp2 = 2, sp3 = 3, sp4 = 1, sp5 = 2)

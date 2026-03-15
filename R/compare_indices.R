@@ -12,10 +12,14 @@
 #'   \item \strong{Delta_star}: Clarke & Warwick taxonomic distinctness (\code{\link{delta_star}})
 #'   \item \strong{AvTD}: Average taxonomic distinctness (\code{\link{avtd}})
 #'   \item \strong{VarTD}: Variation in taxonomic distinctness (\code{\link{vartd}})
-#'   \item \strong{uTO}: Unweighted taxonomic diversity (Ozkan pTO)
-#'   \item \strong{TO}: Weighted taxonomic diversity (Ozkan pTO)
-#'   \item \strong{uTO_plus}: Unweighted taxonomic distance (Ozkan pTO)
-#'   \item \strong{TO_plus}: Weighted taxonomic distance (Ozkan pTO)
+#'   \item \strong{uTO}: Unweighted taxonomic diversity (Ozkan pTO, all levels)
+#'   \item \strong{TO}: Weighted taxonomic diversity (Ozkan pTO, all levels)
+#'   \item \strong{uTO_plus}: Unweighted taxonomic distance (Ozkan pTO, all levels)
+#'   \item \strong{TO_plus}: Weighted taxonomic distance (Ozkan pTO, all levels)
+#'   \item \strong{uTO_max}: Unweighted taxonomic diversity (informative levels)
+#'   \item \strong{TO_max}: Weighted taxonomic diversity (informative levels)
+#'   \item \strong{uTO_plus_max}: Unweighted taxonomic distance (informative levels)
+#'   \item \strong{TO_plus_max}: Weighted taxonomic distance (informative levels)
 #' }
 #'
 #' @param communities A named list of community vectors (named numeric),
@@ -116,18 +120,22 @@ compare_indices <- function(communities, tax_tree,
     pto <- pto_components(comm, tax_tree)
 
     data.frame(
-      Community  = nm,
-      Shannon    = round(H, 6),
-      Simpson    = round(D, 6),
-      Delta      = round(Delta, 6),
-      Delta_star = round(Delta_s, 6),
-      AvTD       = round(AvTD_val, 6),
-      VarTD      = round(VarTD_val, 6),
-      uTO        = round(pto["uTO"], 6),
-      TO         = round(pto["TO"], 6),
-      uTO_plus   = round(pto["uTO_plus"], 6),
-      TO_plus    = round(pto["TO_plus"], 6),
-      row.names  = NULL,
+      Community    = nm,
+      Shannon      = round(H, 6),
+      Simpson      = round(D, 6),
+      Delta        = round(Delta, 6),
+      Delta_star   = round(Delta_s, 6),
+      AvTD         = round(AvTD_val, 6),
+      VarTD        = round(VarTD_val, 6),
+      uTO          = round(pto["uTO"], 6),
+      TO           = round(pto["TO"], 6),
+      uTO_plus     = round(pto["uTO_plus"], 6),
+      TO_plus      = round(pto["TO_plus"], 6),
+      uTO_max      = round(pto["uTO_max"], 6),
+      TO_max       = round(pto["TO_max"], 6),
+      uTO_plus_max = round(pto["uTO_plus_max"], 6),
+      TO_plus_max  = round(pto["TO_plus_max"], 6),
+      row.names    = NULL,
       stringsAsFactors = FALSE
     )
   })

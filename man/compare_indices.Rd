@@ -49,10 +49,14 @@ The function calculates the following indices:
 \item \strong{Delta_star}: Clarke & Warwick taxonomic distinctness (\code{\link{delta_star}})
 \item \strong{AvTD}: Average taxonomic distinctness (\code{\link{avtd}})
 \item \strong{VarTD}: Variation in taxonomic distinctness (\code{\link{vartd}})
-\item \strong{uTO}: Unweighted taxonomic diversity (Ozkan pTO)
-\item \strong{TO}: Weighted taxonomic diversity (Ozkan pTO)
-\item \strong{uTO_plus}: Unweighted taxonomic distance (Ozkan pTO)
-\item \strong{TO_plus}: Weighted taxonomic distance (Ozkan pTO)
+\item \strong{uTO}: Unweighted taxonomic diversity (Ozkan pTO, all levels)
+\item \strong{TO}: Weighted taxonomic diversity (Ozkan pTO, all levels)
+\item \strong{uTO_plus}: Unweighted taxonomic distance (Ozkan pTO, all levels)
+\item \strong{TO_plus}: Weighted taxonomic distance (Ozkan pTO, all levels)
+\item \strong{uTO_max}: Unweighted taxonomic diversity (informative levels)
+\item \strong{TO_max}: Weighted taxonomic diversity (informative levels)
+\item \strong{uTO_plus_max}: Unweighted taxonomic distance (informative levels)
+\item \strong{TO_plus_max}: Weighted taxonomic distance (informative levels)
 }
 }
 \examples{

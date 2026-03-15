@@ -3,7 +3,7 @@
 #' Computes all diversity indices for one or more sample sites from a single
 #' data frame (e.g., imported from Excel). The function automatically detects
 #' the site column, taxonomic columns, and abundance column, splits the data
-#' by site, and returns a summary data frame with 10 diversity indices per site.
+#' by site, and returns a summary data frame with 14 diversity indices per site.
 #'
 #' When no site column is present (or all values are identical), the entire
 #' data set is treated as a single community.
@@ -16,10 +16,14 @@
 #'   \item \strong{Delta_star}: Clarke & Warwick taxonomic distinctness (\code{\link{delta_star}})
 #'   \item \strong{AvTD}: Average taxonomic distinctness (\code{\link{avtd}})
 #'   \item \strong{VarTD}: Variation in taxonomic distinctness (\code{\link{vartd}})
-#'   \item \strong{uTO}: Unweighted taxonomic diversity (Ozkan pTO)
-#'   \item \strong{TO}: Weighted taxonomic diversity (Ozkan pTO)
-#'   \item \strong{uTO_plus}: Unweighted taxonomic distance (Ozkan pTO)
-#'   \item \strong{TO_plus}: Weighted taxonomic distance (Ozkan pTO)
+#'   \item \strong{uTO}: Unweighted taxonomic diversity (Ozkan pTO, all levels)
+#'   \item \strong{TO}: Weighted taxonomic diversity (Ozkan pTO, all levels)
+#'   \item \strong{uTO_plus}: Unweighted taxonomic distance (Ozkan pTO, all levels)
+#'   \item \strong{TO_plus}: Weighted taxonomic distance (Ozkan pTO, all levels)
+#'   \item \strong{uTO_max}: Unweighted taxonomic diversity (informative levels only)
+#'   \item \strong{TO_max}: Weighted taxonomic diversity (informative levels only)
+#'   \item \strong{uTO_plus_max}: Unweighted taxonomic distance (informative levels only)
+#'   \item \strong{TO_plus_max}: Weighted taxonomic distance (informative levels only)
 #' }
 #'
 #' @param data A data frame containing species data. Must include at minimum
@@ -48,7 +52,8 @@
 #' @return A data frame with one row per site and columns:
 #'   \code{Site}, \code{Shannon}, \code{Simpson}, \code{Delta},
 #'   \code{Delta_star}, \code{AvTD}, \code{VarTD}, \code{uTO}, \code{TO},
-#'   \code{uTO_plus}, \code{TO_plus}.
+#'   \code{uTO_plus}, \code{TO_plus}, \code{uTO_max}, \code{TO_max},
+#'   \code{uTO_plus_max}, \code{TO_plus_max}.
 #'
 #' @examples
 #' # Single-site data (no Site column)
@@ -233,18 +238,22 @@ batch_analysis <- function(data,
     pto <- pto_components(community, tax_tree_site)
 
     data.frame(
-      Site       = site_name,
-      Shannon    = round(H, 6),
-      Simpson    = round(D, 6),
-      Delta      = round(Delta_val, 6),
-      Delta_star = round(Delta_s, 6),
-      AvTD       = round(AvTD_val, 6),
-      VarTD      = round(VarTD_val, 6),
-      uTO        = round(pto["uTO"], 6),
-      TO         = round(pto["TO"], 6),
-      uTO_plus   = round(pto["uTO_plus"], 6),
-      TO_plus    = round(pto["TO_plus"], 6),
-      row.names  = NULL,
+      Site         = site_name,
+      Shannon      = round(H, 6),
+      Simpson      = round(D, 6),
+      Delta        = round(Delta_val, 6),
+      Delta_star   = round(Delta_s, 6),
+      AvTD         = round(AvTD_val, 6),
+      VarTD        = round(VarTD_val, 6),
+      uTO          = round(pto["uTO"], 6),
+      TO           = round(pto["TO"], 6),
+      uTO_plus     = round(pto["uTO_plus"], 6),
+      TO_plus      = round(pto["TO_plus"], 6),
+      uTO_max      = round(pto["uTO_max"], 6),
+      TO_max       = round(pto["TO_max"], 6),
+      uTO_plus_max = round(pto["uTO_plus_max"], 6),
+      TO_plus_max  = round(pto["TO_plus_max"], 6),
+      row.names    = NULL,
       stringsAsFactors = FALSE
     )
   }
@@ -264,7 +273,8 @@ batch_analysis <- function(data,
       ns <- asNamespace(utils::packageName())
       parallel::clusterExport(cl, varlist = c(
         "shannon", "simpson", "delta", "delta_star",
-        "avtd", "vartd", "pto_components"
+        "avtd", "vartd", "pto_components", "ozkan_pto",
+        "deng_entropy_level"
       ), envir = ns)
       results <- parallel::parLapply(cl, site_names, compute_site)
     } else {

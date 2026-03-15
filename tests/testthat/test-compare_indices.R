@@ -29,8 +29,8 @@ test_that("tek topluluk vektoru dogru tablo dondurur", {
   # 1 satır olmalı (tek topluluk)
   expect_equal(nrow(result), 1)
 
-  # 11 sütun: Community + 10 indeks
-  expect_equal(ncol(result), 11)
+  # 15 sütun: Community + 14 indeks (6 klasik + 4 PTO + 4 PTO max)
+  expect_equal(ncol(result), 15)
 
   # Community sütunu "Community" olmalı
   expect_equal(result$Community, "Community")
@@ -91,6 +91,12 @@ test_that("degerler tek tek hesaplanan indekslerle eslesiyor", {
   expect_equal(result$TO, round(unname(pto["TO"]), 6))
   expect_equal(result$uTO_plus, round(unname(pto["uTO_plus"]), 6))
   expect_equal(result$TO_plus, round(unname(pto["TO_plus"]), 6))
+
+  # pTO max bileşenleri
+  expect_equal(result$uTO_max, round(unname(pto["uTO_max"]), 6))
+  expect_equal(result$TO_max, round(unname(pto["TO_max"]), 6))
+  expect_equal(result$uTO_plus_max, round(unname(pto["uTO_plus_max"]), 6))
+  expect_equal(result$TO_plus_max, round(unname(pto["TO_plus_max"]), 6))
 })
 
 

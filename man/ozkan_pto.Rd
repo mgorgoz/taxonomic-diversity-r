@@ -4,7 +4,7 @@
 \alias{ozkan_pto}
 \title{Calculate Ozkan's Taxonomic Diversity Index (pTO)}
 \usage{
-ozkan_pto(community, tax_tree)
+ozkan_pto(community, tax_tree, max_level = NULL)
 }
 \arguments{
 \item{community}{A named numeric vector of species abundances.
@@ -14,15 +14,28 @@ Names must match the first column of \code{tax_tree}.}
 is species names, subsequent columns are taxonomic ranks from
 lowest to highest (e.g., Species, Genus, Family, Order, Class,
 Phylum, Kingdom).}
+
+\item{max_level}{Integer or \code{NULL}. Maximum number of taxonomic
+levels (above Species) to include in the product formula. When
+\code{NULL} (default), all available levels are used. When set to
+\code{"auto"}, the function automatically detects the highest
+informative level (where Deng entropy > 0 at nk=0) and truncates
+the product there. A positive integer limits to that many levels
+(e.g., \code{max_level = 2} uses only Genus and Family).}
 }
 \value{
 A named list with components:
 \describe{
-\item{uTO}{Unweighted taxonomic diversity}
-\item{TO}{Weighted taxonomic diversity}
-\item{uTO_plus}{Unweighted taxonomic distance}
-\item{TO_plus}{Weighted taxonomic distance}
+\item{uTO}{Unweighted taxonomic diversity (all levels)}
+\item{TO}{Weighted taxonomic diversity (all levels)}
+\item{uTO_plus}{Unweighted taxonomic distance (all levels)}
+\item{TO_plus}{Weighted taxonomic distance (all levels)}
+\item{uTO_max}{Unweighted taxonomic diversity (max informative level)}
+\item{TO_max}{Weighted taxonomic diversity (max informative level)}
+\item{uTO_plus_max}{Unweighted taxonomic distance (max informative level)}
+\item{TO_plus_max}{Weighted taxonomic distance (max informative level)}
 \item{Ed_levels}{Deng entropy at each taxonomic level (nk=0 slice)}
+\item{max_informative_level}{Integer: highest level with Ed > 0}
 }
 }
 \description{
@@ -69,6 +82,9 @@ tax <- data.frame(
   stringsAsFactors = FALSE
 )
 ozkan_pto(comm, tax)
+
+# With auto max-level detection
+ozkan_pto(comm, tax, max_level = "auto")
 
 }
 \references{

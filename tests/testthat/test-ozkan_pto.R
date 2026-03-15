@@ -22,17 +22,20 @@ test_that("ozkan_pto returns all four components", {
   # Fonksiyon bir liste dönmeli
   expect_type(result, "list")
 
-  # Listede şu 5 bileşen olmalı:
-  # uTO      = ağırlıksız taksonomik çeşitlilik
-  # TO       = ağırlıklı taksonomik çeşitlilik
-  # uTO_plus = ağırlıksız taksonomik mesafe (sadece bulunma/bulunmama)
-  # TO_plus  = ağırlıklı taksonomik mesafe
-  # Ed_levels = her taksonomik seviyedeki Deng entropisi değerleri
+  # Listede 10 bileşen olmalı:
+  # uTO, TO, uTO_plus, TO_plus = tüm seviyeler
+  # uTO_max, TO_max, uTO_plus_max, TO_plus_max = bilgi veren seviyeler
+  # Ed_levels, max_informative_level
   expect_true("uTO" %in% names(result))
   expect_true("TO" %in% names(result))
   expect_true("uTO_plus" %in% names(result))
   expect_true("TO_plus" %in% names(result))
+  expect_true("uTO_max" %in% names(result))
+  expect_true("TO_max" %in% names(result))
+  expect_true("uTO_plus_max" %in% names(result))
+  expect_true("TO_plus_max" %in% names(result))
   expect_true("Ed_levels" %in% names(result))
+  expect_true("max_informative_level" %in% names(result))
 })
 
 test_that("ozkan_pto satisfies ordering constraints", {
@@ -71,6 +74,11 @@ test_that("ozkan_pto returns zero for single species", {
   r <- ozkan_pto(comm, tax)
   expect_equal(r$uTO, 0)
   expect_equal(r$TO, 0)
+  expect_equal(r$uTO_max, 0)
+  expect_equal(r$TO_max, 0)
+  expect_equal(r$uTO_plus_max, 0)
+  expect_equal(r$TO_plus_max, 0)
+  expect_equal(r$max_informative_level, 0L)
 })
 
 test_that("ozkan_pto validates input", {
@@ -91,9 +99,9 @@ test_that("ozkan_pto validates input", {
   expect_error(ozkan_pto(c(sp_x = 10), tax), "not found")
 })
 
-test_that("pto_components returns named numeric vector", {
+test_that("pto_components returns named numeric vector with 8 elements", {
   # pto_components() fonksiyonu ozkan_pto()'nun kısa yol versiyonu
-  # Liste yerine isimli sayısal vektör döner: c(uTO, TO, uTO_plus, TO_plus)
+  # 8 elemanlı isimli sayısal vektör döner (Excel makrosundaki Run 1+2+3)
   comm <- c(sp1 = 4, sp2 = 2, sp3 = 3)
   tax <- data.frame(
     Species = paste0("sp", 1:3),
@@ -107,11 +115,12 @@ test_that("pto_components returns named numeric vector", {
   # Sayısal (double) tipinde olmalı
   expect_type(result, "double")
 
-  # 4 eleman olmalı
-  expect_length(result, 4)
+  # 8 eleman olmalı
+  expect_length(result, 8)
 
   # İsimleri doğru sırada olmalı
-  expect_equal(names(result), c("uTO", "TO", "uTO_plus", "TO_plus"))
+  expect_equal(names(result), c("uTO", "TO", "uTO_plus", "TO_plus",
+                                "uTO_max", "TO_max", "uTO_plus_max", "TO_plus_max"))
 })
 
 test_that("ozkan_pto uses presence-based (equal weight) entropy at species level", {
@@ -185,4 +194,118 @@ test_that("ozkan_pto matches Ozkan (2018) hypothetical examples", {
 
   # A topluluğu B'den daha çeşitli olmalı (12 tür > 6 tür)
   expect_true(r_A$uTO_plus > r_B$uTO_plus)
+})
+
+
+# --- max_level parametresi testleri ---
+
+test_that("ozkan_pto max_level='auto' detects informative levels", {
+  # 5 tür, 2 cins, 1 familya — Family seviyesinde Ed=0 (tek grup)
+  # Bu yüzden max_informative_level = 1 (sadece Genus bilgi veriyor)
+  comm <- c(sp1 = 4, sp2 = 2, sp3 = 3, sp4 = 1, sp5 = 2)
+  tax <- data.frame(
+    Species = paste0("sp", 1:5),
+    Genus   = c("G1", "G1", "G1", "G2", "G2"),
+    Family  = c("F1", "F1", "F1", "F1", "F1"),
+    stringsAsFactors = FALSE
+  )
+
+  r <- ozkan_pto(comm, tax, max_level = "auto")
+
+  # Family seviyesinde tek grup var (F1) -> Ed = 0
+  # max_informative_level = 1 olmali (Genus)
+  expect_equal(r$max_informative_level, 1L)
+
+  # max versiyonlari <= full versiyonlar olmali
+  # (daha az seviye carpimda = daha kucuk veya esit deger)
+  expect_true(r$uTO_plus_max <= r$uTO_plus + 1e-10)
+  expect_true(r$TO_plus_max <= r$TO_plus + 1e-10)
+})
+
+
+test_that("ozkan_pto max_level integer restricts levels", {
+  # 5 tür, 3 seviye (Genus, Family, Order)
+  comm <- c(sp1 = 4, sp2 = 2, sp3 = 3, sp4 = 1, sp5 = 2)
+  tax <- data.frame(
+    Species = paste0("sp", 1:5),
+    Genus   = c("G1", "G1", "G2", "G2", "G3"),
+    Family  = c("F1", "F1", "F1", "F2", "F2"),
+    Order   = c("O1", "O1", "O1", "O1", "O1"),
+    stringsAsFactors = FALSE
+  )
+
+  r_full <- ozkan_pto(comm, tax)
+  r_lim1 <- ozkan_pto(comm, tax, max_level = 1)
+  r_lim2 <- ozkan_pto(comm, tax, max_level = 2)
+
+  # max_level=1 -> sadece Genus seviyesi
+  # max versiyonlari daha kucuk veya esit
+  expect_true(r_lim1$uTO_plus_max <= r_full$uTO_plus + 1e-10)
+
+  # max_level=2 >= max_level=1 (daha fazla seviye = daha buyuk)
+  expect_true(r_lim2$uTO_plus_max >= r_lim1$uTO_plus_max - 1e-10)
+
+  # Full versiyonlar max_level'den bagimsiz — ayni kalmali
+  expect_equal(r_lim1$uTO, r_full$uTO, tolerance = 1e-10)
+  expect_equal(r_lim2$uTO_plus, r_full$uTO_plus, tolerance = 1e-10)
+})
+
+
+test_that("ozkan_pto max_level validates input", {
+  comm <- c(sp1 = 4, sp2 = 2, sp3 = 3)
+  tax <- data.frame(
+    Species = paste0("sp", 1:3),
+    Genus   = c("G1", "G1", "G2"),
+    Family  = c("F1", "F1", "F1"),
+    stringsAsFactors = FALSE
+  )
+
+  # max_level = 0 -> hata (en az 1 olmali)
+  expect_error(ozkan_pto(comm, tax, max_level = 0), "must be between")
+
+  # max_level > mevcut seviye sayisi -> hata
+  expect_error(ozkan_pto(comm, tax, max_level = 10), "must be between")
+
+  # Gecersiz tip
+  expect_error(ozkan_pto(comm, tax, max_level = TRUE), "must be NULL")
+})
+
+
+test_that("ozkan_pto max versions equal full when all levels informative", {
+  # Tum seviyeler bilgi veriyorsa (Ed > 0), max = full olmali
+  comm <- c(sp1 = 4, sp2 = 2, sp3 = 3, sp4 = 1, sp5 = 2, sp6 = 1)
+  tax <- data.frame(
+    Species = paste0("sp", 1:6),
+    Genus   = c("G1", "G1", "G2", "G2", "G3", "G3"),
+    Family  = c("F1", "F1", "F1", "F2", "F2", "F2"),
+    stringsAsFactors = FALSE
+  )
+
+  r <- ozkan_pto(comm, tax, max_level = "auto")
+
+  # 2 family (F1, F2) -> Family seviyesinde de Ed > 0
+  # max = full olmali
+  expect_equal(r$uTO_max, r$uTO, tolerance = 1e-10)
+  expect_equal(r$TO_max, r$TO, tolerance = 1e-10)
+  expect_equal(r$uTO_plus_max, r$uTO_plus, tolerance = 1e-10)
+  expect_equal(r$TO_plus_max, r$TO_plus, tolerance = 1e-10)
+})
+
+
+test_that("pto_components returns max values matching ozkan_pto auto", {
+  comm <- c(sp1 = 4, sp2 = 2, sp3 = 3, sp4 = 1, sp5 = 2)
+  tax <- data.frame(
+    Species = paste0("sp", 1:5),
+    Genus   = c("G1", "G1", "G1", "G2", "G2"),
+    Family  = c("F1", "F1", "F1", "F1", "F1"),
+    stringsAsFactors = FALSE
+  )
+
+  pto <- pto_components(comm, tax)
+  full <- ozkan_pto(comm, tax, max_level = "auto")
+
+  expect_equal(unname(pto["uTO_max"]), full$uTO_max, tolerance = 1e-10)
+  expect_equal(unname(pto["TO_max"]), full$TO_max, tolerance = 1e-10)
+  expect_equal(unname(pto["uTO_plus_max"]), full$uTO_plus_max, tolerance = 1e-10)
+  expect_equal(unname(pto["TO_plus_max"]), full$TO_plus_max, tolerance = 1e-10)
 })

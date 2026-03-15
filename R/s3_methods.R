@@ -135,10 +135,20 @@ summary.batch_analysis <- function(object, ...) {
 #' @export
 print.ozkan_pto <- function(x, ...) {
   cat("taxdiv -- Ozkan pTO Result\n\n")
-  cat("  uTO  :", round(x$uTO, 6), "\n")
-  cat("  TO   :", round(x$TO, 6), "\n")
-  cat("  uTO+ :", round(x$uTO_plus, 6), "\n")
-  cat("  TO+  :", round(x$TO_plus, 6), "\n")
+  cat("  All levels:\n")
+  cat("    uTO  :", round(x$uTO, 6), "\n")
+  cat("    TO   :", round(x$TO, 6), "\n")
+  cat("    uTO+ :", round(x$uTO_plus, 6), "\n")
+  cat("    TO+  :", round(x$TO_plus, 6), "\n")
+
+  if (!is.null(x$uTO_max)) {
+    cat("\n  Max informative level (level ",
+        x$max_informative_level, "):\n", sep = "")
+    cat("    uTO_max  :", round(x$uTO_max, 6), "\n")
+    cat("    TO_max   :", round(x$TO_max, 6), "\n")
+    cat("    uTO+_max :", round(x$uTO_plus_max, 6), "\n")
+    cat("    TO+_max  :", round(x$TO_plus_max, 6), "\n")
+  }
 
   ed <- x$Ed_levels
   if (!is.null(ed) && any(ed != 0)) {

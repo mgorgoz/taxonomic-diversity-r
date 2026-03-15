@@ -48,13 +48,14 @@ indices for multiple sites concurrently. Default \code{FALSE}.}
 A data frame with one row per site and columns:
 \code{Site}, \code{Shannon}, \code{Simpson}, \code{Delta},
 \code{Delta_star}, \code{AvTD}, \code{VarTD}, \code{uTO}, \code{TO},
-\code{uTO_plus}, \code{TO_plus}.
+\code{uTO_plus}, \code{TO_plus}, \code{uTO_max}, \code{TO_max},
+\code{uTO_plus_max}, \code{TO_plus_max}.
 }
 \description{
 Computes all diversity indices for one or more sample sites from a single
 data frame (e.g., imported from Excel). The function automatically detects
 the site column, taxonomic columns, and abundance column, splits the data
-by site, and returns a summary data frame with 10 diversity indices per site.
+by site, and returns a summary data frame with 14 diversity indices per site.
 }
 \details{
 When no site column is present (or all values are identical), the entire
@@ -68,10 +69,14 @@ The function calculates the following indices per site:
 \item \strong{Delta_star}: Clarke & Warwick taxonomic distinctness (\code{\link{delta_star}})
 \item \strong{AvTD}: Average taxonomic distinctness (\code{\link{avtd}})
 \item \strong{VarTD}: Variation in taxonomic distinctness (\code{\link{vartd}})
-\item \strong{uTO}: Unweighted taxonomic diversity (Ozkan pTO)
-\item \strong{TO}: Weighted taxonomic diversity (Ozkan pTO)
-\item \strong{uTO_plus}: Unweighted taxonomic distance (Ozkan pTO)
-\item \strong{TO_plus}: Weighted taxonomic distance (Ozkan pTO)
+\item \strong{uTO}: Unweighted taxonomic diversity (Ozkan pTO, all levels)
+\item \strong{TO}: Weighted taxonomic diversity (Ozkan pTO, all levels)
+\item \strong{uTO_plus}: Unweighted taxonomic distance (Ozkan pTO, all levels)
+\item \strong{TO_plus}: Weighted taxonomic distance (Ozkan pTO, all levels)
+\item \strong{uTO_max}: Unweighted taxonomic diversity (informative levels only)
+\item \strong{TO_max}: Weighted taxonomic diversity (informative levels only)
+\item \strong{uTO_plus_max}: Unweighted taxonomic distance (informative levels only)
+\item \strong{TO_plus_max}: Weighted taxonomic distance (informative levels only)
 }
 }
 \examples{
