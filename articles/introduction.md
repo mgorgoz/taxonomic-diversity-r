@@ -424,6 +424,229 @@ cat("Run 3:", sprintf("%9.4f %9.4f %9.4f %9.4f",
 Each subsequent run finds values \>= the previous run, reflecting the
 increasing exploration of the diversity landscape.
 
+## Rarefaction
+
+Rarefaction curves allow you to evaluate whether your sampling effort is
+sufficient to capture the diversity of the community. The
+[`rarefaction_taxonomic()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/rarefaction_taxonomic.md)
+function computes bootstrap-based rarefaction for any index supported by
+taxdiv:
+
+``` r
+rare <- rarefaction_taxonomic(community, tax_tree,
+                               index = "shannon",
+                               steps = 10, n_boot = 100, seed = 42)
+cat("Rarefaction results (Shannon):\n")
+#> Rarefaction results (Shannon):
+print(round(rare, 4))
+#> taxdiv -- Rarefaction Curve
+#>   Index: shannon 
+#>   Total N: 131 
+#>   Bootstrap: 100 replicates
+#>   CI: 95 %
+#>   Steps: 10 
+#> 
+#>  sample_size   mean  lower  upper     sd
+#>            3 0.9351 0.6365 1.0986 0.2374
+#>           17 1.8396 1.5052 2.1621 0.1730
+#>           31 1.9452 1.6796 2.1678 0.1207
+#>           46 2.0298 1.8698 2.1666 0.0811
+#>           60 2.0365 1.8982 2.1428 0.0676
+#>           74 2.0614 1.9784 2.1361 0.0451
+#>           88 2.0784 2.0000 2.1427 0.0413
+#>          103 2.0847 2.0060 2.1335 0.0318
+#>          117 2.0913 2.0513 2.1265 0.0200
+#>          131 2.0948 2.0948 2.0948 0.0000
+```
+
+The curve should reach a plateau if sampling is adequate. A steep curve
+at the maximum sample size indicates that more sampling is needed.
+
+## Visualization
+
+The taxdiv package provides seven specialized plot types built on
+ggplot2. Each plot answers a different analytical question about
+taxonomic diversity.
+
+### Taxonomic Tree (Dendrogram)
+
+Visualizes the taxonomic hierarchy of species as a dendrogram. Species
+on the same branch share closer taxonomic classification:
+
+``` r
+plot_taxonomic_tree(tax_tree, community = community,
+                    color_by = "Family", label_size = 3.5,
+                    title = "Mediterranean Forest - Taxonomic Tree")
+```
+
+![Dendrogram showing species grouped by family with abundance
+labels](introduction_files/figure-html/dendrogram-1.png)
+
+**How to read:** Species emerging from the same branch are taxonomically
+close. Numbers in parentheses show abundance. Colors indicate family
+groupings. Longer branches represent greater taxonomic distance.
+
+### Taxonomic Distance Heatmap
+
+Displays the pairwise taxonomic distance matrix as a color grid:
+
+``` r
+plot_heatmap(tax_tree, label_size = 2.8,
+             title = "Taxonomic Distance Heatmap")
+```
+
+![Heatmap showing pairwise taxonomic distances between
+species](introduction_files/figure-html/heatmap-1.png)
+
+**How to read:** Dark red cells indicate distant species pairs, white
+cells indicate closely related species. Each cell value is the taxonomic
+distance (0 = same genus, higher = more distant). The diagonal is always
+zero.
+
+### Community Comparison (Bar Plot)
+
+Comparing diversity indices across communities reveals how different
+disturbance types affect taxonomic structure. We create a second
+community where one species dominates:
+
+``` r
+# Dominant community: same species, uneven abundances
+dominant_community <- c(
+  Quercus_coccifera   = 80, Quercus_infectoria  = 5,
+  Pinus_brutia        = 3,  Pinus_nigra         = 2,
+  Juniperus_excelsa   = 2,  Juniperus_oxycedrus = 1,
+  Arbutus_andrachne   = 3,  Styrax_officinalis  = 1,
+  Cercis_siliquastrum = 2,  Olea_europaea       = 1
+)
+
+communities <- list(
+  Diverse  = community,
+  Dominant = dominant_community
+)
+```
+
+``` r
+comparison <- compare_indices(communities, tax_tree, plot = TRUE)
+comparison$plot
+```
+
+![Bar chart comparing 14 diversity indices between diverse and dominant
+communities](introduction_files/figure-html/comparison_plot-1.png)
+
+**How to read:** Abundance-weighted indices (Shannon, Simpson, Delta,
+TO) differ markedly between the two communities because they detect the
+uneven distribution. Presence/absence indices (AvTD, VarTD, uTO+, TO+)
+remain identical because both communities have the same species list.
+This illustrates why both types of measures are needed for a complete
+assessment.
+
+Index values:
+
+``` r
+comparison$table
+#> taxdiv -- Index Comparison
+#>   Communities: 2 
+#>   Indices: Shannon, Simpson, Delta, Delta_star, AvTD, VarTD, uTO, TO, uTO_plus, TO_plus, uTO_max, TO_max, uTO_plus_max, TO_plus_max 
+#> 
+#>  Community N_Species  Shannon  Simpson    Delta Delta_star     AvTD    VarTD
+#>    Diverse        10 2.094838 0.857642 2.391192   2.766816 2.866667 0.248889
+#>   Dominant        10 0.911571 0.354200 0.908485   2.539243 2.866667 0.248889
+#>       uTO        TO uTO_plus  TO_plus  uTO_max    TO_max uTO_plus_max
+#>  7.489477 10.667513  8.55023 11.72828 7.489477 10.667513      8.55023
+#>  5.207604  8.380285  8.55023 11.72828 5.207604  8.380285      8.55023
+#>  TO_plus_max
+#>     11.72828
+#>     11.72828
+```
+
+### Iteration Plot (Run 2)
+
+Shows how pTO values change across stochastic resampling iterations:
+
+``` r
+plot_iteration(run2, component = "TO",
+               title = "Run 2 - TO Values Across Iterations")
+```
+
+![Scatter plot showing TO values across 101 stochastic resampling
+iterations](introduction_files/figure-html/iteration-1.png)
+
+**How to read:**
+
+- **Grey dots**: TO value for each iteration (random species subset)
+- **Red line**: Deterministic value from Run 1 (all species included)
+- **Blue line**: Maximum value found across all iterations
+
+Low points correspond to iterations where few species were included
+(lower diversity). Points above the red line indicate subcommunities
+with higher diversity than the full community, which occurs when
+removing certain species increases the ratio of between-group to
+within-group diversity.
+
+### Bubble Chart
+
+Shows each species’ contribution to community diversity based on
+abundance and average taxonomic distance to all other species:
+
+``` r
+plot_bubble(community, tax_tree, color_by = "Family",
+            title = "Species Contributions to Diversity")
+```
+
+![Bubble chart showing species contributions to diversity colored by
+family](introduction_files/figure-html/bubble-1.png)
+
+**How to read:**
+
+- **X-axis**: Abundance (number of individuals)
+- **Y-axis**: Average taxonomic distance to all other species
+- **Bubble size**: Contribution weight (abundance x distance)
+
+Species in the upper right corner contribute most to taxonomic diversity
+(both abundant and taxonomically distinct). An isolated species with low
+abundance (lower right) contributes less than a taxonomically unique
+species that is also abundant.
+
+### Radar Chart (Spider Plot)
+
+Provides a multivariate comparison of all indices simultaneously:
+
+``` r
+plot_radar(communities, tax_tree,
+           title = "Diverse vs Dominant - Radar Comparison")
+#> Warning: Removed 2 rows containing missing values or values outside the scale range
+#> (`geom_point()`).
+```
+
+![Radar chart comparing normalized diversity index values between
+diverse and dominant
+communities](introduction_files/figure-html/radar-1.png)
+
+**How to read:** Each axis represents one diversity index, normalized to
+0-1 range. A larger area indicates higher overall diversity. The shape
+reveals which aspects of diversity differ between communities. When the
+diverse and dominant community polygons overlap on presence/absence
+indices but diverge on abundance-weighted indices, it confirms that both
+communities share the same species pool but differ in evenness.
+
+### Rarefaction Curve
+
+Visualizes how diversity estimates change with increasing sample size:
+
+``` r
+plot_rarefaction(rare)
+```
+
+![Rarefaction curve for Shannon index with bootstrap confidence
+interval](introduction_files/figure-html/rarefaction_plot-1.png)
+
+**How to read:** The x-axis shows the number of individuals sampled, the
+y-axis shows the estimated diversity index. The shaded band is the 95%
+bootstrap confidence interval. If the curve reaches a plateau at maximum
+sample size, your sampling effort is sufficient. A steep curve at the
+right edge suggests more sampling is needed to capture the full
+diversity.
+
 ## References
 
 - Deng, Y. (2016). Deng entropy. *Chaos, Solitons & Fractals*, 91,
