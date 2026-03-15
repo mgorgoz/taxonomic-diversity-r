@@ -101,13 +101,6 @@ reference:
       - gazi_comm
       - gazi_gytk
 
-  - title: "Deprecated"
-    desc: >
-      Functions scheduled for removal in future versions.
-      Use ozkan_pto() instead.
-    contents:
-      - ozkan_pto_macro
-
 articles:
   - title: "Getting Started"
     navbar: "Getting Started"
