@@ -12,6 +12,7 @@ Calculates taxonomic diversity indices for ecological community data using Deng 
 Useful links:
 \itemize{
   \item \url{https://github.com/mgorgoz/taxonomic-diversity-r}
+  \item \url{https://mgorgoz.github.io/taxonomic-diversity-r/}
   \item Report bugs at \url{https://github.com/mgorgoz/taxonomic-diversity-r/issues}
 }
 

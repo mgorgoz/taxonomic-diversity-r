@@ -1,0 +1,119 @@
+url: https://mgorgoz.github.io/taxonomic-diversity-r/
+
+template:
+  bootstrap: 5
+  bootswatch: cosmo
+  bslib:
+    primary: "#2c6e49"
+
+development:
+  mode: auto
+
+navbar:
+  structure:
+    left: [intro, reference, articles]
+    right: [search, github]
+  components:
+    github:
+      icon: fa-github
+      href: https://github.com/mgorgoz/taxonomic-diversity-r
+      aria-label: GitHub
+
+reference:
+  - title: "Classical Diversity Indices"
+    desc: >
+      Standard diversity indices widely used in ecology.
+      Shannon-Wiener (Shannon, 1948) and Simpson (Simpson, 1949) indices.
+    contents:
+      - shannon
+      - simpson
+
+  - title: "Clarke & Warwick Taxonomic Distinctness"
+    desc: >
+      Path-length-based taxonomic distinctness measures following
+      Warwick & Clarke (1995) and Clarke & Warwick (1998, 1999, 2001).
+    contents:
+      - delta
+      - delta_star
+      - avtd
+      - vartd
+
+  - title: "Ozkan pTO Method"
+    desc: >
+      Deng entropy-based taxonomic diversity indices
+      (Ozkan, 2018; Deng, 2016; Dempster, 1967; Shafer, 1976).
+    contents:
+      - ozkan_pto
+      - pto_components
+      - deng_entropy_level
+
+  - title: "Ozkan pTO Pipeline"
+    desc: >
+      Stochastic resampling, jackknife estimation, sensitivity analysis,
+      and the full three-run pipeline for Ozkan pTO.
+    contents:
+      - ozkan_pto_jackknife
+      - ozkan_pto_resample
+      - ozkan_pto_sensitivity
+      - ozkan_pto_full
+
+  - title: "Batch Analysis & Comparison"
+    desc: >
+      Multi-site batch processing and multi-community index comparison.
+      Computes species count and 14 diversity indices per site/community.
+    contents:
+      - batch_analysis
+      - compare_indices
+
+  - title: "Simulation & Rarefaction"
+    desc: >
+      Funnel plot simulation for expected index distributions and
+      sample-based rarefaction curves with bootstrap confidence intervals.
+    contents:
+      - simulate_td
+      - rarefaction_taxonomic
+
+  - title: "Visualization"
+    desc: >
+      Seven specialized plot types for taxonomic diversity analysis.
+    contents:
+      - plot_funnel
+      - plot_rarefaction
+      - plot_iteration
+      - plot_radar
+      - plot_heatmap
+      - plot_bubble
+      - plot_taxonomic_tree
+
+  - title: "Utility Functions"
+    desc: >
+      Helper functions for taxonomic tree construction and
+      pairwise taxonomic distance computation.
+    contents:
+      - build_tax_tree
+      - tax_distance_matrix
+
+  - title: "Datasets"
+    desc: >
+      Example ecological community datasets for demonstrations.
+    contents:
+      - anatolian_trees
+      - gazi_comm
+      - gazi_gytk
+
+  - title: "Deprecated"
+    desc: >
+      Functions scheduled for removal in future versions.
+      Use ozkan_pto() instead.
+    contents:
+      - ozkan_pto_macro
+
+articles:
+  - title: "Getting Started"
+    navbar: "Getting Started"
+    contents:
+      - introduction
+  - title: "Turkce Rehber"
+    navbar: ~
+    contents:
+      - giris_rehberi

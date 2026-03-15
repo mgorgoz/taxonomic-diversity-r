@@ -31,5 +31,6 @@ Suggests:
     ggplot2
 Config/testthat/edition: 3
 VignetteBuilder: knitr
-URL: https://github.com/mgorgoz/taxonomic-diversity-r
+URL: https://github.com/mgorgoz/taxonomic-diversity-r,
+    https://mgorgoz.github.io/taxonomic-diversity-r/
 BugReports: https://github.com/mgorgoz/taxonomic-diversity-r/issues

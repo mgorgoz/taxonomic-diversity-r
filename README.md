@@ -1,4 +1,4 @@
-# taxdiv <img src="man/figures/logo.png" align="right" height="139" alt="" />
+# taxdiv
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/mgorgoz/taxonomic-diversity-r/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/mgorgoz/taxonomic-diversity-r/actions/workflows/R-CMD-check.yaml)

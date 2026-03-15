@@ -284,7 +284,7 @@ taxdiv paketi ggplot2 tabanli cesitli gorsellestirme fonksiyonlari sunar.
 
 Turlerin taksonomik yakinligini dendogram olarak gosterir:
 
-```{r dendogram, fig.width=9, fig.height=5.5}
+```{r dendogram, fig.width=9, fig.height=5.5, fig.alt="Akdeniz ormani turlerinin familya bazinda taksonomik agac dendogrami"}
 plot_taxonomic_tree(agac, community = topluluk,
                     color_by = "Family", label_size = 3.5,
                     title = "Akdeniz Ormani - Familya Bazinda")
@@ -297,7 +297,7 @@ icindeki sayilar bolluk degerleridir. Renkler familyalari gosterir.
 
 Turler arasi mesafe matrisini renkli olarak gosterir:
 
-```{r heatmap, fig.width=9, fig.height=8}
+```{r heatmap, fig.width=9, fig.height=8, fig.alt="Turler arasi taksonomik mesafeleri gosteren isi haritasi"}
 plot_heatmap(agac, label_size = 2.8,
              title = "Taksonomik Mesafe Isi Haritasi")
 ```
@@ -309,7 +309,7 @@ Her hucredeki sayi taksonomik mesafe degerini gosterir.
 
 Birden fazla toplulugu tum indeksler uzerinden karsilastirir:
 
-```{r karsilastirma, fig.width=10, fig.height=6}
+```{r karsilastirma, fig.width=10, fig.height=6, fig.alt="Cesitli ve baskin topluluklar icin cesitlilik indekslerinin cubuk grafigi karsilastirmasi"}
 # Ikinci topluluk: tek tur baskin
 baskin_topluluk <- c(
   Quercus_coccifera   = 80, Quercus_infectoria  = 5,
@@ -342,7 +342,7 @@ sonuc_plot$table
 
 Her iterasyondaki pTO degerlerini gosterir:
 
-```{r iterasyon, fig.width=9, fig.height=5}
+```{r iterasyon, fig.width=9, fig.height=5, fig.alt="Islem 2 stokastik yeniden orneklemedeki TO degerlerinin iterasyon grafigi"}
 plot_iteration(islem2, component = "TO",
                title = "Islem 2 - TO Degerleri (200 Iterasyon)")
 ```
@@ -359,7 +359,7 @@ Dusuk noktalar = az tur dahil edildigi durumlar (cesitlilik duser).
 
 Her turun topluluk cesitliligine katkisini gosterir:
 
-```{r balon, fig.width=10, fig.height=7}
+```{r balon, fig.width=10, fig.height=7, fig.alt="Her turun cesitlilige katkisini gosteren familya bazinda balon grafigi"}
 plot_bubble(topluluk, agac, color_by = "Family",
             title = "Tur Katkilari - Familya Bazinda")
 ```
@@ -375,7 +375,7 @@ plot_bubble(topluluk, agac, color_by = "Family",
 
 Birden fazla toplulugu tum indeksler uzerinden radar seklinde karsilastirir:
 
-```{r radar, fig.width=8, fig.height=8}
+```{r radar, fig.width=8, fig.height=8, fig.alt="Cesitli ve baskin topluluklar icin normalize edilmis indeks degerlerinin radar grafigi"}
 plot_radar(topluluklar, agac,
            title = "Cesitli vs Baskin - Radar Karsilastirmasi")
 ```
@@ -664,7 +664,7 @@ cat("Rarefaction sonuclari (Shannon):\n")
 print(round(rare, 4))
 ```
 
-```{r ornek_rare_plot, fig.width=8, fig.height=5}
+```{r ornek_rare_plot, fig.width=8, fig.height=5, fig.alt="Shannon indeksi icin orneklem buyuklugune karsi seyreltme egrisi"}
 plot_rarefaction(rare)
 ```
 
