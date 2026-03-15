@@ -109,11 +109,3 @@ Example ecological community datasets for demonstrations.
   : Example Community Vector: 8 Anatolian Tree Species
 - [`gazi_gytk`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/gazi_gytk.md)
   : Example Taxonomy: 8 Anatolian Tree Species
-
-## Deprecated
-
-Functions scheduled for removal in future versions. Use ozkan_pto()
-instead.
-
-- [`ozkan_pto_macro()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/ozkan_pto_macro.md)
-  : Calculate Ozkan's pTO Using the Original Excel Macro Formula
