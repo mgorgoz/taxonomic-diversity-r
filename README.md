@@ -282,8 +282,9 @@ citation("taxdiv")
 ```
 
 ```
-Gorgoz M, Ozkan K (2026). taxdiv: Taxonomic Diversity Indices Using Deng
-Entropy. R package version 0.1.0. https://github.com/mgorgoz/taxonomic-diversity-r
+Gorgoz MM, Ozkan K, Negiz MG (2026). taxdiv: Taxonomic Diversity Indices
+Using Deng Entropy. R package version 0.1.0.
+https://github.com/mgorgoz/taxonomic-diversity-r
 
 Ozkan K (2018). "A new proposed measure for estimating taxonomic diversity."
 Turkish Journal of Forestry, 19(4), 336-346. doi:10.18182/tjf.441061.
