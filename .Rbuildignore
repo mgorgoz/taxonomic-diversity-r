@@ -11,3 +11,4 @@
 ^notes$
 ^data-raw$
 ^figure$
+^cran-comments\.md$
