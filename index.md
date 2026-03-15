@@ -96,7 +96,7 @@ A ready-to-use Excel template is included:
 
 ## Features
 
-### Diversity Indices (27 exported functions)
+### Diversity Indices (26 exported functions)
 
 | Category             | Functions                                                                                                                                                                                                                                                                                                                                                                                                                                  | Description                                                                                                                                       |
 |----------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -263,10 +263,10 @@ significance testing.
 |--------------------|-------------------------------|
 | R CMD check        | 0 errors, 0 warnings, 0 notes |
 | Unit tests         | 610 passing                   |
-| Exported functions | 27                            |
+| Exported functions | 26                            |
 | S3 methods         | 13 (print, summary, plot)     |
-| R source files     | 20                            |
-| Test files         | 13                            |
+| R source files     | 19                            |
+| Test files         | 12                            |
 | Example datasets   | 3                             |
 | Vignettes          | 2 (English + Turkish)         |
 
