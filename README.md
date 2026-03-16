@@ -275,6 +275,18 @@ testing.
 - [ ] JOSS paper submission
 - [ ] CRAN submission
 
+## Contributing
+
+Contributions are welcome! If you encounter a bug or have an idea for a new
+feature, please open an issue using our templates:
+
+- [Bug Report](https://github.com/mgorgoz/taxonomic-diversity-r/issues/new?template=bug_report.md) — for errors, unexpected behavior, or incorrect results
+- [Feature Request](https://github.com/mgorgoz/taxonomic-diversity-r/issues/new?template=feature_request.md) — for new indices, visualizations, or enhancements
+
+For general questions about the package or taxonomic diversity methods, feel free
+to start a [GitHub Discussion](https://github.com/mgorgoz/taxonomic-diversity-r/discussions)
+or open a blank issue.
+
 ## Citation
 
 ```r
