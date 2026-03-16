@@ -38,9 +38,9 @@ Where $m(F_i)^0$ is the raw (unnormalized) mass value.
 
 ---
 
-## 2. Özkan's Taxonomic Diversity Index — $pT_O$ (Özkan, 2018)
+## 2. Ozkan's Taxonomic Diversity Index — $pT_O$ (Ozkan, 2018)
 
-### 2.1 Main Formula (Equation 4 in Özkan, 2018)
+### 2.1 Main Formula (Equation 4 in Ozkan, 2018)
 
 The Deng Entropy-based taxonomic diversity measure ($pT_O$) is calculated as:
 
@@ -64,13 +64,13 @@ Weights increase from species to kingdom level:
 
 | Level | $i$ | $w_i$ (weighted) | $w_i$ (unweighted) |
 |-------|-----|-------------------|---------------------|
-| Species (Tür) | 1 | 1 | 1 |
-| Genus (Cins) | 2 | 2 | 1 |
-| Family (Familya) | 3 | 3 | 1 |
-| Order (Takım) | 4 | 4 | 1 |
-| Class (Sınıf) | 5 | 5 | 1 |
-| Phylum (Şube) | 6 | 6 | 1 |
-| Kingdom (Alem) | 7 | 7 | 1 |
+| Species | 1 | 1 | 1 |
+| Genus | 2 | 2 | 1 |
+| Family | 3 | 3 | 1 |
+| Order | 4 | 4 | 1 |
+| Class | 5 | 5 | 1 |
+| Phylum | 6 | 6 | 1 |
+| Kingdom | 7 | 7 | 1 |
 
 When weights are used: $pT_O$ is denoted as $T_O$ (weighted taxonomic diversity)
 When $w_i = 1$ for all levels: $pT_O$ is denoted as $uT_O$ (unweighted taxonomic diversity)
@@ -105,7 +105,7 @@ $E_d$ is computed separately at each level of the Linnean hierarchy:
 
 **Termination rule:** If any level $i > 1$ has only one node ($n_{od_{i>1}} = 1$), then $E_{d_i} = 0$ and computation stops at that level.
 
-### 2.5 Taxonomic Distance — $pT_O^+$ (Equation 5 in Özkan, 2018)
+### 2.5 Taxonomic Distance — $pT_O^+$ (Equation 5 in Ozkan, 2018)
 
 For presence/absence data (ignoring abundances), the taxonomic distance is:
 
@@ -184,7 +184,7 @@ $$E_{d_S} = H' = -\sum_i p_i \ln p_i$$
 
 The $pT_O$ components show positive correlations with species richness ($S$) but are **not** indicators of species richness — they capture taxonomic hierarchy information that $S$ alone cannot represent.
 
-From Özkan (2018), correlation values for 8 sample complexes:
+From Ozkan (2018), correlation values for 8 sample complexes:
 - $r_{S-uT_O} = 0.965$
 - $r_{S-T_O} = 0.827$
 - $r_{S-uT_O^+} = 0.946$
@@ -197,5 +197,5 @@ From Özkan (2018), correlation values for 8 sample complexes:
 - Clarke, K.R. & Warwick, R.M. (1998). A taxonomic distinctness index and its statistical properties. *Journal of Applied Ecology*, 35, 523-531.
 - Clarke, K.R. & Warwick, R.M. (2001). A further biodiversity index applicable to species lists: variation in taxonomic distinctness. *Marine Ecology Progress Series*, 216, 265-278.
 - Deng, Y. (2016). Deng entropy. *Chaos, Solitons & Fractals*, 91, 549-553.
-- Özkan, K. (2018). Taksonomik çeşitliliğin belirlenmesi için yeni önerilen bir eşitlik. *Turkish Journal of Forestry*, 19(4), 336-346. DOI: 10.18182/tjf.441061
+- Ozkan, K. (2018). A new equation proposed for measuring taxonomic diversity. *Turkish Journal of Forestry*, 19(4), 336-346. DOI: 10.18182/tjf.441061
 - Warwick, R.M. & Clarke, K.R. (1995). New 'biodiversity' measures reveal a decrease in taxonomic distinctness with increasing stress. *Marine Ecology Progress Series*, 129, 301-305.

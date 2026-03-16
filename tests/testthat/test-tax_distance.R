@@ -1,17 +1,17 @@
 # =============================================================================
-# Taksonomik Mesafe Matrisi ve Taksonomi Ağacı Oluşturucu Testleri
+# Taxonomic Distance Matrix and Taxonomy Tree Builder Tests
 #
-# Bu dosya şu fonksiyonları test eder:
-#   tax_distance_matrix() — Türler arası çiftli taksonomik mesafe matrisi
-#   build_tax_tree()      — Sınıflandırma tablosu (data.frame) oluşturucu
+# This file tests the following functions:
+#   tax_distance_matrix() — Pairwise taxonomic distance matrix between species
+#   build_tax_tree()      — Classification table (data.frame) builder
 #
-# Mesafe hesaplama mantığı:
-#   İki tür arasındaki mesafe = ilk eşleşen taksonomik seviyenin ağırlığı
-#   Aynı cins → ω=1, Aynı familya farklı cins → ω=2, vs.
+# Distance calculation logic:
+#   Distance between two species = weight of the first matching taxonomic level
+#   Same genus → ω=1, Same family but different genus → ω=2, etc.
 # =============================================================================
 
 test_that("tax_distance_matrix computes correct distances", {
-  # 3 tür: sp_a ve sp_b aynı cinste, sp_c farklı cinste ama aynı familyada
+  # 3 species: sp_a and sp_b are in the same genus, sp_c is in a different genus but the same family
   tax <- data.frame(
     Species = c("sp_a", "sp_b", "sp_c"),
     Genus = c("Gen1", "Gen1", "Gen2"),
@@ -19,24 +19,24 @@ test_that("tax_distance_matrix computes correct distances", {
     stringsAsFactors = FALSE
   )
 
-  # Varsayılan ağırlıklar: Genus=1, Family=2
+  # Default weights: Genus=1, Family=2
   d <- tax_distance_matrix(tax)
 
-  # sp_a ve sp_b aynı cins (Gen1) → ilk eşleşme Genus seviyesinde → ω = 1
+  # sp_a and sp_b are the same genus (Gen1) → first match at Genus level → ω = 1
   expect_equal(d["sp_a", "sp_b"], 1)
 
-  # sp_a ve sp_c farklı cins (Gen1 ≠ Gen2), aynı familya → eşleşme Family'de → ω = 2
+  # sp_a and sp_c are different genera (Gen1 ≠ Gen2), same family → match at Family level → ω = 2
   expect_equal(d["sp_a", "sp_c"], 2)
 
-  # Matris simetrik olmalı: ω(a,c) = ω(c,a)
+  # Matrix should be symmetric: ω(a,c) = ω(c,a)
   expect_equal(d["sp_a", "sp_c"], d["sp_c", "sp_a"])
 
-  # Köşegen sıfır olmalı: bir türün kendisiyle mesafesi = 0
+  # Diagonal should be zero: a species' distance to itself = 0
   expect_equal(d["sp_a", "sp_a"], 0)
 })
 
 test_that("tax_distance_matrix works with custom weights", {
-  # 2 tür, hiçbir seviyede eşleşmeyen (farklı cins, farklı familya)
+  # 2 species, no match at any level (different genus, different family)
   tax <- data.frame(
     Species = c("sp_a", "sp_b"),
     Genus = c("Gen1", "Gen2"),
@@ -44,51 +44,51 @@ test_that("tax_distance_matrix works with custom weights", {
     stringsAsFactors = FALSE
   )
 
-  # Varsayılan ağırlıklar [1, 2]: hiçbir seviyede eşleşme yok → maksimum ağırlık = 2
+  # Default weights [1, 2]: no match at any level → maximum weight = 2
   d1 <- tax_distance_matrix(tax)
   expect_equal(d1["sp_a", "sp_b"], 2)
 
-  # Özel ağırlıklar [1, 3]: hiçbir eşleşme yok → maksimum ağırlık = 3
+  # Custom weights [1, 3]: no match → maximum weight = 3
   d2 <- tax_distance_matrix(tax, weights = c(1, 3))
   expect_equal(d2["sp_a", "sp_b"], 3)
 })
 
 
 # =============================================================================
-# build_tax_tree() Testleri — Sınıflandırma Tablosu Oluşturucu
+# build_tax_tree() Tests — Classification Table Builder
 # =============================================================================
 
 test_that("build_tax_tree creates correct structure", {
-  # 2 tür, 2 taksonomik seviye (Genus, Family)
+  # 2 species, 2 taxonomic levels (Genus, Family)
   tree <- build_tax_tree(
     species = c("sp_a", "sp_b"),
     Genus = c("Gen1", "Gen2"),
     Family = c("Fam1", "Fam1")
   )
 
-  # 3 sütun olmalı: Species + Genus + Family
+  # Should have 3 columns: Species + Genus + Family
   expect_equal(ncol(tree), 3)
   expect_equal(names(tree), c("Species", "Genus", "Family"))
 
-  # 2 satır olmalı (her tür için 1)
+  # Should have 2 rows (1 for each species)
   expect_equal(nrow(tree), 2)
 })
 
 test_that("build_tax_tree validates input", {
-  # Tür sayısı ile taksonomik seviye uzunluğu eşleşmeli
-  # 2 tür var ama sadece 1 cins adı verilmiş → hata
+  # Number of species must match the length of taxonomic levels
+  # 2 species provided but only 1 genus name given → error
   expect_error(
     build_tax_tree(species = c("a", "b"), Genus = c("G1")),
     "does not match"
   )
 
-  # En az 1 taksonomik seviye verilmeli (sadece tür adı yetmez)
+  # At least 1 taxonomic level must be provided (species names alone are not sufficient)
   expect_error(build_tax_tree(species = c("a")), "At least one")
 })
 
 test_that("build_tax_tree rejects duplicate species", {
-  # Aynı tür adı iki kez verilmiş → hata
-  # Çünkü tür adları benzersiz olmalı (mesafe matrisinde satır/sütun isimleri)
+  # The same species name is given twice → error
+  # Because species names must be unique (they serve as row/column names in the distance matrix)
   expect_error(
     build_tax_tree(species = c("sp1", "sp2", "sp1"), Genus = c("G1", "G2", "G1")),
     "Duplicate species names: sp1"
@@ -97,11 +97,11 @@ test_that("build_tax_tree rejects duplicate species", {
 
 
 # =============================================================================
-# Hata Kontrolü — Yanlış Ağırlık Uzunluğu
+# Error Handling — Incorrect Weights Length
 # =============================================================================
 
 test_that("tax_distance_matrix errors on wrong weights length", {
-  # 2 taksonomik seviye var (Genus, Family) → 2 ağırlık gerekli
+  # There are 2 taxonomic levels (Genus, Family) → 2 weights required
   tax <- data.frame(
     Species = c("sp_a", "sp_b"),
     Genus = c("Gen1", "Gen2"),
@@ -109,9 +109,9 @@ test_that("tax_distance_matrix errors on wrong weights length", {
     stringsAsFactors = FALSE
   )
 
-  # 1 ağırlık verilmiş ama 2 gerekli → hata
+  # 1 weight provided but 2 required → error
   expect_error(tax_distance_matrix(tax, weights = c(1)), "must have length 2")
 
-  # 4 ağırlık verilmiş ama 2 gerekli → hata
+  # 4 weights provided but 2 required → error
   expect_error(tax_distance_matrix(tax, weights = c(1, 2, 3, 4)), "must have length 2")
 })

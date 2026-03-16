@@ -1,10 +1,10 @@
 # =============================================================================
 # test-compare_indices.R
-# compare_indices() fonksiyonunun testleri
+# Tests for the compare_indices() function
 # =============================================================================
 
-# --- Ortak test verisi ---
-# 4 türlü basit taksonomik ağaç
+# --- Common test data ---
+# Simple taxonomic tree with 4 species
 tax <- data.frame(
   Species = c("sp1", "sp2", "sp3", "sp4"),
   Genus   = c("G1", "G1", "G2", "G2"),
@@ -13,60 +13,60 @@ tax <- data.frame(
   stringsAsFactors = FALSE
 )
 
-# İki farklı topluluk: biri eşit dağılımlı, biri baskın türlü
+# Two different communities: one evenly distributed, one with a dominant species
 comm_equal   <- c(sp1 = 5, sp2 = 5, sp3 = 5, sp4 = 5)
 comm_unequal <- c(sp1 = 50, sp2 = 2, sp3 = 1, sp4 = 1)
 
 
-# ---- Test 1: Tek topluluk girişi doğru data.frame döndürmeli ----
-# Tek bir vektör verildiğinde "Community" ismiyle sarmalanır
-test_that("tek topluluk vektoru dogru tablo dondurur", {
+# ---- Test 1: Single community input should return correct data.frame ----
+# When a single vector is provided, it is wrapped with the name "Community"
+test_that("single community vector returns correct table", {
   result <- compare_indices(comm_equal, tax)
 
-  # Data frame mi?
+  # Is it a data frame?
   expect_true(is.data.frame(result))
 
-  # 1 satır olmalı (tek topluluk)
+  # Should have 1 row (single community)
   expect_equal(nrow(result), 1)
 
-  # 16 sütun: Community + N_Species + 14 indeks (6 klasik + 4 PTO + 4 PTO max)
+  # 16 columns: Community + N_Species + 14 indices (6 classic + 4 PTO + 4 PTO max)
   expect_equal(ncol(result), 16)
 
-  # N_Species kontrol
+  # Check N_Species
   expect_equal(result$N_Species, 4L)
 
-  # Community sütunu "Community" olmalı
+  # Community column should be "Community"
   expect_equal(result$Community, "Community")
 
-  # Tüm indeks sütunları sayısal olmalı
+  # All index columns should be numeric
   index_cols <- setdiff(names(result), "Community")
   for (col in index_cols) {
     expect_true(is.numeric(result[[col]]),
-                info = paste(col, "sayisal olmali"))
+                info = paste(col, "should be numeric"))
   }
 })
 
 
-# ---- Test 2: Çoklu topluluk girişi ----
-# Liste olarak verilen birden fazla topluluk
-test_that("coklu topluluk listesi dogru tablo dondurur", {
+# ---- Test 2: Multiple community input ----
+# Multiple communities provided as a list
+test_that("multiple community list returns correct table", {
   comm_list <- list(
     Esit    = comm_equal,
     Baskin  = comm_unequal
   )
   result <- compare_indices(comm_list, tax)
 
-  # 2 satır olmalı
+  # Should have 2 rows
   expect_equal(nrow(result), 2)
 
-  # Topluluk isimleri korunmalı
+  # Community names should be preserved
   expect_equal(result$Community, c("Esit", "Baskin"))
 })
 
 
-# ---- Test 3: Bilinen değerlerle doğrulama ----
-# Tek tek hesaplanan değerlerle compare_indices sonuçları eşleşmeli
-test_that("degerler tek tek hesaplanan indekslerle eslesiyor", {
+# ---- Test 3: Validation with known values ----
+# compare_indices results should match individually calculated values
+test_that("values match individually calculated indices", {
   result <- compare_indices(comm_equal, tax)
 
   # Shannon
@@ -88,14 +88,14 @@ test_that("degerler tek tek hesaplanan indekslerle eslesiyor", {
   # VarTD
   expect_equal(result$VarTD, round(vartd(sp, tax), 6))
 
-  # pTO bileşenleri (unname ile isim farkını kaldır)
+  # pTO components (remove name differences with unname)
   pto <- pto_components(comm_equal, tax)
   expect_equal(result$uTO, round(unname(pto["uTO"]), 6))
   expect_equal(result$TO, round(unname(pto["TO"]), 6))
   expect_equal(result$uTO_plus, round(unname(pto["uTO_plus"]), 6))
   expect_equal(result$TO_plus, round(unname(pto["TO_plus"]), 6))
 
-  # pTO max bileşenleri
+  # pTO max components
   expect_equal(result$uTO_max, round(unname(pto["uTO_max"]), 6))
   expect_equal(result$TO_max, round(unname(pto["TO_max"]), 6))
   expect_equal(result$uTO_plus_max, round(unname(pto["uTO_plus_max"]), 6))
@@ -103,55 +103,55 @@ test_that("degerler tek tek hesaplanan indekslerle eslesiyor", {
 })
 
 
-# ---- Test 4: Eşit dağılım vs baskın tür karşılaştırması ----
-# Eşit dağılımlı toplulukta Shannon daha yüksek olmalı
-test_that("esit dagilimda Shannon ve Simpson daha yuksek", {
+# ---- Test 4: Even distribution vs dominant species comparison ----
+# Shannon should be higher in the evenly distributed community
+test_that("Shannon and Simpson are higher with even distribution", {
   comm_list <- list(Esit = comm_equal, Baskin = comm_unequal)
   result <- compare_indices(comm_list, tax)
 
   esit  <- result[result$Community == "Esit", ]
   baskin <- result[result$Community == "Baskin", ]
 
-  # Eşit dağılımda Shannon daha yüksek
+  # Shannon is higher with even distribution
   expect_gt(esit$Shannon, baskin$Shannon)
 
-  # Eşit dağılımda Simpson daha yüksek
+  # Simpson is higher with even distribution
   expect_gt(esit$Simpson, baskin$Simpson)
 })
 
 
-# ---- Test 5: plot = TRUE ile liste döndürmeli ----
-# ggplot2 yüklüyse hem tablo hem grafik döner
-test_that("plot = TRUE ile liste dondurur", {
+# ---- Test 5: Should return a list when plot = TRUE ----
+# If ggplot2 is installed, both table and plot are returned
+test_that("returns a list when plot = TRUE", {
   skip_if_not_installed("ggplot2")
 
   result <- compare_indices(comm_equal, tax, plot = TRUE)
 
-  # Liste olmalı
+  # Should be a list
   expect_true(is.list(result))
   expect_true("table" %in% names(result))
   expect_true("plot" %in% names(result))
 
-  # table bir data.frame olmalı
+  # table should be a data.frame
   expect_true(is.data.frame(result$table))
 
-  # plot bir ggplot nesnesi olmalı
+  # plot should be a ggplot object
   expect_s3_class(result$plot, "ggplot")
 })
 
 
-# ---- Test 6: Hatalı girdi kontrolü ----
-# Yanlış veri türü verildiğinde hata fırlatmalı
-test_that("hatali girdi durumunda hata firlatir", {
-  # tax_tree data.frame değilse
+# ---- Test 6: Invalid input validation ----
+# Should throw an error when an incorrect data type is provided
+test_that("throws an error for invalid input", {
+  # If tax_tree is not a data.frame
   expect_error(compare_indices(comm_equal, "not_a_df"),
                "tax_tree")
 
-  # community sayısal değilse
+  # If community is not numeric
   expect_error(compare_indices("not_numeric", tax),
                "must be")
 
-  # community isimsizse
+  # If community is unnamed
   expect_error(compare_indices(c(1, 2, 3), tax),
                "must be")
 })

@@ -1,6 +1,6 @@
-# Özkan pTO Taxonomic Diversity — Pseudocode and I/O Specification
+# Ozkan pTO Taxonomic Diversity — Pseudocode and I/O Specification
 
-> Based on: Özkan, K. (2018). A new proposed measure for estimating taxonomic
+> Based on: Ozkan, K. (2018). A new proposed measure for estimating taxonomic
 > diversity. *Turkish Journal of Forestry*, 19(4), 336-346.
 > DOI: 10.18182/tjf.441061
 >
@@ -11,13 +11,13 @@
 
 ## 1. Overview
 
-The Özkan (2018) method produces four taxonomic diversity/distance components
+The Ozkan (2018) method produces four taxonomic diversity/distance components
 through a three-stage pipeline:
 
 ```
-Run 1 (İşlem 1):  Deterministic calculation     -> ozkan_pto()
-Run 2 (İşlem 2):  Stochastic resampling (50%)   -> ozkan_pto_resample()
-Run 3 (İşlem 3):  Sensitivity analysis           -> ozkan_pto_sensitivity()
+Run 1:  Deterministic calculation     -> ozkan_pto()
+Run 2:  Stochastic resampling (50%)   -> ozkan_pto_resample()
+Run 3:  Sensitivity analysis           -> ozkan_pto_sensitivity()
 ```
 
 Each run computes four components:
@@ -522,9 +522,9 @@ pto_components()              # Convenience: named vector wrapper for Run 1
 
 | R Function                 | VBA Module   | VBA Procedure  | Button    |
 |----------------------------|-------------|----------------|-----------|
-| `ozkan_pto()`              | Module1     | `tekerur()`    | İşlem 1   |
-| `ozkan_pto_resample()`     | Module3     | `tekerur2()`   | İşlem 2   |
-| `ozkan_pto_sensitivity()`  | Module8     | `tekerur3()`   | İşlem 3   |
+| `ozkan_pto()`              | Module1     | `tekerur()`    | Run 1     |
+| `ozkan_pto_resample()`     | Module3     | `tekerur2()`   | Run 2     |
+| `ozkan_pto_sensitivity()`  | Module8     | `tekerur3()`   | Run 3     |
 
 **Known Excel bug:** Both `tekerur2()` and `tekerur3()` lack
 `Application.Calculate` inside their iteration loops. This causes
@@ -537,8 +537,8 @@ The R implementation correctly generates new random values at each iteration.
 ## References
 
 - Deng, Y. (2016). Deng entropy. *Chaos, Solitons & Fractals*, 91, 549-553.
-- Özkan, K. (2018). Taksonomik çeşitliliğin belirlenmesi için yeni önerilen
-  bir eşitlik. *Turkish Journal of Forestry*, 19(4), 336-346.
+- Ozkan, K. (2018). A new equation proposed for measuring taxonomic diversity.
+  *Turkish Journal of Forestry*, 19(4), 336-346.
   DOI: 10.18182/tjf.441061
-- Özkan, K., Mert, A., Şenol, A., Özdemir, S. (2018). Macrotakdivozkan
+- Ozkan, K., Mert, A., Senol, A., Ozdemir, S. (2018). Macrotakdivozkan
   Excel macro. http://www.kantitatifekoloji.net/takdivozkan

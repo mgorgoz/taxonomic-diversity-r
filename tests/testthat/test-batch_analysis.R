@@ -1,10 +1,10 @@
 # =============================================================================
 # test-batch_analysis.R
-# batch_analysis() fonksiyonunun testleri
+# Tests for the batch_analysis() function
 # =============================================================================
 
-# --- Ortak test verisi ---
-# Tek alanlı veri (Site sütunu yok)
+# --- Common test data ---
+# Single site data (no Site column)
 df_single <- data.frame(
   Species   = c("sp1", "sp2", "sp3", "sp4"),
   Genus     = c("G1", "G1", "G2", "G2"),
@@ -14,7 +14,7 @@ df_single <- data.frame(
   stringsAsFactors = FALSE
 )
 
-# Çoklu alanlı veri (Site sütunu var)
+# Multi-site data (with Site column)
 df_multi <- data.frame(
   Site      = c("A", "A", "A", "A", "B", "B", "B", "B"),
   Species   = c("sp1", "sp2", "sp3", "sp4", "sp1", "sp2", "sp3", "sp4"),
@@ -25,7 +25,7 @@ df_multi <- data.frame(
   stringsAsFactors = FALSE
 )
 
-# Taksonomik agac (compare_indices testleriyle uyumlu)
+# Taxonomic tree (compatible with compare_indices tests)
 tax <- data.frame(
   Species = c("sp1", "sp2", "sp3", "sp4"),
   Genus   = c("G1", "G1", "G2", "G2"),
@@ -35,86 +35,86 @@ tax <- data.frame(
 )
 
 
-# ---- Test 1: Tek alan — Site sutunu olmadan ----
-test_that("tek alan verisi dogru sonuc dondurur", {
+# ---- Test 1: Single site — without Site column ----
+test_that("single site data returns correct results", {
   result <- batch_analysis(df_single)
 
-  # Data frame mi?
+  # Is it a data frame?
   expect_true(is.data.frame(result))
 
-  # 1 satir olmali (tek alan)
+  # Should have 1 row (single site)
   expect_equal(nrow(result), 1)
 
-  # 16 sutun: Site + N_Species + 14 indeks (6 klasik + 4 PTO + 4 PTO max)
+  # 16 columns: Site + N_Species + 14 indices (6 classic + 4 PTO + 4 PTO max)
   expect_equal(ncol(result), 16)
 
-  # Site sutunu "All" olmali (otomatik)
+  # Site column should be "All" (automatic)
   expect_equal(result$Site, "All")
 
-  # N_Species olmali
+  # Should have N_Species
   expect_equal(result$N_Species, 4L)
 
-  # Tum indeks sutunlari sayisal olmali
+  # All index columns should be numeric
   index_cols <- setdiff(names(result), "Site")
   for (col in index_cols) {
     expect_true(is.numeric(result[[col]]),
-                info = paste(col, "sayisal olmali"))
+                info = paste(col, "should be numeric"))
   }
 })
 
 
-# ---- Test 2: Coklu alan — Site sutunu ile ----
-test_that("coklu alan verisi dogru sonuc dondurur", {
+# ---- Test 2: Multiple sites — with Site column ----
+test_that("multi-site data returns correct results", {
   result <- batch_analysis(df_multi)
 
-  # 2 satir olmali
+  # Should have 2 rows
   expect_equal(nrow(result), 2)
 
-  # Site isimleri korunmali
+  # Site names should be preserved
   expect_equal(result$Site, c("A", "B"))
 
-  # Her satirin 16 sutunu olmali
+  # Each row should have 16 columns
   expect_equal(ncol(result), 16)
 
-  # Her site icin N_Species
+  # N_Species for each site
   expect_equal(result$N_Species, c(4L, 4L))
 })
 
 
-# ---- Test 3: compare_indices ile tutarlilik ----
-# batch_analysis sonuclari, ayni veri ile compare_indices sonuclariyla eslesmeli
-test_that("tek alan sonuclari compare_indices ile eslesir", {
+# ---- Test 3: Consistency with compare_indices ----
+# batch_analysis results should match compare_indices results for the same data
+test_that("single site results match compare_indices", {
   batch_result <- batch_analysis(df_single)
 
-  # Ayni veriyle compare_indices calistir
+  # Run compare_indices with the same data
   comm <- c(sp1 = 10, sp2 = 20, sp3 = 15, sp4 = 5)
   ci_result <- compare_indices(comm, tax)
 
-  # Shannon eslesir mi?
+  # Does Shannon match?
   expect_equal(batch_result$Shannon, ci_result$Shannon)
 
-  # Simpson eslesir mi?
+  # Does Simpson match?
   expect_equal(batch_result$Simpson, ci_result$Simpson)
 
-  # Delta eslesir mi?
+  # Does Delta match?
   expect_equal(batch_result$Delta, ci_result$Delta)
 
-  # Delta_star eslesir mi?
+  # Does Delta_star match?
   expect_equal(batch_result$Delta_star, ci_result$Delta_star)
 
-  # AvTD eslesir mi?
+  # Does AvTD match?
   expect_equal(batch_result$AvTD, ci_result$AvTD)
 
-  # VarTD eslesir mi?
+  # Does VarTD match?
   expect_equal(batch_result$VarTD, ci_result$VarTD)
 
-  # pTO bilesenleri
+  # pTO components
   expect_equal(batch_result$uTO, ci_result$uTO)
   expect_equal(batch_result$TO, ci_result$TO)
   expect_equal(batch_result$uTO_plus, ci_result$uTO_plus)
   expect_equal(batch_result$TO_plus, ci_result$TO_plus)
 
-  # pTO max bilesenleri
+  # pTO max components
   expect_equal(batch_result$uTO_max, ci_result$uTO_max)
   expect_equal(batch_result$TO_max, ci_result$TO_max)
   expect_equal(batch_result$uTO_plus_max, ci_result$uTO_plus_max)
@@ -122,8 +122,8 @@ test_that("tek alan sonuclari compare_indices ile eslesir", {
 })
 
 
-# ---- Test 4: Coklu alan — her alan icin compare_indices ile eslestir ----
-test_that("coklu alan sonuclari compare_indices ile eslesir", {
+# ---- Test 4: Multiple sites — match compare_indices for each site ----
+test_that("multi-site results match compare_indices", {
   batch_result <- batch_analysis(df_multi)
 
   # Site A: comm_A = c(sp1=10, sp2=20, sp3=15, sp4=5)
@@ -140,20 +140,20 @@ test_that("coklu alan sonuclari compare_indices ile eslesir", {
 })
 
 
-# ---- Test 5: Site sutunu otomatik algilama ----
-# "Site", "Alan", "Plot" isimleri otomatik algilanmali
-test_that("Site sutunu otomatik algilanir", {
-  # "Site" ismiyle
+# ---- Test 5: Automatic Site column detection ----
+# "Site", "Alan", "Plot" names should be automatically detected
+test_that("Site column is automatically detected", {
+  # With the name "Site"
   result_site <- batch_analysis(df_multi)
   expect_equal(nrow(result_site), 2)
 
-  # "Alan" ismiyle
+  # With the name "Alan"
   df_alan <- df_multi
   names(df_alan)[1] <- "Alan"
   result_alan <- batch_analysis(df_alan)
   expect_equal(nrow(result_alan), 2)
 
-  # "Plot" ismiyle
+  # With the name "Plot"
   df_plot <- df_multi
   names(df_plot)[1] <- "Plot"
   result_plot <- batch_analysis(df_plot)
@@ -161,8 +161,8 @@ test_that("Site sutunu otomatik algilanir", {
 })
 
 
-# ---- Test 6: site_column parametresi ile ----
-test_that("site_column parametresi ile belirtme calisiyor", {
+# ---- Test 6: With site_column parameter ----
+test_that("specifying site_column parameter works", {
   df_custom <- df_multi
   names(df_custom)[1] <- "Lokasyon"
   result <- batch_analysis(df_custom, site_column = "Lokasyon")
@@ -171,8 +171,8 @@ test_that("site_column parametresi ile belirtme calisiyor", {
 })
 
 
-# ---- Test 7: Bos Site sutunu — tek alan gibi calismali ----
-test_that("bos Site sutunu tek alan olarak calisir", {
+# ---- Test 7: Empty Site column — should work as single site ----
+test_that("empty Site column works as single site", {
   df_empty_site <- df_single
   df_empty_site$Site <- ""
   result <- batch_analysis(df_empty_site)
@@ -181,8 +181,8 @@ test_that("bos Site sutunu tek alan olarak calisir", {
 })
 
 
-# ---- Test 8: NA Site sutunu — tek alan gibi calismali ----
-test_that("NA Site sutunu tek alan olarak calisir", {
+# ---- Test 8: NA Site column — should work as single site ----
+test_that("NA Site column works as single site", {
   df_na_site <- df_single
   df_na_site$Site <- NA
   result <- batch_analysis(df_na_site)
@@ -191,8 +191,8 @@ test_that("NA Site sutunu tek alan olarak calisir", {
 })
 
 
-# ---- Test 9: Case-insensitive abundance sutunu ----
-test_that("abundance sutunu case-insensitive eslesiyor", {
+# ---- Test 9: Case-insensitive abundance column ----
+test_that("abundance column matches case-insensitively", {
   df_lower <- df_single
   names(df_lower)[names(df_lower) == "Abundance"] <- "abundance"
   result <- batch_analysis(df_lower)
@@ -200,19 +200,19 @@ test_that("abundance sutunu case-insensitive eslesiyor", {
 })
 
 
-# ---- Test 10: Hatali girdi kontrolleri ----
-test_that("hatali girdi durumunda hata firlatir", {
-  # data.frame degil
+# ---- Test 10: Invalid input checks ----
+test_that("throws error on invalid input", {
+  # Not a data.frame
   expect_error(batch_analysis("not_a_df"), "data.*must be a data frame")
 
-  # Bos data.frame
+  # Empty data.frame
   expect_error(batch_analysis(data.frame()), "no rows")
 
-  # Abundance sutunu yok
+  # No Abundance column
   df_no_abd <- df_single[, -5]
   expect_error(batch_analysis(df_no_abd), "Abundance.*not found")
 
-  # Taksonomik sutunlar yetersiz
+  # Insufficient taxonomic columns
   df_no_tax <- data.frame(
     Species   = c("sp1", "sp2"),
     Abundance = c(10, 20),
@@ -220,14 +220,14 @@ test_that("hatali girdi durumunda hata firlatir", {
   )
   expect_error(batch_analysis(df_no_tax), "auto-detect")
 
-  # Belirtilen site_column bulunamiyor
+  # Specified site_column not found
   expect_error(batch_analysis(df_single, site_column = "Nonexistent"),
                "not found")
 })
 
 
-# ---- Test 11: tax_columns parametresi ile ----
-test_that("tax_columns parametresi ile calisiyor", {
+# ---- Test 11: With tax_columns parameter ----
+test_that("works with tax_columns parameter", {
   df_custom_names <- data.frame(
     Tur     = c("sp1", "sp2", "sp3", "sp4"),
     Cins    = c("G1", "G1", "G2", "G2"),
@@ -244,33 +244,33 @@ test_that("tax_columns parametresi ile calisiyor", {
 })
 
 
-# ---- Test 12: Esit dagilimda cesitlilik daha yuksek ----
-test_that("esit dagilimda cesitlilik daha yuksek", {
+# ---- Test 12: Diversity is higher with even distribution ----
+test_that("diversity is higher with even distribution", {
   result <- batch_analysis(df_multi)
 
-  # Site B (esit dagilim) Shannon daha yuksek olmali
+  # Site B (even distribution) should have higher Shannon
   expect_gt(result$Shannon[result$Site == "B"],
             result$Shannon[result$Site == "A"])
 })
 
 
-# ---- Test 13: Turkce alan ismiyle otomatik algilama ----
-test_that("alan ismiyle otomatik algilama calisiyor", {
+# ---- Test 13: Automatic detection with Turkish site name ----
+test_that("automatic detection works with site name", {
   df_alan <- df_multi
-  names(df_alan)[1] <- "alan"  # kucuk harfle
+  names(df_alan)[1] <- "alan"  # lowercase
   result <- batch_analysis(df_alan)
   expect_equal(nrow(result), 2)
 })
 
 
-# ---- Test 14: 3 veya daha fazla site ----
-test_that("3 site ile calisiyor", {
+# ---- Test 14: 3 or more sites ----
+test_that("works with 3 sites", {
   df_three <- rbind(
     data.frame(Site = "X", df_single, stringsAsFactors = FALSE),
     data.frame(Site = "Y", df_single, stringsAsFactors = FALSE),
     data.frame(Site = "Z", df_single, stringsAsFactors = FALSE)
   )
-  # Y sitesinde farkli abundance
+  # Different abundance at site Y
   df_three$Abundance[df_three$Site == "Y"] <- c(5, 5, 5, 5)
   df_three$Abundance[df_three$Site == "Z"] <- c(50, 1, 1, 1)
 
@@ -280,8 +280,8 @@ test_that("3 site ile calisiyor", {
 })
 
 
-# ---- Test 15: Sifir abundance turler filtrelenmeli ----
-test_that("sifir abundance turler filtreleniyor", {
+# ---- Test 15: Zero abundance species should be filtered ----
+test_that("zero abundance species are filtered", {
   df_zeros <- data.frame(
     Species   = c("sp1", "sp2", "sp3", "sp4", "sp5"),
     Genus     = c("G1", "G1", "G2", "G2", "G3"),
@@ -290,7 +290,7 @@ test_that("sifir abundance turler filtreleniyor", {
     Abundance = c(10, 20, 15, 5, 0),
     stringsAsFactors = FALSE
   )
-  # Hata firlatmamali — sp5 (abundance = 0) atlanmali
+  # Should not throw an error — sp5 (abundance = 0) should be skipped
   result <- batch_analysis(df_zeros)
   expect_equal(nrow(result), 1)
   expect_true(is.numeric(result$Shannon))

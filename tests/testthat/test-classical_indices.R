@@ -1,84 +1,84 @@
 # =============================================================================
-# Klasik Çeşitlilik İndeksleri ve Clarke & Warwick İndeksleri Testleri
+# Tests for Classical Diversity Indices and Clarke & Warwick Indices
 #
-# Bu dosya şu fonksiyonları test eder:
-#   shannon()     — Shannon çeşitlilik indeksi (H')
-#   simpson()     — Simpson çeşitlilik indeksi (D, 1-D, 1/D)
-#   delta()       — Taksonomik çeşitlilik (Δ) — bolluk ağırlıklı
-#   delta_star()  — Taksonomik ayırt edicilik (Δ*) — aynı tür çiftleri hariç
-#   avtd()        — Ortalama taksonomik ayırt edicilik (Δ+/AvTD) — bulunma/bulunmama
-#   vartd()       — Taksonomik ayırt edicilik varyansı (Λ+/VarTD)
+# This file tests the following functions:
+#   shannon()     — Shannon diversity index (H')
+#   simpson()     — Simpson diversity index (D, 1-D, 1/D)
+#   delta()       — Taxonomic diversity (Δ) — abundance-weighted
+#   delta_star()  — Taxonomic distinctness (Δ*) — excluding same-species pairs
+#   avtd()        — Average taxonomic distinctness (Δ+/AvTD) — presence/absence
+#   vartd()       — Variance in taxonomic distinctness (Λ+/VarTD)
 # =============================================================================
 
 
 # =============================================================================
-# Shannon Çeşitlilik İndeksi (H') Testleri
-# Formül: H' = -Σ pᵢ × ln(pᵢ)
+# Shannon Diversity Index (H') Tests
+# Formula: H' = -Σ pᵢ × ln(pᵢ)
 # =============================================================================
 
 test_that("shannon calculates correctly", {
-  # Eşit bolluklu 4 tür: H' = ln(4) = 1.386
-  # Her türün oranı p = 10/40 = 0.25
+  # 4 species with equal abundance: H' = ln(4) = 1.386
+  # Each species' proportion p = 10/40 = 0.25
   # H' = -4 × 0.25 × ln(0.25) = ln(4)
   comm <- c(10, 10, 10, 10)
   expect_equal(shannon(comm), log(4), tolerance = 1e-10)
 
-  # Tek tür: çeşitlilik yok, H' = 0
+  # Single species: no diversity, H' = 0
   expect_equal(shannon(c(10)), 0)
 
-  # 2 tabanlı logaritma ile (bit cinsinden): 2 eşit tür → H' = 1 bit
+  # Base-2 logarithm (in bits): 2 equal species → H' = 1 bit
   comm <- c(10, 10)
   expect_equal(shannon(comm, base = 2), 1, tolerance = 1e-10)
 })
 
 test_that("shannon handles edge cases", {
-  # Sıfır bolluklu türler otomatik çıkarılmalı
-  # [10, 0, 5, 0, 8] ile [10, 5, 8] aynı sonucu vermeli
+  # Species with zero abundance should be automatically excluded
+  # [10, 0, 5, 0, 8] and [10, 5, 8] should give the same result
   comm <- c(10, 0, 5, 0, 8)
   expect_equal(shannon(comm), shannon(c(10, 5, 8)))
 
-  # Hepsi sıfır: tür yok, çeşitlilik = 0
+  # All zeros: no species, diversity = 0
   expect_equal(shannon(c(0, 0, 0)), 0)
 })
 
 test_that("shannon validates input", {
-  # Negatif bolluk: doğada bolluk negatif olamaz
+  # Negative abundance: abundance cannot be negative in nature
   expect_error(shannon(c(-1, 5)), "non-negative")
 
-  # Sayısal olmayan değer: bolluk sayı olmalı
+  # Non-numeric value: abundance must be numeric
   expect_error(shannon("abc"), "numeric")
 })
 
 
 # =============================================================================
-# Simpson Çeşitlilik İndeksi Testleri
-# Dominans: D = Σ pᵢ²
+# Simpson Diversity Index Tests
+# Dominance: D = Σ pᵢ²
 # Gini-Simpson: 1 - D
-# Ters Simpson: 1/D
+# Inverse Simpson: 1/D
 # =============================================================================
 
 test_that("simpson calculates correctly", {
-  # Eşit bolluklu 4 tür:
+  # 4 species with equal abundance:
   # D = 4 × (0.25)² = 4 × 0.0625 = 0.25
   # Gini-Simpson = 1 - 0.25 = 0.75
-  # Ters Simpson = 1/0.25 = 4
+  # Inverse Simpson = 1/0.25 = 4
   comm <- c(10, 10, 10, 10)
   expect_equal(simpson(comm, "dominance"), 0.25, tolerance = 1e-10)
   expect_equal(simpson(comm, "gini_simpson"), 0.75, tolerance = 1e-10)
   expect_equal(simpson(comm, "inverse"), 4, tolerance = 1e-10)
 
-  # Tek tür: D = 1 (tam dominans — sadece 1 tür var)
+  # Single species: D = 1 (complete dominance — only 1 species present)
   expect_equal(simpson(c(10), "dominance"), 1)
 })
 
 test_that("simpson validates input", {
-  # Negatif bolluk: hata vermeli
+  # Negative abundance: should throw an error
   expect_error(simpson(c(-1, 5)), "non-negative")
 })
 
 
 # =============================================================================
-# Shannon Yanlılık Düzeltme (Bias Correction) Testleri
+# Shannon Bias Correction Tests
 # =============================================================================
 
 test_that("shannon miller_madow adds positive correction", {
@@ -166,46 +166,46 @@ test_that("shannon default correction is none (backward compatible)", {
 
 
 # =============================================================================
-# Clarke & Warwick İndeksleri
+# Clarke & Warwick Indices
 # =============================================================================
 
-# --- Δ (Delta): Taksonomik Çeşitlilik ---
-# Tüm birey çiftleri arasındaki ortalama taksonomik mesafe
-# Aynı türden birey çiftleri de dahildir (mesafe = 0)
+# --- Δ (Delta): Taxonomic Diversity ---
+# Average taxonomic distance between all pairs of individuals
+# Pairs of individuals from the same species are also included (distance = 0)
 
 test_that("delta calculates taxonomic diversity correctly", {
-  # 3 tür, 2 cins, 1 familya, hepsi eşit bollukta
+  # 3 species, 2 genera, 1 family, all with equal abundance
   comm <- c(sp1 = 3, sp2 = 3, sp3 = 3)
   tax <- data.frame(
     Species = c("sp1", "sp2", "sp3"),
-    Genus = c("G1", "G1", "G2"),       # sp1-sp2 aynı cins, sp3 farklı
-    Family = c("F1", "F1", "F1"),       # hepsi aynı familya
+    Genus = c("G1", "G1", "G2"),       # sp1-sp2 same genus, sp3 different
+    Family = c("F1", "F1", "F1"),       # all in the same family
     stringsAsFactors = FALSE
   )
 
   d <- delta(comm, tax)
 
-  # Sayısal değer dönmeli ve pozitif olmalı
+  # Should return a numeric value and be positive
   expect_type(d, "double")
   expect_true(d > 0)
 
-  # Sadece aynı cinsteki türlerle karşılaştır: mesafe daha düşük olmalı
-  # Çünkü taksonomik yayılım daha az
+  # Compare with only same-genus species: distance should be lower
+  # Because the taxonomic spread is smaller
   comm2 <- c(sp1 = 3, sp2 = 3)
   tax2 <- data.frame(
     Species = c("sp1", "sp2"),
-    Genus = c("G1", "G1"),              # ikisi de aynı cins
+    Genus = c("G1", "G1"),              # both in the same genus
     Family = c("F1", "F1"),
     stringsAsFactors = FALSE
   )
   d2 <- delta(comm2, tax2)
 
-  # Aynı cinsteki 2 tür, farklı cinsleri de içeren 3 türden daha düşük Δ vermeli
+  # 2 species in the same genus should yield a lower Δ than 3 species spanning different genera
   expect_true(d2 < d)
 })
 
 test_that("delta returns 0 for single species", {
-  # Tek tür: karşılaştırma yapılacak başka tür yok → Δ = 0
+  # Single species: no other species to compare with → Δ = 0
   comm <- c(sp1 = 10)
   tax <- data.frame(
     Species = "sp1", Genus = "G1", Family = "F1",
@@ -215,12 +215,12 @@ test_that("delta returns 0 for single species", {
 })
 
 
-# --- Δ* (Delta star): Taksonomik Ayırt Edicilik ---
-# Δ ile aynı mantık ama aynı türden birey çiftleri HARİÇ tutulur
-# Bu sayede Δ* her zaman Δ'dan büyük veya eşit olur
+# --- Δ* (Delta star): Taxonomic Distinctness ---
+# Same logic as Δ but pairs of individuals from the same species are EXCLUDED
+# As a result, Δ* is always greater than or equal to Δ
 
 test_that("delta_star calculates taxonomic distinctness correctly", {
-  # 3 tür, farklı bolluklar
+  # 3 species, different abundances
   comm <- c(sp1 = 5, sp2 = 3, sp3 = 2)
   tax <- data.frame(
     Species = c("sp1", "sp2", "sp3"),
@@ -232,18 +232,18 @@ test_that("delta_star calculates taxonomic distinctness correctly", {
   ds <- delta_star(comm, tax)
   d <- delta(comm, tax)
 
-  # Sayısal ve pozitif olmalı
+  # Should be numeric and positive
   expect_type(ds, "double")
   expect_true(ds > 0)
 
-  # MATEMATİKSEL KURAL: Δ* her zaman Δ'dan büyük veya eşit
-  # Çünkü Δ'nın paydasında aynı tür çiftleri de var (mesafe = 0 katkısı)
-  # bu ortalamayı aşağı çeker
+  # MATHEMATICAL RULE: Δ* is always greater than or equal to Δ
+  # Because the denominator of Δ also includes same-species pairs (contributing distance = 0)
+  # which pulls the average down
   expect_true(ds >= d)
 })
 
 test_that("delta_star returns 0 for single species", {
-  # Tek tür: karşılaştırma yapılamaz → Δ* = 0
+  # Single species: no comparison possible → Δ* = 0
   comm <- c(sp1 = 10)
   tax <- data.frame(
     Species = "sp1", Genus = "G1",
@@ -253,45 +253,45 @@ test_that("delta_star returns 0 for single species", {
 })
 
 
-# --- Δ+ (AvTD): Ortalama Taksonomik Ayırt Edicilik ---
-# Sadece bulunma/bulunmama verisi kullanır (bolluk bilgisi gerekmez)
-# Formül: Δ+ = Σ Σ_{i<j} ω_ij / [S(S-1)/2]
+# --- Δ+ (AvTD): Average Taxonomic Distinctness ---
+# Uses only presence/absence data (abundance information is not needed)
+# Formula: Δ+ = Σ Σ_{i<j} ω_ij / [S(S-1)/2]
 
 test_that("avtd calculates average taxonomic distinctness", {
-  # 4 tür, 2 cins, 2 familya
+  # 4 species, 2 genera, 2 families
   tax <- data.frame(
     Species = c("sp1", "sp2", "sp3", "sp4"),
     Genus = c("G1", "G1", "G2", "G2"),
-    Family = c("F1", "F1", "F1", "F2"),   # sp4 farklı familyada
+    Family = c("F1", "F1", "F1", "F2"),   # sp4 in a different family
     stringsAsFactors = FALSE
   )
 
   spp <- c("sp1", "sp2", "sp3", "sp4")
   result <- avtd(spp, tax)
 
-  # Sayısal ve pozitif olmalı
+  # Should be numeric and positive
   expect_type(result, "double")
   expect_true(result > 0)
 })
 
 test_that("avtd with all same-genus species equals weights[1]", {
-  # Tüm türler aynı cinste → tüm çiftlerin mesafesi = weights[1] = 1
-  # Dolayısıyla ortalama da = 1
+  # All species in the same genus → all pairwise distances = weights[1] = 1
+  # Therefore the average is also = 1
   tax <- data.frame(
     Species = c("sp1", "sp2", "sp3"),
-    Genus = c("G1", "G1", "G1"),     # hepsi aynı cins
+    Genus = c("G1", "G1", "G1"),     # all in the same genus
     Family = c("F1", "F1", "F1"),
     stringsAsFactors = FALSE
   )
 
   result <- avtd(c("sp1", "sp2", "sp3"), tax)
 
-  # Tüm mesafeler 1 → ortalama = 1
+  # All distances are 1 → average = 1
   expect_equal(result, 1)
 })
 
 test_that("avtd requires at least 2 species", {
-  # En az 2 tür gerekli (çift oluşturmak için)
+  # At least 2 species required (to form pairs)
   tax <- data.frame(
     Species = "sp1", Genus = "G1",
     stringsAsFactors = FALSE
@@ -300,13 +300,13 @@ test_that("avtd requires at least 2 species", {
 })
 
 
-# --- Λ+ (VarTD): Taksonomik Ayırt Edicilik Varyansı ---
-# Çiftler arası mesafelerin Δ+ etrafındaki varyansı
-# Yüksek Λ+ = bazı çiftler çok yakın, bazıları çok uzak (dengesiz dağılım)
-# Düşük Λ+ = tüm çiftlerin mesafesi birbirine yakın (homojen dağılım)
+# --- Λ+ (VarTD): Variance in Taxonomic Distinctness ---
+# Variance of pairwise distances around Δ+
+# High Λ+ = some pairs very close, others very distant (uneven distribution)
+# Low Λ+ = all pairwise distances are similar (homogeneous distribution)
 
 test_that("vartd calculates variation in taxonomic distinctness", {
-  # 4 tür: bazıları yakın, bazıları uzak → varyans > 0
+  # 4 species: some close, others distant → variance > 0
   tax <- data.frame(
     Species = c("sp1", "sp2", "sp3", "sp4"),
     Genus = c("G1", "G1", "G2", "G2"),
@@ -317,29 +317,29 @@ test_that("vartd calculates variation in taxonomic distinctness", {
   spp <- c("sp1", "sp2", "sp3", "sp4")
   result <- vartd(spp, tax)
 
-  # Sayısal ve sıfırdan büyük veya eşit olmalı (varyans negatif olamaz)
+  # Should be numeric and greater than or equal to zero (variance cannot be negative)
   expect_type(result, "double")
   expect_true(result >= 0)
 })
 
 test_that("vartd is zero when all pairwise distances are equal", {
-  # Tüm çiftlerin mesafesi eşit olduğunda varyans = 0
-  # 3 tür, hepsi farklı cinste ama aynı familyada → tüm mesafeler = 2
+  # When all pairwise distances are equal, variance = 0
+  # 3 species, all in different genera but the same family → all distances = 2
   tax <- data.frame(
     Species = c("sp1", "sp2", "sp3"),
-    Genus = c("G1", "G2", "G3"),       # hepsi farklı cins
-    Family = c("F1", "F1", "F1"),       # hepsi aynı familya
+    Genus = c("G1", "G2", "G3"),       # all in different genera
+    Family = c("F1", "F1", "F1"),       # all in the same family
     stringsAsFactors = FALSE
   )
 
   result <- vartd(c("sp1", "sp2", "sp3"), tax)
 
-  # Tüm mesafeler eşit (= 2) → varyans = 0
+  # All distances are equal (= 2) → variance = 0
   expect_equal(result, 0, tolerance = 1e-10)
 })
 
 test_that("vartd requires at least 2 species", {
-  # En az 2 tür gerekli
+  # At least 2 species required
   tax <- data.frame(
     Species = "sp1", Genus = "G1",
     stringsAsFactors = FALSE
@@ -349,11 +349,11 @@ test_that("vartd requires at least 2 species", {
 
 
 # =============================================================================
-# Hata Kontrolü Testleri — Yanlış Girdi Durumları
+# Error Handling Tests — Invalid Input Cases
 # =============================================================================
 
 test_that("delta errors on species not in tax_tree", {
-  # Taksonomide bulunmayan tür adı verildiğinde hata vermeli
+  # Should throw an error when a species name not found in the taxonomy is provided
   comm <- c(sp1 = 5, sp_unknown = 3)
   tax <- data.frame(
     Species = c("sp1", "sp2"),
@@ -365,7 +365,7 @@ test_that("delta errors on species not in tax_tree", {
 })
 
 test_that("delta_star errors on species not in tax_tree", {
-  # Birden fazla eksik tür varsa hepsini listele
+  # If there are multiple missing species, list them all
   comm <- c(sp1 = 5, sp_missing = 3, sp_also = 2)
   tax <- data.frame(
     Species = c("sp1", "sp2"),
@@ -377,8 +377,8 @@ test_that("delta_star errors on species not in tax_tree", {
 })
 
 test_that("delta errors on wrong weights length", {
-  # Ağırlık vektörünün uzunluğu taksonomik seviye sayısına eşit olmalı
-  # Burada 2 seviye var (Genus, Family) ama 3 ağırlık verilmiş
+  # The length of the weight vector must equal the number of taxonomic levels
+  # Here there are 2 levels (Genus, Family) but 3 weights were provided
   comm <- c(sp1 = 5, sp2 = 3)
   tax <- data.frame(
     Species = c("sp1", "sp2"),
@@ -390,8 +390,8 @@ test_that("delta errors on wrong weights length", {
 })
 
 test_that("delta_star errors on wrong weights length", {
-  # Aynı ağırlık uzunluğu kontrolü delta_star için de geçerli
-  # 2 seviye var ama 1 ağırlık verilmiş
+  # The same weight length check applies to delta_star as well
+  # There are 2 levels but only 1 weight was provided
   comm <- c(sp1 = 5, sp2 = 3)
   tax <- data.frame(
     Species = c("sp1", "sp2"),

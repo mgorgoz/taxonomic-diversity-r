@@ -507,9 +507,9 @@ calling `tax_distance_matrix()`), while `avtd()` and `vartd()` call
 
 ---
 
-## 10. Comparison with Özkan pTO
+## 10. Comparison with Ozkan pTO
 
-| Feature            | Clarke & Warwick       | Özkan pTO                 |
+| Feature            | Clarke & Warwick       | Ozkan pTO                 |
 |--------------------|------------------------|---------------------------|
 | Entropy basis      | None (path length avg) | Deng entropy              |
 | Hierarchy use      | Pairwise distance      | Level-wise entropy + product|
