@@ -13,3 +13,5 @@
 ^figure$
 ^cran-comments\.md$
 ^CLAUDE\.md$
+^CONTRIBUTING\.md$
+^CODE_OF_CONDUCT\.md$
