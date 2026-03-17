@@ -375,17 +375,35 @@ Run 3:  uT0+max        -&gt;  uTO_plus_max
 <h2 id="theoretical-background">Theoretical Background<a class="anchor" aria-label="anchor" href="#theoretical-background"></a>
 </h2>
 <div class="section level3">
+<h3 id="the-problem-why-species-counts-are-not-enough">The Problem: Why Species Counts Are Not Enough<a class="anchor" aria-label="anchor" href="#the-problem-why-species-counts-are-not-enough"></a>
+</h3>
+<p>Consider two forest plots, each containing 10 species. In the first plot, all 10 species belong to the same genus. In the second, they span 5 families across 3 orders. Standard indices like Shannon and Simpson would assign identical diversity scores to both — yet the second community is clearly more diverse in an evolutionary and functional sense. <strong>Taxonomic diversity indices solve this problem by incorporating the hierarchical relationships among species.</strong></p>
+</div>
+<div class="section level3">
 <h3 id="ozkan-pto-method">Ozkan pTO Method<a class="anchor" aria-label="anchor" href="#ozkan-pto-method"></a>
 </h3>
-<p>The Ozkan (2018) method applies <strong>Deng entropy</strong> — a generalization of Shannon entropy based on Dempster-Shafer evidence theory — to taxonomic hierarchy data.</p>
-<p>At each taxonomic level <em>k</em>, Deng entropy <em>Ed(k)</em> quantifies how evenly species are distributed across higher-level groups (genera, families, etc.). The product of these level-wise entropies yields <strong>taxonomic diversity</strong> (pTO), while the product including the species-level Shannon entropy yields <strong>taxonomic distance</strong> (pTO+).</p>
-<p>A <strong>slicing procedure</strong> progressively removes the least abundant species, recalculating at each step. The maximum value across all slices represents the community’s optimal taxonomic diversity. This stochastic resampling approach (Run 2) identifies “happy” and “unhappy” species — those whose removal decreases or increases diversity, respectively.</p>
+<p>Ozkan (2018) introduced a method that uses <strong>Deng entropy</strong> — a generalization of Shannon entropy rooted in Dempster-Shafer evidence theory — to measure how species are distributed across a taxonomic hierarchy.</p>
+<p>The method works in three stages:</p>
+<p><strong>Run 1 — Deterministic calculation:</strong> At each taxonomic level (genus, family, order, etc.), Deng entropy measures how evenly species are grouped. A level where all species fall into one group contributes zero entropy (no diversity), while a level where species are spread evenly across many groups contributes high entropy. The product of these level-wise entropies gives <strong>pTO</strong> (taxonomic diversity). When species-level Shannon entropy is also included in the product, the result is <strong>pTO+</strong> (taxonomic distance), which captures both taxonomic structure and within-community evenness.</p>
+<p><strong>Run 2 — Stochastic resampling (slicing):</strong> Species are removed one at a time, starting with the least abundant. After each removal, all indices are recalculated. This reveals each species’ contribution to overall diversity: removing a “happy” species decreases diversity (it was contributing positively), while removing an “unhappy” species increases diversity (it was redundant in the taxonomic structure). The maximum pTO value across all slicing steps represents the community’s optimal taxonomic organization.</p>
+<p><strong>Run 3 — Max-informative level variants:</strong> Some taxonomic levels may carry no information (e.g., when all species share the same order, Deng entropy at that level is zero). Run 3 repeats the calculations using only the levels where Deng entropy is greater than zero, producing the <code>_max</code> variants of each index.</p>
+<p>This three-stage pipeline yields <strong>8 complementary indices</strong>: <code>uTO</code>, <code>TO</code>, <code>uTO_plus</code>, <code>TO_plus</code>, and their <code>_max</code> counterparts.</p>
 </div>
 <div class="section level3">
 <h3 id="clarke--warwick-taxonomic-distinctness">Clarke &amp; Warwick Taxonomic Distinctness<a class="anchor" aria-label="anchor" href="#clarke--warwick-taxonomic-distinctness"></a>
 </h3>
-<p>Average Taxonomic Distinctness (AvTD/Delta+) measures the average path length through the taxonomic tree between all species pairs. It is independent of sample size, making it suitable for comparing studies with unequal sampling effort.</p>
-<p>Variation in Taxonomic Distinctness (VarTD/Lambda+) measures the variance in these path lengths. Together with <code><a href="reference/simulate_td.html">simulate_td()</a></code> and <code><a href="reference/plot_funnel.html">plot_funnel()</a></code>, taxdiv provides simulation-based 95% confidence funnels for statistical significance testing.</p>
+<p>Clarke &amp; Warwick (1995, 1998, 2001) proposed a family of indices based on the <strong>pairwise taxonomic path length</strong> between species in a classification tree.</p>
+<ul>
+<li>
+<strong>Delta (Δ)</strong> — average taxonomic distance between two randomly chosen individuals, weighted by abundance</li>
+<li>
+<strong>Delta* (Δ*)</strong> — same as Delta but excluding same-species pairs, isolating the pure taxonomic component</li>
+<li>
+<strong>AvTD (Δ+)</strong> — average taxonomic distinctness based on presence/absence only. Because it does not depend on abundance, AvTD is <strong>independent of sample size</strong>, making it ideal for comparing datasets collected with different sampling efforts</li>
+<li>
+<strong>VarTD (Λ+)</strong> — the variance in taxonomic path lengths. High VarTD indicates an uneven taxonomic tree (some branches are deep, others shallow)</li>
+</ul>
+<p>To assess whether an observed AvTD or VarTD value is statistically significant, <code><a href="reference/simulate_td.html">simulate_td()</a></code> draws random subsets of species from a master species pool and computes expected distributions. <code><a href="reference/plot_funnel.html">plot_funnel()</a></code> then plots these as <strong>95% confidence funnels</strong> — if a community falls below the funnel, its taxonomic diversity is significantly lower than expected by chance.</p>
 </div>
 </div>
 <div class="section level2">

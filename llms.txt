@@ -164,38 +164,80 @@ entropy \> 0, matching the Excel macro’s Run 3 behavior.
 
 ## Theoretical Background
 
+### The Problem: Why Species Counts Are Not Enough
+
+Consider two forest plots, each containing 10 species. In the first
+plot, all 10 species belong to the same genus. In the second, they span
+5 families across 3 orders. Standard indices like Shannon and Simpson
+would assign identical diversity scores to both — yet the second
+community is clearly more diverse in an evolutionary and functional
+sense. **Taxonomic diversity indices solve this problem by incorporating
+the hierarchical relationships among species.**
+
 ### Ozkan pTO Method
 
-The Ozkan (2018) method applies **Deng entropy** — a generalization of
-Shannon entropy based on Dempster-Shafer evidence theory — to taxonomic
-hierarchy data.
+Ozkan (2018) introduced a method that uses **Deng entropy** — a
+generalization of Shannon entropy rooted in Dempster-Shafer evidence
+theory — to measure how species are distributed across a taxonomic
+hierarchy.
 
-At each taxonomic level *k*, Deng entropy *Ed(k)* quantifies how evenly
-species are distributed across higher-level groups (genera, families,
-etc.). The product of these level-wise entropies yields **taxonomic
-diversity** (pTO), while the product including the species-level Shannon
-entropy yields **taxonomic distance** (pTO+).
+The method works in three stages:
 
-A **slicing procedure** progressively removes the least abundant
-species, recalculating at each step. The maximum value across all slices
-represents the community’s optimal taxonomic diversity. This stochastic
-resampling approach (Run 2) identifies “happy” and “unhappy” species —
-those whose removal decreases or increases diversity, respectively.
+**Run 1 — Deterministic calculation:** At each taxonomic level (genus,
+family, order, etc.), Deng entropy measures how evenly species are
+grouped. A level where all species fall into one group contributes zero
+entropy (no diversity), while a level where species are spread evenly
+across many groups contributes high entropy. The product of these
+level-wise entropies gives **pTO** (taxonomic diversity). When
+species-level Shannon entropy is also included in the product, the
+result is **pTO+** (taxonomic distance), which captures both taxonomic
+structure and within-community evenness.
+
+**Run 2 — Stochastic resampling (slicing):** Species are removed one at
+a time, starting with the least abundant. After each removal, all
+indices are recalculated. This reveals each species’ contribution to
+overall diversity: removing a “happy” species decreases diversity (it
+was contributing positively), while removing an “unhappy” species
+increases diversity (it was redundant in the taxonomic structure). The
+maximum pTO value across all slicing steps represents the community’s
+optimal taxonomic organization.
+
+**Run 3 — Max-informative level variants:** Some taxonomic levels may
+carry no information (e.g., when all species share the same order, Deng
+entropy at that level is zero). Run 3 repeats the calculations using
+only the levels where Deng entropy is greater than zero, producing the
+`_max` variants of each index.
+
+This three-stage pipeline yields **8 complementary indices**: `uTO`,
+`TO`, `uTO_plus`, `TO_plus`, and their `_max` counterparts.
 
 ### Clarke & Warwick Taxonomic Distinctness
 
-Average Taxonomic Distinctness (AvTD/Delta+) measures the average path
-length through the taxonomic tree between all species pairs. It is
-independent of sample size, making it suitable for comparing studies
-with unequal sampling effort.
+Clarke & Warwick (1995, 1998, 2001) proposed a family of indices based
+on the **pairwise taxonomic path length** between species in a
+classification tree.
 
-Variation in Taxonomic Distinctness (VarTD/Lambda+) measures the
-variance in these path lengths. Together with
+- **Delta (Δ)** — average taxonomic distance between two randomly chosen
+  individuals, weighted by abundance
+- **Delta\* (Δ\*)** — same as Delta but excluding same-species pairs,
+  isolating the pure taxonomic component
+- **AvTD (Δ+)** — average taxonomic distinctness based on
+  presence/absence only. Because it does not depend on abundance, AvTD
+  is **independent of sample size**, making it ideal for comparing
+  datasets collected with different sampling efforts
+- **VarTD (Λ+)** — the variance in taxonomic path lengths. High VarTD
+  indicates an uneven taxonomic tree (some branches are deep, others
+  shallow)
+
+To assess whether an observed AvTD or VarTD value is statistically
+significant,
 [`simulate_td()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/simulate_td.md)
-and
-[`plot_funnel()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/plot_funnel.md),
-taxdiv provides simulation-based 95% confidence funnels for statistical
-significance testing.
+draws random subsets of species from a master species pool and computes
+expected distributions.
+[`plot_funnel()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/plot_funnel.md)
+then plots these as **95% confidence funnels** — if a community falls
+below the funnel, its taxonomic diversity is significantly lower than
+expected by chance.
 
 ## References
 
