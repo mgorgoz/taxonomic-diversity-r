@@ -1,0 +1,224 @@
+---
+title: "Complete Workflow: From Data to Results"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Complete Workflow: From Data to Results}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 8,
+  fig.height = 5
+)
+```
+
+## From Raw Data to Publication-Ready Results
+
+This guide walks through a complete analysis workflow using taxdiv --- from
+preparing your data to interpreting and exporting results. By the end, you
+will have computed all 14 diversity indices, generated diagnostic plots, and
+saved results to a file.
+
+```{r setup}
+library(taxdiv)
+```
+
+## Step 1: Prepare Your Data
+
+taxdiv needs two inputs:
+
+1. **Community data** --- a named numeric vector (single site) or a data frame
+   with a `Site` column (multiple sites)
+2. **Taxonomic tree** --- a data frame with `Species` and at least one
+   higher-level column (Genus, Family, Order, etc.)
+
+### Single community (named vector)
+
+```{r single_site}
+community <- c(
+  Quercus_coccifera    = 25,
+  Quercus_infectoria   = 18,
+  Pinus_brutia         = 30,
+  Pinus_nigra          = 12,
+  Juniperus_excelsa    = 8,
+  Juniperus_oxycedrus  = 6,
+  Arbutus_andrachne    = 15,
+  Styrax_officinalis   = 4,
+  Cercis_siliquastrum  = 3,
+  Olea_europaea        = 10
+)
+```
+
+### Taxonomic tree
+
+Use `build_tax_tree()` to create a properly structured tree. Column order
+defines the hierarchy --- species-level first, then progressively higher ranks:
+
+```{r tree}
+tax_tree <- build_tax_tree(
+  species = names(community),
+  Genus   = c("Quercus", "Quercus", "Pinus", "Pinus",
+              "Juniperus", "Juniperus", "Arbutus", "Styrax",
+              "Cercis", "Olea"),
+  Family  = c("Fagaceae", "Fagaceae", "Pinaceae", "Pinaceae",
+              "Cupressaceae", "Cupressaceae", "Ericaceae", "Styracaceae",
+              "Fabaceae", "Oleaceae"),
+  Order   = c("Fagales", "Fagales", "Pinales", "Pinales",
+              "Pinales", "Pinales", "Ericales", "Ericales",
+              "Fabales", "Lamiales")
+)
+
+tax_tree
+```
+
+### Multiple sites (data frame)
+
+For multi-site analysis, your data should look like this:
+
+```{r multi_site}
+multi_data <- data.frame(
+  Site = rep(c("Forest_A", "Forest_B"), each = 5),
+  Species = c("Quercus_coccifera", "Pinus_brutia", "Juniperus_excelsa",
+              "Arbutus_andrachne", "Olea_europaea",
+              "Quercus_coccifera", "Quercus_infectoria", "Pinus_brutia",
+              "Pinus_nigra", "Cercis_siliquastrum"),
+  Abundance = c(25, 30, 8, 15, 10,
+                40, 20, 15, 10, 5),
+  Genus = c("Quercus", "Pinus", "Juniperus", "Arbutus", "Olea",
+            "Quercus", "Quercus", "Pinus", "Pinus", "Cercis"),
+  Family = c("Fagaceae", "Pinaceae", "Cupressaceae", "Ericaceae", "Oleaceae",
+             "Fagaceae", "Fagaceae", "Pinaceae", "Pinaceae", "Fabaceae"),
+  Order = c("Fagales", "Pinales", "Pinales", "Ericales", "Lamiales",
+            "Fagales", "Fagales", "Pinales", "Pinales", "Fabales")
+)
+
+head(multi_data)
+```
+
+## Step 2: Compute All Indices at Once
+
+### Single community --- `compare_indices()`
+
+```{r single_compare}
+results <- compare_indices(community, tax_tree)
+results
+```
+
+This returns all 14 indices: Shannon, Simpson, Delta, Delta*, AvTD, VarTD,
+and the 8 Ozkan pTO indices (uTO, TO, uTO+, TO+, and their max variants).
+
+### Multiple sites --- `batch_analysis()`
+
+```{r batch}
+batch_results <- batch_analysis(multi_data)
+batch_results
+```
+
+`batch_analysis()` automatically detects the `Site`, `Species`, and
+`Abundance` columns and computes all indices for each site. You can also
+use `summary()` to see statistics across sites:
+
+```{r batch_summary}
+summary(batch_results)
+```
+
+## Step 3: Run the Full Ozkan Pipeline
+
+For deeper analysis, the full three-run pipeline reveals species-level
+contributions to diversity:
+
+```{r full_pipeline}
+full <- ozkan_pto_full(community, tax_tree, n_iter = 101, seed = 42)
+
+cat("Run 1 (deterministic):\n")
+cat("  uTO+ =", round(full$run1$uTO_plus, 4), "\n")
+cat("  TO+  =", round(full$run1$TO_plus, 4), "\n\n")
+
+cat("Run 2 (stochastic maximum):\n")
+cat("  uTO+ =", round(full$run2$uTO_plus_max, 4), "\n")
+cat("  TO+  =", round(full$run2$TO_plus_max, 4), "\n\n")
+
+cat("Run 3 (sensitivity maximum):\n")
+cat("  uTO+ =", round(full$run3$uTO_plus_max, 4), "\n")
+cat("  TO+  =", round(full$run3$TO_plus_max, 4), "\n")
+```
+
+## Step 4: Visualize Results
+
+### Compare communities side by side
+
+```{r compare_plot, fig.width=10, fig.height=6, fig.alt="Bar chart comparing diversity indices between intact and degraded forest communities"}
+degraded <- c(
+  Quercus_coccifera   = 40,
+  Pinus_brutia        = 35,
+  Juniperus_oxycedrus = 10
+)
+tax_degraded <- tax_tree[tax_tree$Species %in% names(degraded), ]
+
+communities <- list(
+  "Intact Forest" = community,
+  "Degraded"      = degraded
+)
+
+comp <- compare_indices(communities, tax_tree, plot = TRUE)
+comp$plot
+```
+
+### Inspect the taxonomic tree
+
+```{r tree_plot, fig.width=9, fig.height=5.5, fig.alt="Dendrogram showing community taxonomic structure colored by family"}
+plot_taxonomic_tree(tax_tree, community = community,
+                    color_by = "Family",
+                    title = "Community Taxonomic Structure")
+```
+
+### Rarefaction curve
+
+```{r rarefaction, fig.width=8, fig.height=5, fig.alt="Shannon rarefaction curve with bootstrap confidence interval"}
+rare <- rarefaction_taxonomic(community, tax_tree,
+                               index = "shannon",
+                               steps = 10, n_boot = 50, seed = 42)
+plot_rarefaction(rare)
+```
+
+## Step 5: Export Results
+
+### Save to CSV
+
+```{r export_csv, eval=FALSE}
+# Single community
+df <- as.data.frame(t(compare_indices(community, tax_tree)$table))
+write.csv(df, "results.csv", row.names = FALSE)
+
+# Multi-site batch
+write.csv(as.data.frame(batch_results$results),
+          "batch_results.csv", row.names = FALSE)
+```
+
+### Save to Excel
+
+```{r export_xlsx, eval=FALSE}
+# Requires writexl package
+# install.packages("writexl")
+writexl::write_xlsx(as.data.frame(batch_results$results),
+                    "batch_results.xlsx")
+```
+
+## Quick Reference: Which Function to Use?
+
+| I want to... | Function |
+|--------------|----------|
+| Compute Shannon/Simpson | `shannon()`, `simpson()` |
+| Compute all 14 indices for one community | `compare_indices()` |
+| Compute all indices for many sites | `batch_analysis()` |
+| Run the full Ozkan pipeline (Run 1+2+3) | `ozkan_pto_full()` |
+| Test if AvTD/VarTD is significant | `simulate_td()` + `plot_funnel()` |
+| Check if sampling effort is sufficient | `rarefaction_taxonomic()` + `plot_rarefaction()` |
+| Compare two or more communities visually | `compare_indices(plot=TRUE)` or `plot_radar()` |
+| See species contributions | `plot_bubble()` |
+| View the taxonomic hierarchy | `plot_taxonomic_tree()` |
+| Create a taxonomic tree from species data | `build_tax_tree()` |

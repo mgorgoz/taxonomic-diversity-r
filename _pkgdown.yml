@@ -5,77 +5,152 @@ template:
   bootswatch: cosmo
   bslib:
     primary: "#2c6e49"
+    border-radius: 0.5rem
+    btn-border-radius: 0.25rem
+  includes:
+    in_header: |
+      <meta name="google-site-verification" content="" />
+
+home:
+  title: "taxdiv — Taxonomic Diversity Indices for R"
+  description: >
+    An R package for computing taxonomic diversity indices from ecological
+    community data using Deng entropy and Clarke & Warwick frameworks.
+  sidebar:
+    structure: [links, license, community, citation, authors, dev]
+    components:
+      links:
+        title: Links
+        text: |
+          - [Report a bug](https://github.com/mgorgoz/taxonomic-diversity-r/issues/new?template=bug_report.md)
+          - [Request a feature](https://github.com/mgorgoz/taxonomic-diversity-r/issues/new?template=feature_request.md)
+          - [Ask a question](https://github.com/mgorgoz/taxonomic-diversity-r/discussions)
 
 development:
   mode: auto
 
 navbar:
+  bg: dark
   structure:
-    left: [intro, reference, articles]
+    left: [intro, reference, articles, news]
     right: [search, github]
   components:
+    intro:
+      text: Get Started
+      href: articles/introduction.html
+    articles:
+      text: Articles
+      menu:
+        - text: "Getting Started"
+        - text: "Introduction to taxdiv"
+          href: articles/introduction.html
+        - text: "Complete Workflow"
+          href: articles/workflow.html
+        - text: "---"
+        - text: "Methods & Theory"
+        - text: "Classical Indices (Shannon & Simpson)"
+          href: articles/classical-indices.html
+        - text: "Clarke & Warwick Taxonomic Distinctness"
+          href: articles/clarke-warwick.html
+        - text: "Ozkan pTO Method"
+          href: articles/ozkan-pto.html
+        - text: "---"
+        - text: "Visualization Guide"
+          href: articles/visualization.html
+        - text: "---"
+        - text: "Turkce Rehber"
+          href: articles/giris_rehberi.html
+        - text: "---"
+        - text: "All articles"
+          href: articles/index.html
+    news:
+      text: Changelog
+      href: news/index.html
     github:
       icon: fa-github
       href: https://github.com/mgorgoz/taxonomic-diversity-r
       aria-label: GitHub
 
+footer:
+  structure:
+    left: developed_by
+    right: built_with
+  components:
+    developed_by: >
+      Developed by [Gorgoz MM](https://github.com/mgorgoz),
+      Negiz MG & Ozkan K — Isparta University of Applied Sciences.
+
 reference:
-  - title: "Classical Diversity Indices"
+  - title: "Quick Start"
+    icon: fa-rocket
     desc: >
-      Standard diversity indices widely used in ecology.
-      Shannon-Wiener (Shannon, 1948) and Simpson (Simpson, 1949) indices.
+      Start here. These two functions handle multi-site batch processing and
+      multi-community comparison — the fastest way to get results from your data.
+    contents:
+      - batch_analysis
+      - compare_indices
+
+  - title: "Classical Diversity Indices"
+    icon: fa-calculator
+    desc: >
+      Shannon-Wiener (H') and Gini-Simpson indices — the most widely used
+      diversity measures in ecology. Shannon includes three bias correction
+      methods: Miller-Madow, Grassberger, and Chao-Shen.
     contents:
       - shannon
       - simpson
 
   - title: "Clarke & Warwick Taxonomic Distinctness"
+    icon: fa-sitemap
     desc: >
-      Path-length-based taxonomic distinctness measures following
-      Warwick & Clarke (1995) and Clarke & Warwick (1998, 1999, 2001).
+      Path-length-based taxonomic distinctness measures.
+      Delta and Delta* are abundance-weighted; AvTD and VarTD are
+      presence/absence-based and sample-size independent.
     contents:
       - delta
       - delta_star
       - avtd
       - vartd
 
-  - title: "Ozkan pTO Method"
+  - title: "Ozkan pTO — Core Functions"
+    icon: fa-leaf
     desc: >
-      Deng entropy-based taxonomic diversity indices
-      (Ozkan, 2018; Deng, 2016; Dempster, 1967; Shafer, 1976).
+      Deng entropy-based taxonomic diversity following Ozkan (2018).
+      Produces 8 complementary indices (uTO, TO, uTO+, TO+ and their
+      max-informative-level variants).
     contents:
       - ozkan_pto
       - pto_components
       - deng_entropy_level
 
-  - title: "Ozkan pTO Pipeline"
+  - title: "Ozkan pTO — Full Pipeline"
+    icon: fa-cogs
     desc: >
-      Stochastic resampling, jackknife estimation, sensitivity analysis,
-      and the full three-run pipeline for Ozkan pTO.
+      The complete three-run pipeline: deterministic calculation (Run 1),
+      stochastic resampling with slicing (Run 2), max-informative levels (Run 3),
+      plus jackknife and sensitivity analysis.
     contents:
-      - ozkan_pto_jackknife
+      - ozkan_pto_full
       - ozkan_pto_resample
       - ozkan_pto_sensitivity
-      - ozkan_pto_full
+      - ozkan_pto_jackknife
 
-  - title: "Batch Analysis & Comparison"
+  - title: "Simulation & Significance Testing"
+    icon: fa-chart-area
     desc: >
-      Multi-site batch processing and multi-community index comparison.
-      Computes species count and 14 diversity indices per site/community.
-    contents:
-      - batch_analysis
-      - compare_indices
-
-  - title: "Simulation & Rarefaction"
-    desc: >
-      Funnel plot simulation for expected index distributions and
-      sample-based rarefaction curves with bootstrap confidence intervals.
+      Random subsampling from a master species pool to generate expected
+      distributions of AvTD and VarTD. Use with plot_funnel() for 95%
+      confidence funnels and statistical significance testing.
     contents:
       - simulate_td
       - rarefaction_taxonomic
 
   - title: "Visualization"
+    icon: fa-chart-bar
     desc: >
-      Seven specialized plot types for taxonomic diversity analysis.
+      Seven ggplot2-based plot types covering significance testing,
+      rarefaction, resampling trajectories, community comparison,
+      similarity patterns, composition, and taxonomic structure.
     contents:
       - plot_funnel
       - plot_rarefaction
@@ -85,17 +160,22 @@ reference:
       - plot_bubble
       - plot_taxonomic_tree
 
-  - title: "Utility Functions"
+  - title: "Taxonomic Tree & Distance"
+    icon: fa-tree
     desc: >
-      Helper functions for taxonomic tree construction and
-      pairwise taxonomic distance computation.
+      Build taxonomic classification trees from species-level data and
+      compute pairwise taxonomic distance matrices used by Clarke & Warwick
+      and Ozkan pTO methods.
     contents:
       - build_tax_tree
       - tax_distance_matrix
 
-  - title: "Datasets"
+  - title: "Example Datasets"
+    icon: fa-database
     desc: >
-      Example ecological community datasets for demonstrations.
+      Ready-to-use ecological community datasets from Mediterranean forest
+      ecosystems in Anatolia, Turkey. Includes abundance data and full
+      taxonomic classifications.
     contents:
       - anatolian_trees
       - gazi_comm
@@ -103,10 +183,26 @@ reference:
 
 articles:
   - title: "Getting Started"
-    navbar: "Getting Started"
+    desc: Start here for a quick overview of what taxdiv can do.
     contents:
       - introduction
+      - workflow
+
+  - title: "Methods & Theory"
+    desc: >
+      In-depth guides explaining the diversity indices, their mathematical
+      foundations, and when to use each one.
+    contents:
+      - classical-indices
+      - clarke-warwick
+      - ozkan-pto
+
+  - title: "Visualization"
+    desc: How to visualize and interpret your results.
+    contents:
+      - visualization
+
   - title: "Turkce Rehber"
-    navbar: ~
+    desc: Turkish language guide for Turkish-speaking researchers.
     contents:
       - giris_rehberi
