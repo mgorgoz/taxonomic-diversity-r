@@ -1,6 +1,6 @@
 # MIT License
 
-Copyright (c) 2026 Murat Görgöz
+Copyright (c) 2026 Muhammet Murat Gorgoz, Mehmet Guvenc Negiz, Kursad Ozkan
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
