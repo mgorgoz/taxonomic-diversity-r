@@ -65,7 +65,7 @@ batch_analysis(
 - n_cores:
 
   Number of CPU cores to use when `parallel = TRUE`. Default `NULL` uses
-  `parallel::detectCores() - 1`.
+  up to 2 cores (CRAN policy limit).
 
 ## Value
 
