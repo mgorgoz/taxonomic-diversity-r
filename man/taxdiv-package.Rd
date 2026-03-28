@@ -22,8 +22,8 @@ Useful links:
 
 Authors:
 \itemize{
-  \item Mehmet Guvenc Negiz
-  \item Kursad Ozkan
+  \item Kursad Ozkan (\href{https://orcid.org/0000-0002-8526-7243}{ORCID})
+  \item Mehmet Guvenc Negiz (\href{https://orcid.org/0009-0008-1507-8712}{ORCID})
 }
 
 }
