@@ -48,7 +48,7 @@
 #' @param parallel Logical. If `TRUE`, use parallel processing to compute
 #'   indices for multiple sites concurrently. Default `FALSE`.
 #' @param n_cores Number of CPU cores to use when `parallel = TRUE`. Default
-#'   `NULL` uses `parallel::detectCores() - 1`.
+#'   `NULL` uses up to 2 cores (CRAN policy limit).
 #'
 #' @return A data frame with one row per site and columns:
 #'   \code{Site}, \code{N_Species}, \code{Shannon}, \code{Simpson}, \code{Delta},
@@ -264,7 +264,7 @@ batch_analysis <- function(data,
   site_names <- names(site_list)
 
   if (isTRUE(parallel) && length(site_names) > 1) {
-    n_cores_use <- if (is.null(n_cores)) max(1L, parallel::detectCores() - 1L) else max(1L, as.integer(n_cores))
+    n_cores_use <- if (is.null(n_cores)) min(2L, parallel::detectCores()) else max(1L, as.integer(n_cores))
 
     if (.Platform$OS.type == "windows") {
       cl <- parallel::makeCluster(n_cores_use)

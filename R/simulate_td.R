@@ -23,7 +23,7 @@
 #' @param parallel Logical. If `TRUE`, use parallel processing to speed up
 #'   simulations. Default `FALSE`.
 #' @param n_cores Number of CPU cores to use when `parallel = TRUE`. Default
-#'   `NULL` uses `parallel::detectCores() - 1`.
+#'   `NULL` uses up to 2 cores (CRAN policy limit).
 #'
 #' @return A data frame with class `"td_simulation"` containing
 #'   columns:
@@ -157,7 +157,7 @@ simulate_td <- function(tax_tree,
 
   # --- Run: parallel or sequential ---
   if (isTRUE(parallel)) {
-    n_cores <- if (is.null(n_cores)) max(1L, parallel::detectCores() - 1L) else as.integer(n_cores)
+    n_cores <- if (is.null(n_cores)) min(2L, parallel::detectCores()) else as.integer(n_cores)
     n_cores <- max(1L, n_cores)
 
     if (.Platform$OS.type == "windows") {

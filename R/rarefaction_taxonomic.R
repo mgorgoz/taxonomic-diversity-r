@@ -23,7 +23,7 @@
 #' @param parallel Logical. If `TRUE`, use parallel processing to speed up
 #'   bootstrap resampling across sample sizes. Default `FALSE`.
 #' @param n_cores Number of CPU cores to use when `parallel = TRUE`. Default
-#'   `NULL` uses `parallel::detectCores() - 1`.
+#'   `NULL` uses up to 2 cores (CRAN policy limit).
 #'
 #' @return A data frame with columns:
 #'   \describe{
@@ -186,7 +186,7 @@ rarefaction_taxonomic <- function(community, tax_tree,
 
   # --- Run: parallel or sequential ---
   if (isTRUE(parallel)) {
-    n_cores_use <- if (is.null(n_cores)) max(1L, parallel::detectCores() - 1L) else max(1L, as.integer(n_cores))
+    n_cores_use <- if (is.null(n_cores)) min(2L, parallel::detectCores()) else max(1L, as.integer(n_cores))
 
     if (.Platform$OS.type == "windows") {
       cl <- parallel::makeCluster(n_cores_use)

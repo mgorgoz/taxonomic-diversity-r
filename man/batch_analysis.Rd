@@ -42,7 +42,7 @@ abundance column. Default is \code{"Abundance"} (case-insensitive match).}
 indices for multiple sites concurrently. Default \code{FALSE}.}
 
 \item{n_cores}{Number of CPU cores to use when \code{parallel = TRUE}. Default
-\code{NULL} uses \code{parallel::detectCores() - 1}.}
+\code{NULL} uses up to 2 cores (CRAN policy limit).}
 }
 \value{
 A data frame with one row per site and columns:

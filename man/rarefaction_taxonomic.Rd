@@ -45,7 +45,7 @@ is species names, subsequent columns are taxonomic ranks.}
 bootstrap resampling across sample sizes. Default \code{FALSE}.}
 
 \item{n_cores}{Number of CPU cores to use when \code{parallel = TRUE}. Default
-\code{NULL} uses \code{parallel::detectCores() - 1}.}
+\code{NULL} uses up to 2 cores (CRAN policy limit).}
 }
 \value{
 A data frame with columns:
