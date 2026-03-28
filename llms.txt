@@ -343,7 +343,7 @@ or open a blank issue.
 citation("taxdiv")
 ```
 
-    Gorgoz MM, Negiz MG, Ozkan K (2026). taxdiv: Taxonomic Diversity Indices
+    Ozkan K, Negiz MG, Gorgoz MM (2026). taxdiv: Taxonomic Diversity Indices
     Using Deng Entropy. R package version 0.1.0.
     https://github.com/mgorgoz/taxonomic-diversity-r
 

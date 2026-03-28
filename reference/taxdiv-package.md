@@ -26,6 +26,6 @@ Useful links:
 
 Authors:
 
-- Mehmet Guvenc Negiz
+- Kursad Ozkan ([ORCID](https://orcid.org/0000-0002-8526-7243))
 
-- Kursad Ozkan
+- Mehmet Guvenc Negiz ([ORCID](https://orcid.org/0009-0008-1507-8712))
