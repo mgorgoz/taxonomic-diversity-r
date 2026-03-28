@@ -6,8 +6,9 @@
   [](https://orcid.org/0000-0002-6398-0005)
 
 - **Mehmet Guvenc Negiz**. Author.
+  [](https://orcid.org/0009-0008-1507-8712)
 
-- **Kursad Ozkan**. Author.
+- **Kursad Ozkan**. Author. [](https://orcid.org/0000-0002-8526-7243)
 
 ## Citation
 

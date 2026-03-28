@@ -1,9 +1,21 @@
 # Package index
 
+## Quick Start
+
+Start here. These two functions handle multi-site batch processing and
+multi-community comparison — the fastest way to get results from your
+data.
+
+- [`batch_analysis()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/batch_analysis.md)
+  : Batch Analysis from a Single Data Frame
+- [`compare_indices()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/compare_indices.md)
+  : Compare All Diversity Indices Side by Side
+
 ## Classical Diversity Indices
 
-Standard diversity indices widely used in ecology. Shannon-Wiener
-(Shannon, 1948) and Simpson (Simpson, 1949) indices.
+Shannon-Wiener (H’) and Gini-Simpson indices — the most widely used
+diversity measures in ecology. Shannon includes three bias correction
+methods: Miller-Madow, Grassberger, and Chao-Shen.
 
 - [`shannon()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/shannon.md)
   : Shannon Diversity Index
@@ -12,8 +24,9 @@ Standard diversity indices widely used in ecology. Shannon-Wiener
 
 ## Clarke & Warwick Taxonomic Distinctness
 
-Path-length-based taxonomic distinctness measures following Warwick &
-Clarke (1995) and Clarke & Warwick (1998, 1999, 2001).
+Path-length-based taxonomic distinctness measures. Delta and Delta\* are
+abundance-weighted; AvTD and VarTD are presence/absence-based and
+sample-size independent.
 
 - [`delta()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/delta.md)
   : Taxonomic Diversity Index (Delta)
@@ -24,10 +37,11 @@ Clarke (1995) and Clarke & Warwick (1998, 1999, 2001).
 - [`vartd()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/vartd.md)
   : Variation in Taxonomic Distinctness (Lambda+)
 
-## Ozkan pTO Method
+## Ozkan pTO — Core Functions
 
-Deng entropy-based taxonomic diversity indices (Ozkan, 2018; Deng, 2016;
-Dempster, 1967; Shafer, 1976).
+Deng entropy-based taxonomic diversity following Ozkan (2018). Produces
+8 complementary indices (uTO, TO, uTO+, TO+ and their
+max-informative-level variants).
 
 - [`ozkan_pto()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/ozkan_pto.md)
   : Calculate Ozkan's Taxonomic Diversity Index (pTO)
@@ -36,34 +50,26 @@ Dempster, 1967; Shafer, 1976).
 - [`deng_entropy_level()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/deng_entropy_level.md)
   : Calculate Deng Entropy at a Single Taxonomic Level
 
-## Ozkan pTO Pipeline
+## Ozkan pTO — Full Pipeline
 
-Stochastic resampling, jackknife estimation, sensitivity analysis, and
-the full three-run pipeline for Ozkan pTO.
+The complete three-run pipeline: deterministic calculation (Run 1),
+stochastic resampling with slicing (Run 2), max-informative levels (Run
+3), plus jackknife and sensitivity analysis.
 
-- [`ozkan_pto_jackknife()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/ozkan_pto_jackknife.md)
-  : Jackknife Analysis for Ozkan's pTO Index (Islem 1 / Run 1)
+- [`ozkan_pto_full()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/ozkan_pto_full.md)
+  : Full Ozkan pTO Pipeline (Islem 1 + 2 + 3)
 - [`ozkan_pto_resample()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/ozkan_pto_resample.md)
   : Stochastic Resampling of Ozkan's pTO Index (Islem 2 / Run 2)
 - [`ozkan_pto_sensitivity()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/ozkan_pto_sensitivity.md)
   : Sensitivity Analysis of Ozkan's pTO Index (Islem 3 / Run 3)
-- [`ozkan_pto_full()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/ozkan_pto_full.md)
-  : Full Ozkan pTO Pipeline (Islem 1 + 2 + 3)
+- [`ozkan_pto_jackknife()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/ozkan_pto_jackknife.md)
+  : Jackknife Analysis for Ozkan's pTO Index (Islem 1 / Run 1)
 
-## Batch Analysis & Comparison
+## Simulation & Significance Testing
 
-Multi-site batch processing and multi-community index comparison.
-Computes species count and 14 diversity indices per site/community.
-
-- [`batch_analysis()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/batch_analysis.md)
-  : Batch Analysis from a Single Data Frame
-- [`compare_indices()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/compare_indices.md)
-  : Compare All Diversity Indices Side by Side
-
-## Simulation & Rarefaction
-
-Funnel plot simulation for expected index distributions and sample-based
-rarefaction curves with bootstrap confidence intervals.
+Random subsampling from a master species pool to generate expected
+distributions of AvTD and VarTD. Use with plot_funnel() for 95%
+confidence funnels and statistical significance testing.
 
 - [`simulate_td()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/simulate_td.md)
   : Simulate Expected AvTD/VarTD Under Random Sampling
@@ -72,7 +78,9 @@ rarefaction curves with bootstrap confidence intervals.
 
 ## Visualization
 
-Seven specialized plot types for taxonomic diversity analysis.
+Seven ggplot2-based plot types covering significance testing,
+rarefaction, resampling trajectories, community comparison, similarity
+patterns, composition, and taxonomic structure.
 
 - [`plot_funnel()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/plot_funnel.md)
   : Funnel Plot for AvTD/VarTD
@@ -89,19 +97,22 @@ Seven specialized plot types for taxonomic diversity analysis.
 - [`plot_taxonomic_tree()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/plot_taxonomic_tree.md)
   : Plot Taxonomic Tree as a Dendrogram
 
-## Utility Functions
+## Taxonomic Tree & Distance
 
-Helper functions for taxonomic tree construction and pairwise taxonomic
-distance computation.
+Build taxonomic classification trees from species-level data and compute
+pairwise taxonomic distance matrices used by Clarke & Warwick and Ozkan
+pTO methods.
 
 - [`build_tax_tree()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/build_tax_tree.md)
   : Build a Taxonomic Tree from Species Data
 - [`tax_distance_matrix()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/tax_distance_matrix.md)
   : Compute Taxonomic Distance Matrix
 
-## Datasets
+## Example Datasets
 
-Example ecological community datasets for demonstrations.
+Ready-to-use ecological community datasets from Mediterranean forest
+ecosystems in Anatolia, Turkey. Includes abundance data and full
+taxonomic classifications.
 
 - [`anatolian_trees`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/anatolian_trees.md)
   : Anatolian Forest Trees: Multi-Site Species Data

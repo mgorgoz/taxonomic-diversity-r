@@ -2,9 +2,14 @@ pandoc: 3.1.11
 pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
+  clarke-warwick: clarke-warwick.html
+  classical-indices: classical-indices.html
   giris_rehberi: giris_rehberi.html
   introduction: introduction.html
-last_built: 2026-03-28T15:48Z
+  ozkan-pto: ozkan-pto.html
+  visualization: visualization.html
+  workflow: workflow.html
+last_built: 2026-03-28T16:07Z
 urls:
   reference: https://mgorgoz.github.io/taxonomic-diversity-r/reference
   article: https://mgorgoz.github.io/taxonomic-diversity-r/articles
