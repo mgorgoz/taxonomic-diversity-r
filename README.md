@@ -297,20 +297,20 @@ diversity is significantly lower than expected by chance.
 
 | Metric | Value |
 |--------|-------|
-| R CMD check | 0 errors, 0 warnings, 0 notes |
+| R CMD check | 0 errors, 0 warnings, 1 note (new submission) |
 | Unit tests | 610 passing |
 | Exported functions | 26 |
 | S3 methods | 13 (print, summary, plot) |
 | R source files | 19 |
 | Test files | 12 |
 | Example datasets | 3 |
-| Vignettes | 2 (English + Turkish) |
+| Vignettes | 7 (6 English + 1 Turkish) |
 
 ## Roadmap
 
 - [x] pkgdown documentation website
+- [x] CRAN submission (under review)
 - [ ] JOSS paper submission
-- [ ] CRAN submission
 
 ## Contributing
 
