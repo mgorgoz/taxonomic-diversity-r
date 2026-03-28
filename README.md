@@ -6,7 +6,7 @@
 [![GitHub release](https://img.shields.io/github/v/release/mgorgoz/taxonomic-diversity-r?include_prereleases&label=version)](https://github.com/mgorgoz/taxonomic-diversity-r/releases)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 ![Tests](https://img.shields.io/badge/tests-610%20passing-brightgreen.svg)
-[![codecov](https://app.codecov.io/gh/mgorgoz/taxonomic-diversity-r/branch/main/graph/badge.svg)](https://app.codecov.io/gh/mgorgoz/taxonomic-diversity-r)
+[![codecov](https://codecov.io/gh/mgorgoz/taxonomic-diversity-r/graph/badge.svg?token=43b8b7e2-349a-41ad-b4f9-29b9d4862d19)](https://app.codecov.io/gh/mgorgoz/taxonomic-diversity-r)
 <!-- badges: end -->
 
 ## Overview
