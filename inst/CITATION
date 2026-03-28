@@ -2,9 +2,9 @@ bibentry(
   bibtype  = "Manual",
   title    = "taxdiv: Taxonomic Diversity Indices Using Deng Entropy",
   author   = c(
+    person("Muhammet Murat", "Gorgoz"),
     person("Kursad", "Ozkan"),
-    person("Mehmet Guvenc", "Negiz"),
-    person("Muhammet Murat", "Gorgoz")
+    person("Mehmet Guvenc", "Negiz")
   ),
   year     = "2026",
   note     = "R package version 0.1.0",
