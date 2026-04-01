@@ -2,6 +2,8 @@
 
 ## taxdiv 0.1.0
 
+CRAN release: 2026-04-01
+
 Initial release of taxdiv — taxonomic diversity indices using Deng
 entropy.
 

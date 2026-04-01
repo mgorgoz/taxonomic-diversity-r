@@ -301,22 +301,22 @@ expected by chance.
 
 ## Package Status
 
-| Metric             | Value                                         |
-|--------------------|-----------------------------------------------|
-| R CMD check        | 0 errors, 0 warnings, 1 note (new submission) |
-| Unit tests         | 610 passing                                   |
-| Exported functions | 26                                            |
-| S3 methods         | 13 (print, summary, plot)                     |
-| R source files     | 19                                            |
-| Test files         | 12                                            |
-| Example datasets   | 3                                             |
-| Vignettes          | 7 (6 English + 1 Turkish)                     |
+| Metric             | Value                         |
+|--------------------|-------------------------------|
+| R CMD check        | 0 errors, 0 warnings, 0 notes |
+| Unit tests         | 610 passing                   |
+| Exported functions | 26                            |
+| S3 methods         | 13 (print, summary, plot)     |
+| R source files     | 19                            |
+| Test files         | 12                            |
+| Example datasets   | 3                             |
+| Vignettes          | 7 (6 English + 1 Turkish)     |
 
 ## Roadmap
 
 pkgdown documentation website
 
-CRAN submission (under review)
+CRAN publication
 
 JOSS paper submission
 
