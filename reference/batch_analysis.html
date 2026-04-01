@@ -75,6 +75,9 @@ diversity indices per site.</p>
 <span>  tax_columns <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  abundance_column <span class="op">=</span> <span class="st">"Abundance"</span>,</span>
 <span>  correction <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span>, <span class="st">"miller_madow"</span>, <span class="st">"grassberger"</span>, <span class="st">"chao_shen"</span><span class="op">)</span>,</span>
+<span>  full <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  n_iter <span class="op">=</span> <span class="fl">101L</span>,</span>
+<span>  seed <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  parallel <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  n_cores <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -117,6 +120,23 @@ abundance column. Default is <code>"Abundance"</code> (case-insensitive match).<
 <code>"chao_shen"</code>. Passed to <code><a href="shannon.html">shannon()</a></code>. See <code><a href="shannon.html">shannon()</a></code> for details.</p></dd>
 
 
+<dt id="arg-full">full<a class="anchor" aria-label="anchor" href="#arg-full"></a></dt>
+<dd><p>Logical. If <code>TRUE</code>, run the full Ozkan pipeline (Run 1+2+3)
+using <code><a href="ozkan_pto_full.html">ozkan_pto_full()</a></code> instead of deterministic-only <code><a href="pto_components.html">pto_components()</a></code>.
+This produces max values across all three runs, matching the Excel macro
+output. Default <code>FALSE</code> (deterministic Run 1 only, faster).</p></dd>
+
+
+<dt id="arg-n-iter">n_iter<a class="anchor" aria-label="anchor" href="#arg-n-iter"></a></dt>
+<dd><p>Number of stochastic iterations for Run 2 and Run 3 when
+<code>full = TRUE</code>. Default <code>101</code>. Ignored when <code>full = FALSE</code>.</p></dd>
+
+
+<dt id="arg-seed">seed<a class="anchor" aria-label="anchor" href="#arg-seed"></a></dt>
+<dd><p>Optional random seed for reproducibility when <code>full = TRUE</code>.
+Ignored when <code>full = FALSE</code>.</p></dd>
+
+
 <dt id="arg-parallel">parallel<a class="anchor" aria-label="anchor" href="#arg-parallel"></a></dt>
 <dd><p>Logical. If <code>TRUE</code>, use parallel processing to compute
 indices for multiple sites concurrently. Default <code>FALSE</code>.</p></dd>
@@ -133,7 +153,8 @@ indices for multiple sites concurrently. Default <code>FALSE</code>.</p></dd>
 <code>Site</code>, <code>N_Species</code>, <code>Shannon</code>, <code>Simpson</code>, <code>Delta</code>,
 <code>Delta_star</code>, <code>AvTD</code>, <code>VarTD</code>, <code>uTO</code>, <code>TO</code>,
 <code>uTO_plus</code>, <code>TO_plus</code>, <code>uTO_max</code>, <code>TO_max</code>,
-<code>uTO_plus_max</code>, <code>TO_plus_max</code>.</p>
+<code>uTO_plus_max</code>, <code>TO_plus_max</code>. When <code>full = TRUE</code>, the max
+columns reflect the maximum across Run 1, 2, and 3.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -157,7 +178,8 @@ data set is treated as a single community.</p>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><code><a href="compare_indices.html">compare_indices</a></code> for analysis with pre-built community
-vectors, <code><a href="build_tax_tree.html">build_tax_tree</a></code> for building taxonomic trees manually.</p></div>
+vectors, <code><a href="build_tax_tree.html">build_tax_tree</a></code> for building taxonomic trees manually,
+<code><a href="ozkan_pto_full.html">ozkan_pto_full</a></code> for the full 3-run pipeline on a single community.</p></div>
     </div>
 
     <div class="section level2">
@@ -202,6 +224,19 @@ vectors, <code><a href="build_tax_tree.html">build_tax_tree</a></code> for build
 <span class="r-out co"><span class="r-pr">#&gt;</span>       uTO       TO uTO_plus  TO_plus  uTO_max   TO_max uTO_plus_max TO_plus_max</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  2.442117 3.132154 2.577008 3.270155 2.442117 3.132154     2.577008    3.270155</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  2.804266 4.533563 3.767722 5.559482 2.804266 4.533563     3.767722    5.559482</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Full pipeline (Run 1+2+3, matches Excel macro output)</span></span></span>
+<span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="fu">batch_analysis</span><span class="op">(</span><span class="va">df</span>, full <span class="op">=</span> <span class="cn">TRUE</span>, n_iter <span class="op">=</span> <span class="fl">101</span>, seed <span class="op">=</span> <span class="fl">42</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> taxdiv -- Batch Analysis</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Sites: 1 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Indices: 14 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Site N_Species  Shannon Simpson    Delta Delta_star AvTD    VarTD      uTO</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   All         4 1.279854     0.7 1.326531   1.857143    2 0.666667 3.413215</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        TO uTO_plus  TO_plus  uTO_max   TO_max uTO_plus_max TO_plus_max</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  5.066836  4.04615 5.837909 3.413215 5.066836      4.04615    5.837909</span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

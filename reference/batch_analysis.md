@@ -15,6 +15,9 @@ batch_analysis(
   tax_columns = NULL,
   abundance_column = "Abundance",
   correction = c("none", "miller_madow", "grassberger", "chao_shen"),
+  full = FALSE,
+  n_iter = 101L,
+  seed = NULL,
   parallel = FALSE,
   n_cores = NULL
 )
@@ -57,6 +60,25 @@ batch_analysis(
   [`shannon()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/shannon.md)
   for details.
 
+- full:
+
+  Logical. If `TRUE`, run the full Ozkan pipeline (Run 1+2+3) using
+  [`ozkan_pto_full()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/ozkan_pto_full.md)
+  instead of deterministic-only
+  [`pto_components()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/pto_components.md).
+  This produces max values across all three runs, matching the Excel
+  macro output. Default `FALSE` (deterministic Run 1 only, faster).
+
+- n_iter:
+
+  Number of stochastic iterations for Run 2 and Run 3 when
+  `full = TRUE`. Default `101`. Ignored when `full = FALSE`.
+
+- seed:
+
+  Optional random seed for reproducibility when `full = TRUE`. Ignored
+  when `full = FALSE`.
+
 - parallel:
 
   Logical. If `TRUE`, use parallel processing to compute indices for
@@ -72,7 +94,8 @@ batch_analysis(
 A data frame with one row per site and columns: `Site`, `N_Species`,
 `Shannon`, `Simpson`, `Delta`, `Delta_star`, `AvTD`, `VarTD`, `uTO`,
 `TO`, `uTO_plus`, `TO_plus`, `uTO_max`, `TO_max`, `uTO_plus_max`,
-`TO_plus_max`.
+`TO_plus_max`. When `full = TRUE`, the max columns reflect the maximum
+across Run 1, 2, and 3.
 
 ## Details
 
@@ -121,7 +144,9 @@ The function calculates the following indices per site:
 [`compare_indices`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/compare_indices.md)
 for analysis with pre-built community vectors,
 [`build_tax_tree`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/build_tax_tree.md)
-for building taxonomic trees manually.
+for building taxonomic trees manually,
+[`ozkan_pto_full`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/ozkan_pto_full.md)
+for the full 3-run pipeline on a single community.
 
 ## Examples
 
@@ -166,4 +191,17 @@ batch_analysis(df2)
 #>       uTO       TO uTO_plus  TO_plus  uTO_max   TO_max uTO_plus_max TO_plus_max
 #>  2.442117 3.132154 2.577008 3.270155 2.442117 3.132154     2.577008    3.270155
 #>  2.804266 4.533563 3.767722 5.559482 2.804266 4.533563     3.767722    5.559482
+
+# Full pipeline (Run 1+2+3, matches Excel macro output)
+# \donttest{
+batch_analysis(df, full = TRUE, n_iter = 101, seed = 42)
+#> taxdiv -- Batch Analysis
+#>   Sites: 1 
+#>   Indices: 14 
+#> 
+#>  Site N_Species  Shannon Simpson    Delta Delta_star AvTD    VarTD      uTO
+#>   All         4 1.279854     0.7 1.326531   1.857143    2 0.666667 3.413215
+#>        TO uTO_plus  TO_plus  uTO_max   TO_max uTO_plus_max TO_plus_max
+#>  5.066836  4.04615 5.837909 3.413215 5.066836      4.04615    5.837909
+# }
 ```
