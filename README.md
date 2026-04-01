@@ -1,9 +1,10 @@
 # taxdiv
 
 <!-- badges: start -->
+[![CRAN status](https://www.r-pkg.org/badges/version/taxdiv)](https://CRAN.R-project.org/package=taxdiv)
+[![CRAN downloads](https://cranlogs.r-pkg.org/badges/grand-total/taxdiv)](https://CRAN.R-project.org/package=taxdiv)
 [![R-CMD-check](https://github.com/mgorgoz/taxonomic-diversity-r/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/mgorgoz/taxonomic-diversity-r/actions/workflows/R-CMD-check.yaml)
-[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-[![GitHub release](https://img.shields.io/github/v/release/mgorgoz/taxonomic-diversity-r?include_prereleases&label=version)](https://github.com/mgorgoz/taxonomic-diversity-r/releases)
+[![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 ![Tests](https://img.shields.io/badge/tests-610%20passing-brightgreen.svg)
 ![R Version](https://img.shields.io/badge/R%20%E2%89%A5%204.1.0-blue.svg)
@@ -297,7 +298,7 @@ diversity is significantly lower than expected by chance.
 
 | Metric | Value |
 |--------|-------|
-| R CMD check | 0 errors, 0 warnings, 1 note (new submission) |
+| R CMD check | 0 errors, 0 warnings, 0 notes |
 | Unit tests | 610 passing |
 | Exported functions | 26 |
 | S3 methods | 13 (print, summary, plot) |
@@ -309,7 +310,7 @@ diversity is significantly lower than expected by chance.
 ## Roadmap
 
 - [x] pkgdown documentation website
-- [x] CRAN submission (under review)
+- [x] CRAN publication
 - [ ] JOSS paper submission
 
 ## Contributing
