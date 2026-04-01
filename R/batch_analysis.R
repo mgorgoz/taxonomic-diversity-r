@@ -45,13 +45,15 @@
 #' @param correction Bias correction for the Shannon index. One of
 #'   `"none"` (default), `"miller_madow"`, `"grassberger"`, or
 #'   `"chao_shen"`. Passed to [shannon()]. See [shannon()] for details.
-#' @param full Logical. If `TRUE`, run the full Ozkan pipeline (Run 1+2+3)
-#'   using [ozkan_pto_full()] instead of deterministic-only [pto_components()].
-#'   This produces max values across all three runs, matching the Excel macro
-#'   output. Default `FALSE` (deterministic Run 1 only, faster).
+#' @param full Logical. If `TRUE` (default), run the full Ozkan pipeline
+#'   (Run 1+2+3) using [ozkan_pto_full()] instead of deterministic-only
+#'   [pto_components()]. This produces max values across all three runs,
+#'   matching the Excel macro output. Set to `FALSE` for deterministic
+#'   Run 1 only (faster but incomplete).
 #' @param n_iter Number of stochastic iterations for Run 2 and Run 3 when
 #'   `full = TRUE`. Default `101`. Ignored when `full = FALSE`.
-#' @param seed Optional random seed for reproducibility when `full = TRUE`.
+#' @param seed Random seed for reproducibility when `full = TRUE`.
+#'   Default `42`. Set to `NULL` for non-deterministic results.
 #'   Ignored when `full = FALSE`.
 #' @param parallel Logical. If `TRUE`, use parallel processing to compute
 #'   indices for multiple sites concurrently. Default `FALSE`.
@@ -66,7 +68,8 @@
 #'   columns reflect the maximum across Run 1, 2, and 3.
 #'
 #' @examples
-#' # Single-site data (no Site column)
+#' # Single-site data (no Site column) — full pipeline by default
+#' \donttest{
 #' df <- data.frame(
 #'   Species   = c("sp1", "sp2", "sp3", "sp4"),
 #'   Genus     = c("G1", "G1", "G2", "G2"),
@@ -89,9 +92,8 @@
 #' )
 #' batch_analysis(df2)
 #'
-#' # Full pipeline (Run 1+2+3, matches Excel macro output)
-#' \donttest{
-#' batch_analysis(df, full = TRUE, n_iter = 101, seed = 42)
+#' # Fast mode: deterministic Run 1 only (no stochastic runs)
+#' batch_analysis(df, full = FALSE)
 #' }
 #'
 #' @seealso \code{\link{compare_indices}} for analysis with pre-built community
@@ -105,9 +107,9 @@ batch_analysis <- function(data,
                            abundance_column = "Abundance",
                            correction = c("none", "miller_madow",
                                           "grassberger", "chao_shen"),
-                           full = FALSE,
+                           full = TRUE,
                            n_iter = 101L,
-                           seed = NULL,
+                           seed = 42L,
                            parallel = FALSE,
                            n_cores = NULL) {
   correction <- match.arg(correction)

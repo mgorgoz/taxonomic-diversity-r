@@ -10,9 +10,9 @@ batch_analysis(
   tax_columns = NULL,
   abundance_column = "Abundance",
   correction = c("none", "miller_madow", "grassberger", "chao_shen"),
-  full = FALSE,
+  full = TRUE,
   n_iter = 101L,
-  seed = NULL,
+  seed = 42L,
   parallel = FALSE,
   n_cores = NULL
 )
@@ -41,15 +41,17 @@ abundance column. Default is \code{"Abundance"} (case-insensitive match).}
 \code{"none"} (default), \code{"miller_madow"}, \code{"grassberger"}, or
 \code{"chao_shen"}. Passed to \code{\link[=shannon]{shannon()}}. See \code{\link[=shannon]{shannon()}} for details.}
 
-\item{full}{Logical. If \code{TRUE}, run the full Ozkan pipeline (Run 1+2+3)
-using \code{\link[=ozkan_pto_full]{ozkan_pto_full()}} instead of deterministic-only \code{\link[=pto_components]{pto_components()}}.
-This produces max values across all three runs, matching the Excel macro
-output. Default \code{FALSE} (deterministic Run 1 only, faster).}
+\item{full}{Logical. If \code{TRUE} (default), run the full Ozkan pipeline
+(Run 1+2+3) using \code{\link[=ozkan_pto_full]{ozkan_pto_full()}} instead of deterministic-only
+\code{\link[=pto_components]{pto_components()}}. This produces max values across all three runs,
+matching the Excel macro output. Set to \code{FALSE} for deterministic
+Run 1 only (faster but incomplete).}
 
 \item{n_iter}{Number of stochastic iterations for Run 2 and Run 3 when
 \code{full = TRUE}. Default \code{101}. Ignored when \code{full = FALSE}.}
 
-\item{seed}{Optional random seed for reproducibility when \code{full = TRUE}.
+\item{seed}{Random seed for reproducibility when \code{full = TRUE}.
+Default \code{42}. Set to \code{NULL} for non-deterministic results.
 Ignored when \code{full = FALSE}.}
 
 \item{parallel}{Logical. If \code{TRUE}, use parallel processing to compute
@@ -96,7 +98,8 @@ The function calculates the following indices per site:
 }
 }
 \examples{
-# Single-site data (no Site column)
+# Single-site data (no Site column) — full pipeline by default
+\donttest{
 df <- data.frame(
   Species   = c("sp1", "sp2", "sp3", "sp4"),
   Genus     = c("G1", "G1", "G2", "G2"),
@@ -119,9 +122,8 @@ df2 <- data.frame(
 )
 batch_analysis(df2)
 
-# Full pipeline (Run 1+2+3, matches Excel macro output)
-\donttest{
-batch_analysis(df, full = TRUE, n_iter = 101, seed = 42)
+# Fast mode: deterministic Run 1 only (no stochastic runs)
+batch_analysis(df, full = FALSE)
 }
 
 }
