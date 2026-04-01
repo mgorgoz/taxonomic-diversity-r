@@ -75,9 +75,9 @@ diversity indices per site.</p>
 <span>  tax_columns <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  abundance_column <span class="op">=</span> <span class="st">"Abundance"</span>,</span>
 <span>  correction <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span>, <span class="st">"miller_madow"</span>, <span class="st">"grassberger"</span>, <span class="st">"chao_shen"</span><span class="op">)</span>,</span>
-<span>  full <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  full <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  n_iter <span class="op">=</span> <span class="fl">101L</span>,</span>
-<span>  seed <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  seed <span class="op">=</span> <span class="fl">42L</span>,</span>
 <span>  parallel <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  n_cores <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -121,10 +121,11 @@ abundance column. Default is <code>"Abundance"</code> (case-insensitive match).<
 
 
 <dt id="arg-full">full<a class="anchor" aria-label="anchor" href="#arg-full"></a></dt>
-<dd><p>Logical. If <code>TRUE</code>, run the full Ozkan pipeline (Run 1+2+3)
-using <code><a href="ozkan_pto_full.html">ozkan_pto_full()</a></code> instead of deterministic-only <code><a href="pto_components.html">pto_components()</a></code>.
-This produces max values across all three runs, matching the Excel macro
-output. Default <code>FALSE</code> (deterministic Run 1 only, faster).</p></dd>
+<dd><p>Logical. If <code>TRUE</code> (default), run the full Ozkan pipeline
+(Run 1+2+3) using <code><a href="ozkan_pto_full.html">ozkan_pto_full()</a></code> instead of deterministic-only
+<code><a href="pto_components.html">pto_components()</a></code>. This produces max values across all three runs,
+matching the Excel macro output. Set to <code>FALSE</code> for deterministic
+Run 1 only (faster but incomplete).</p></dd>
 
 
 <dt id="arg-n-iter">n_iter<a class="anchor" aria-label="anchor" href="#arg-n-iter"></a></dt>
@@ -133,7 +134,8 @@ output. Default <code>FALSE</code> (deterministic Run 1 only, faster).</p></dd>
 
 
 <dt id="arg-seed">seed<a class="anchor" aria-label="anchor" href="#arg-seed"></a></dt>
-<dd><p>Optional random seed for reproducibility when <code>full = TRUE</code>.
+<dd><p>Random seed for reproducibility when <code>full = TRUE</code>.
+Default <code>42</code>. Set to <code>NULL</code> for non-deterministic results.
 Ignored when <code>full = FALSE</code>.</p></dd>
 
 
@@ -184,7 +186,8 @@ vectors, <code><a href="build_tax_tree.html">build_tax_tree</a></code> for build
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Single-site data (no Site column)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Single-site data (no Site column) — full pipeline by default</span></span></span>
+<span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  Species   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sp1"</span>, <span class="st">"sp2"</span>, <span class="st">"sp3"</span>, <span class="st">"sp4"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  Genus     <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"G1"</span>, <span class="st">"G1"</span>, <span class="st">"G2"</span>, <span class="st">"G2"</span><span class="op">)</span>,</span></span>
@@ -223,11 +226,10 @@ vectors, <code><a href="build_tax_tree.html">build_tax_tree</a></code> for build
 <span class="r-out co"><span class="r-pr">#&gt;</span>     B         3 0.900256 0.531250 0.833333   1.529412 2.000000 0.666667</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       uTO       TO uTO_plus  TO_plus  uTO_max   TO_max uTO_plus_max TO_plus_max</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  2.442117 3.132154 2.577008 3.270155 2.442117 3.132154     2.577008    3.270155</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2.804266 4.533563 3.767722 5.559482 2.804266 4.533563     3.767722    5.559482</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2.804266 4.533563 3.767722 5.559482 2.991176 4.771455     3.767722    5.559482</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Full pipeline (Run 1+2+3, matches Excel macro output)</span></span></span>
-<span class="r-in"><span><span class="co"># \donttest{</span></span></span>
-<span class="r-in"><span><span class="fu">batch_analysis</span><span class="op">(</span><span class="va">df</span>, full <span class="op">=</span> <span class="cn">TRUE</span>, n_iter <span class="op">=</span> <span class="fl">101</span>, seed <span class="op">=</span> <span class="fl">42</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Fast mode: deterministic Run 1 only (no stochastic runs)</span></span></span>
+<span class="r-in"><span><span class="fu">batch_analysis</span><span class="op">(</span><span class="va">df</span>, full <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> taxdiv -- Batch Analysis</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Sites: 1 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Indices: 14 </span>

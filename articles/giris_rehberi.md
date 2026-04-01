@@ -510,7 +510,7 @@ print(sonuc_batch)
 #>  Alan_B         5 1.039172 0.517222 1.301130   2.473684  2.6  0.44 4.330512
 #>        TO uTO_plus  TO_plus  uTO_max   TO_max uTO_plus_max TO_plus_max
 #>  8.622250 5.845169 9.023223 5.444330 8.622250     5.845169    9.023223
-#>  7.501388 5.845169 9.023223 4.330512 7.501388     5.845169    9.023223
+#>  7.501388 5.845169 9.023223 5.105595 8.282063     5.845169    9.023223
 ```
 
 Cikti 16 sutundan olusur: Site, N_Species ve 14 cesitlilik indeksi.

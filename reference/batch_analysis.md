@@ -15,9 +15,9 @@ batch_analysis(
   tax_columns = NULL,
   abundance_column = "Abundance",
   correction = c("none", "miller_madow", "grassberger", "chao_shen"),
-  full = FALSE,
+  full = TRUE,
   n_iter = 101L,
-  seed = NULL,
+  seed = 42L,
   parallel = FALSE,
   n_cores = NULL
 )
@@ -62,12 +62,14 @@ batch_analysis(
 
 - full:
 
-  Logical. If `TRUE`, run the full Ozkan pipeline (Run 1+2+3) using
+  Logical. If `TRUE` (default), run the full Ozkan pipeline (Run 1+2+3)
+  using
   [`ozkan_pto_full()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/ozkan_pto_full.md)
   instead of deterministic-only
   [`pto_components()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/pto_components.md).
   This produces max values across all three runs, matching the Excel
-  macro output. Default `FALSE` (deterministic Run 1 only, faster).
+  macro output. Set to `FALSE` for deterministic Run 1 only (faster but
+  incomplete).
 
 - n_iter:
 
@@ -76,8 +78,8 @@ batch_analysis(
 
 - seed:
 
-  Optional random seed for reproducibility when `full = TRUE`. Ignored
-  when `full = FALSE`.
+  Random seed for reproducibility when `full = TRUE`. Default `42`. Set
+  to `NULL` for non-deterministic results. Ignored when `full = FALSE`.
 
 - parallel:
 
@@ -151,7 +153,8 @@ for the full 3-run pipeline on a single community.
 ## Examples
 
 ``` r
-# Single-site data (no Site column)
+# Single-site data (no Site column) — full pipeline by default
+# \donttest{
 df <- data.frame(
   Species   = c("sp1", "sp2", "sp3", "sp4"),
   Genus     = c("G1", "G1", "G2", "G2"),
@@ -190,11 +193,10 @@ batch_analysis(df2)
 #>     B         3 0.900256 0.531250 0.833333   1.529412 2.000000 0.666667
 #>       uTO       TO uTO_plus  TO_plus  uTO_max   TO_max uTO_plus_max TO_plus_max
 #>  2.442117 3.132154 2.577008 3.270155 2.442117 3.132154     2.577008    3.270155
-#>  2.804266 4.533563 3.767722 5.559482 2.804266 4.533563     3.767722    5.559482
+#>  2.804266 4.533563 3.767722 5.559482 2.991176 4.771455     3.767722    5.559482
 
-# Full pipeline (Run 1+2+3, matches Excel macro output)
-# \donttest{
-batch_analysis(df, full = TRUE, n_iter = 101, seed = 42)
+# Fast mode: deterministic Run 1 only (no stochastic runs)
+batch_analysis(df, full = FALSE)
 #> taxdiv -- Batch Analysis
 #>   Sites: 1 
 #>   Indices: 14 
