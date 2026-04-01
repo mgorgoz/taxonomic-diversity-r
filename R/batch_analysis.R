@@ -45,6 +45,14 @@
 #' @param correction Bias correction for the Shannon index. One of
 #'   `"none"` (default), `"miller_madow"`, `"grassberger"`, or
 #'   `"chao_shen"`. Passed to [shannon()]. See [shannon()] for details.
+#' @param full Logical. If `TRUE`, run the full Ozkan pipeline (Run 1+2+3)
+#'   using [ozkan_pto_full()] instead of deterministic-only [pto_components()].
+#'   This produces max values across all three runs, matching the Excel macro
+#'   output. Default `FALSE` (deterministic Run 1 only, faster).
+#' @param n_iter Number of stochastic iterations for Run 2 and Run 3 when
+#'   `full = TRUE`. Default `101`. Ignored when `full = FALSE`.
+#' @param seed Optional random seed for reproducibility when `full = TRUE`.
+#'   Ignored when `full = FALSE`.
 #' @param parallel Logical. If `TRUE`, use parallel processing to compute
 #'   indices for multiple sites concurrently. Default `FALSE`.
 #' @param n_cores Number of CPU cores to use when `parallel = TRUE`. Default
@@ -54,7 +62,8 @@
 #'   \code{Site}, \code{N_Species}, \code{Shannon}, \code{Simpson}, \code{Delta},
 #'   \code{Delta_star}, \code{AvTD}, \code{VarTD}, \code{uTO}, \code{TO},
 #'   \code{uTO_plus}, \code{TO_plus}, \code{uTO_max}, \code{TO_max},
-#'   \code{uTO_plus_max}, \code{TO_plus_max}.
+#'   \code{uTO_plus_max}, \code{TO_plus_max}. When `full = TRUE`, the max
+#'   columns reflect the maximum across Run 1, 2, and 3.
 #'
 #' @examples
 #' # Single-site data (no Site column)
@@ -80,8 +89,14 @@
 #' )
 #' batch_analysis(df2)
 #'
+#' # Full pipeline (Run 1+2+3, matches Excel macro output)
+#' \donttest{
+#' batch_analysis(df, full = TRUE, n_iter = 101, seed = 42)
+#' }
+#'
 #' @seealso \code{\link{compare_indices}} for analysis with pre-built community
-#'   vectors, \code{\link{build_tax_tree}} for building taxonomic trees manually.
+#'   vectors, \code{\link{build_tax_tree}} for building taxonomic trees manually,
+#'   \code{\link{ozkan_pto_full}} for the full 3-run pipeline on a single community.
 #'
 #' @export
 batch_analysis <- function(data,
@@ -90,6 +105,9 @@ batch_analysis <- function(data,
                            abundance_column = "Abundance",
                            correction = c("none", "miller_madow",
                                           "grassberger", "chao_shen"),
+                           full = FALSE,
+                           n_iter = 101L,
+                           seed = NULL,
                            parallel = FALSE,
                            n_cores = NULL) {
   correction <- match.arg(correction)
@@ -236,28 +254,57 @@ batch_analysis <- function(data,
     AvTD_val <- avtd(sp_names, tax_tree_site)
     VarTD_val <- vartd(sp_names, tax_tree_site)
 
-    pto <- pto_components(community, tax_tree_site)
+    if (isTRUE(full)) {
+      # Full pipeline: Run 1 + 2 + 3 (matches Excel macro)
+      pto_run1 <- pto_components(community, tax_tree_site)
+      full_res <- ozkan_pto_full(community, tax_tree_site,
+                                  n_iter = n_iter, seed = seed)
 
-    data.frame(
-      Site         = site_name,
-      N_Species    = length(community),
-      Shannon      = round(H, 6),
-      Simpson      = round(D, 6),
-      Delta        = round(Delta_val, 6),
-      Delta_star   = round(Delta_s, 6),
-      AvTD         = round(AvTD_val, 6),
-      VarTD        = round(VarTD_val, 6),
-      uTO          = round(pto["uTO"], 6),
-      TO           = round(pto["TO"], 6),
-      uTO_plus     = round(pto["uTO_plus"], 6),
-      TO_plus      = round(pto["TO_plus"], 6),
-      uTO_max      = round(pto["uTO_max"], 6),
-      TO_max       = round(pto["TO_max"], 6),
-      uTO_plus_max = round(pto["uTO_plus_max"], 6),
-      TO_plus_max  = round(pto["TO_plus_max"], 6),
-      row.names    = NULL,
-      stringsAsFactors = FALSE
-    )
+      data.frame(
+        Site         = site_name,
+        N_Species    = length(community),
+        Shannon      = round(H, 6),
+        Simpson      = round(D, 6),
+        Delta        = round(Delta_val, 6),
+        Delta_star   = round(Delta_s, 6),
+        AvTD         = round(AvTD_val, 6),
+        VarTD        = round(VarTD_val, 6),
+        uTO          = round(pto_run1["uTO"], 6),
+        TO           = round(pto_run1["TO"], 6),
+        uTO_plus     = round(pto_run1["uTO_plus"], 6),
+        TO_plus      = round(pto_run1["TO_plus"], 6),
+        uTO_max      = round(full_res$uTO, 6),
+        TO_max       = round(full_res$TO, 6),
+        uTO_plus_max = round(full_res$uTO_plus, 6),
+        TO_plus_max  = round(full_res$TO_plus, 6),
+        row.names    = NULL,
+        stringsAsFactors = FALSE
+      )
+    } else {
+      # Deterministic only: Run 1 (fast)
+      pto <- pto_components(community, tax_tree_site)
+
+      data.frame(
+        Site         = site_name,
+        N_Species    = length(community),
+        Shannon      = round(H, 6),
+        Simpson      = round(D, 6),
+        Delta        = round(Delta_val, 6),
+        Delta_star   = round(Delta_s, 6),
+        AvTD         = round(AvTD_val, 6),
+        VarTD        = round(VarTD_val, 6),
+        uTO          = round(pto["uTO"], 6),
+        TO           = round(pto["TO"], 6),
+        uTO_plus     = round(pto["uTO_plus"], 6),
+        TO_plus      = round(pto["TO_plus"], 6),
+        uTO_max      = round(pto["uTO_max"], 6),
+        TO_max       = round(pto["TO_max"], 6),
+        uTO_plus_max = round(pto["uTO_plus_max"], 6),
+        TO_plus_max  = round(pto["TO_plus_max"], 6),
+        row.names    = NULL,
+        stringsAsFactors = FALSE
+      )
+    }
   }
 
   # --- Run: parallel or sequential ---
@@ -270,13 +317,16 @@ batch_analysis <- function(data,
       cl <- parallel::makeCluster(n_cores_use)
       on.exit(parallel::stopCluster(cl), add = TRUE)
       parallel::clusterExport(cl, varlist = c(
-        "site_list", "species_col", "abd_col", "tax_cols", "correction"
+        "site_list", "species_col", "abd_col", "tax_cols", "correction",
+        "full", "n_iter", "seed"
       ), envir = environment())
       ns <- asNamespace(utils::packageName())
       parallel::clusterExport(cl, varlist = c(
         "shannon", "simpson", "delta", "delta_star",
         "avtd", "vartd", "pto_components", "ozkan_pto",
-        "deng_entropy_level"
+        "deng_entropy_level", "ozkan_pto_full",
+        "ozkan_pto_resample", "ozkan_pto_sensitivity",
+        "ozkan_pto_jackknife"
       ), envir = ns)
       results <- parallel::parLapply(cl, site_names, compute_site)
     } else {

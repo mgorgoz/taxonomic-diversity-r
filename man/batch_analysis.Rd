@@ -10,6 +10,9 @@ batch_analysis(
   tax_columns = NULL,
   abundance_column = "Abundance",
   correction = c("none", "miller_madow", "grassberger", "chao_shen"),
+  full = FALSE,
+  n_iter = 101L,
+  seed = NULL,
   parallel = FALSE,
   n_cores = NULL
 )
@@ -38,6 +41,17 @@ abundance column. Default is \code{"Abundance"} (case-insensitive match).}
 \code{"none"} (default), \code{"miller_madow"}, \code{"grassberger"}, or
 \code{"chao_shen"}. Passed to \code{\link[=shannon]{shannon()}}. See \code{\link[=shannon]{shannon()}} for details.}
 
+\item{full}{Logical. If \code{TRUE}, run the full Ozkan pipeline (Run 1+2+3)
+using \code{\link[=ozkan_pto_full]{ozkan_pto_full()}} instead of deterministic-only \code{\link[=pto_components]{pto_components()}}.
+This produces max values across all three runs, matching the Excel macro
+output. Default \code{FALSE} (deterministic Run 1 only, faster).}
+
+\item{n_iter}{Number of stochastic iterations for Run 2 and Run 3 when
+\code{full = TRUE}. Default \code{101}. Ignored when \code{full = FALSE}.}
+
+\item{seed}{Optional random seed for reproducibility when \code{full = TRUE}.
+Ignored when \code{full = FALSE}.}
+
 \item{parallel}{Logical. If \code{TRUE}, use parallel processing to compute
 indices for multiple sites concurrently. Default \code{FALSE}.}
 
@@ -49,7 +63,8 @@ A data frame with one row per site and columns:
 \code{Site}, \code{N_Species}, \code{Shannon}, \code{Simpson}, \code{Delta},
 \code{Delta_star}, \code{AvTD}, \code{VarTD}, \code{uTO}, \code{TO},
 \code{uTO_plus}, \code{TO_plus}, \code{uTO_max}, \code{TO_max},
-\code{uTO_plus_max}, \code{TO_plus_max}.
+\code{uTO_plus_max}, \code{TO_plus_max}. When \code{full = TRUE}, the max
+columns reflect the maximum across Run 1, 2, and 3.
 }
 \description{
 Computes all diversity indices for one or more sample sites from a single
@@ -104,8 +119,14 @@ df2 <- data.frame(
 )
 batch_analysis(df2)
 
+# Full pipeline (Run 1+2+3, matches Excel macro output)
+\donttest{
+batch_analysis(df, full = TRUE, n_iter = 101, seed = 42)
+}
+
 }
 \seealso{
 \code{\link{compare_indices}} for analysis with pre-built community
-vectors, \code{\link{build_tax_tree}} for building taxonomic trees manually.
+vectors, \code{\link{build_tax_tree}} for building taxonomic trees manually,
+\code{\link{ozkan_pto_full}} for the full 3-run pipeline on a single community.
 }
