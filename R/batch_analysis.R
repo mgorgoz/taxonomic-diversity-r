@@ -59,6 +59,9 @@
 #'   indices for multiple sites concurrently. Default `FALSE`.
 #' @param n_cores Number of CPU cores to use when `parallel = TRUE`. Default
 #'   `NULL` uses up to 2 cores (CRAN policy limit).
+#' @param progress Logical. If `TRUE` (default), display a progress bar
+#'   during sequential computation. Ignored when `parallel = TRUE`.
+#'   Set to `FALSE` to suppress progress output.
 #'
 #' @return A data frame with one row per site and columns:
 #'   \code{Site}, \code{N_Species}, \code{Shannon}, \code{Simpson}, \code{Delta},
@@ -111,7 +114,8 @@ batch_analysis <- function(data,
                            n_iter = 101L,
                            seed = 42L,
                            parallel = FALSE,
-                           n_cores = NULL) {
+                           n_cores = NULL,
+                           progress = TRUE) {
   correction <- match.arg(correction)
 
   # --- Input validation ---
@@ -314,6 +318,11 @@ batch_analysis <- function(data,
 
   if (isTRUE(parallel) && length(site_names) > 1) {
     n_cores_use <- if (is.null(n_cores)) min(2L, parallel::detectCores()) else max(1L, as.integer(n_cores))
+    if (isTRUE(progress) && interactive()) {
+      mode_label <- if (isTRUE(full)) "full pipeline" else "Run 1 only"
+      message(sprintf("Processing %d sites in parallel (%d cores, %s)...",
+                      length(site_names), n_cores_use, mode_label))
+    }
 
     if (.Platform$OS.type == "windows") {
       cl <- parallel::makeCluster(n_cores_use)
@@ -336,7 +345,22 @@ batch_analysis <- function(data,
                                      mc.cores = n_cores_use)
     }
   } else {
-    results <- lapply(site_names, compute_site)
+    n_sites <- length(site_names)
+    show_progress <- isTRUE(progress) && n_sites > 1 && interactive()
+
+    if (show_progress) {
+      mode_label <- if (isTRUE(full)) "full pipeline" else "Run 1 only"
+      message(sprintf("Processing %d sites (%s)...", n_sites, mode_label))
+      pb <- utils::txtProgressBar(min = 0, max = n_sites, style = 3)
+      on.exit(close(pb), add = TRUE)
+      results <- vector("list", n_sites)
+      for (i in seq_along(site_names)) {
+        results[[i]] <- compute_site(site_names[i])
+        utils::setTxtProgressBar(pb, i)
+      }
+    } else {
+      results <- lapply(site_names, compute_site)
+    }
   }
 
   # Remove NULLs (skipped sites)

@@ -14,7 +14,8 @@ batch_analysis(
   n_iter = 101L,
   seed = 42L,
   parallel = FALSE,
-  n_cores = NULL
+  n_cores = NULL,
+  progress = TRUE
 )
 }
 \arguments{
@@ -59,6 +60,10 @@ indices for multiple sites concurrently. Default \code{FALSE}.}
 
 \item{n_cores}{Number of CPU cores to use when \code{parallel = TRUE}. Default
 \code{NULL} uses up to 2 cores (CRAN policy limit).}
+
+\item{progress}{Logical. If \code{TRUE} (default), display a progress bar
+during sequential computation. Ignored when \code{parallel = TRUE}.
+Set to \code{FALSE} to suppress progress output.}
 }
 \value{
 A data frame with one row per site and columns:
