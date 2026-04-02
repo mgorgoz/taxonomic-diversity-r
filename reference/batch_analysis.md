@@ -19,7 +19,8 @@ batch_analysis(
   n_iter = 101L,
   seed = 42L,
   parallel = FALSE,
-  n_cores = NULL
+  n_cores = NULL,
+  progress = TRUE
 )
 ```
 
@@ -90,6 +91,12 @@ batch_analysis(
 
   Number of CPU cores to use when `parallel = TRUE`. Default `NULL` uses
   up to 2 cores (CRAN policy limit).
+
+- progress:
+
+  Logical. If `TRUE` (default), display a progress bar during sequential
+  computation. Ignored when `parallel = TRUE`. Set to `FALSE` to
+  suppress progress output.
 
 ## Value
 

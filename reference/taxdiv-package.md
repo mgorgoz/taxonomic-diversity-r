@@ -7,6 +7,16 @@ distinctness, average taxonomic distinctness (AvTD/Delta+), variation in
 taxonomic distinctness (VarTD/Lambda+), and Deng entropy-based measures
 that incorporate taxonomic hierarchy information. Includes tools for
 constructing taxonomic trees and computing pairwise taxonomic distances.
+Methods are described in Ozkan (2018)
+[doi:10.18182/tjf.441061](https://doi.org/10.18182/tjf.441061) , Ozkan
+(2018)
+[doi:10.26650/forestist.2018.340634](https://doi.org/10.26650/forestist.2018.340634)
+, Clarke & Warwick (1998)
+[doi:10.1046/j.1365-2664.1998.3540523.x](https://doi.org/10.1046/j.1365-2664.1998.3540523.x)
+, Shannon (1948)
+[doi:10.1002/j.1538-7305.1948.tb01338.x](https://doi.org/10.1002/j.1538-7305.1948.tb01338.x)
+, and Simpson (1949)
+[doi:10.1038/163688a0](https://doi.org/10.1038/163688a0) .
 
 ## See also
 
