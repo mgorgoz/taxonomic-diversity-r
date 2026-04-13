@@ -15,7 +15,8 @@ Pakette uc ana yaklasim vardir:
 1.  **Klasik indeksler**: Shannon ve Simpson
 2.  **Clarke & Warwick taksonomik ayirt edicilik**: Delta, Delta\*,
     AvTD, VarTD
-3.  **Ozkan (2018) Deng entropisi tabanli**: pTO (uTO, TO, uTO+, TO+)
+3.  **Ozkan (2018; 2022) Deng entropisi tabanli**: pTO (uTO, TO, uTO+,
+    TO+) ve guclendirilmis tahmin ediciler
 
 ``` r
 library(taxdiv)
@@ -1203,6 +1204,10 @@ for (i in seq_along(pto_sonuc$Ed_levels)) {
 - Ozkan, K. (2018). Yeni bir taksonomik cesitlilik olcusu onerisi.
   *Turkish Journal of Forestry*, 19(4), 336-346. DOI:
   10.18182/tjf.441061
+- Ozkan, K. & Mert, A. (2022). Deng entropisi tabanli taksonomik
+  cesitlilik olculerinin karsilastirilmasi ve guclendirilmis tahmin
+  edicilerin tanitilmasi. *FORESTIST*, 72(2). DOI:
+  10.5152/forestist.2021.21025
 
 ### Yanliliksiz Tahmin
 

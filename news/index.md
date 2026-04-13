@@ -18,6 +18,7 @@ entropy.
   - `max_level` parameter for controlling taxonomic depth (NULL, “auto”,
     integer)
   - Presence-based entropy: equal weight (1/S) at each slice
+- Ozkan & Mert (2022) reinforced estimators:
 - Stochastic resampling — Run 2
   ([`ozkan_pto_resample()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/ozkan_pto_resample.md))
   - Random species inclusion/exclusion (50% probability per species)
@@ -125,6 +126,7 @@ entropy.
 ### Validation
 
 - Verified against Ozkan (2018) hypothetical examples
+- Verified against Ozkan & Mert (2022) reinforced estimator methodology
 - Cross-validated with Kursad Ozkan’s Excel macro (TD_OMD.xlsm)
 - Documented Excel macro bug: `Application.Calculate` missing inside
   tekerur2() and tekerur3() loops

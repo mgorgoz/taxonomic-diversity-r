@@ -14,7 +14,8 @@ The package implements three main approaches:
 1.  **Classical diversity indices**: Shannon and Simpson
 2.  **Clarke & Warwick taxonomic distinctness**: Delta, Delta\*, AvTD,
     VarTD
-3.  **Ozkan (2018) Deng entropy-based diversity**: pTO and pTO+
+3.  **Ozkan (2018; 2022) Deng entropy-based diversity**: pTO, pTO+, and
+    reinforced estimators
 
 ``` r
 library(taxdiv)
@@ -653,6 +654,11 @@ diversity.
   549-553.
 - Ozkan, K. (2018). A new proposed measure for estimating taxonomic
   diversity. *Turkish Journal of Forestry*, 19(4), 336-346.
+- Ozkan, K. & Mert, A. (2022). Comparisons of Deng entropy-based
+  taxonomic diversity measures with the other diversity measures and
+  introduction to the new proposed (reinforced) estimators. *FORESTIST*,
+  72(2). doi:
+  [10.5152/forestist.2021.21025](https://doi.org/10.5152/forestist.2021.21025)
 - Clarke, K.R. & Warwick, R.M. (1998). A taxonomic distinctness index
   and its statistical properties. *Journal of Applied Ecology*, 35,
   523-531.

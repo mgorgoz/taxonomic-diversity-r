@@ -1,8 +1,9 @@
 # Calculate All Eight pTO Components (Convenience Wrapper)
 
-Returns a named numeric vector with all eight Ozkan (2018) components:
-four using all taxonomic levels and four using only the informative
-levels (max version), matching the Excel macro's Run 1+2+3 output.
+Returns a named numeric vector with all eight Ozkan (2018; 2022)
+components: four using all taxonomic levels and four using only the
+informative levels (max version), matching the Excel macro's Run 1+2+3
+output.
 
 ## Usage
 

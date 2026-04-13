@@ -62,6 +62,7 @@
 <code>max_level</code> parameter for controlling taxonomic depth (NULL, “auto”, integer)</li>
 <li>Presence-based entropy: equal weight (1/S) at each slice</li>
 </ul></li>
+<li>Ozkan &amp; Mert (2022) reinforced estimators:</li>
 <li>Stochastic resampling — Run 2 (<code><a href="../reference/ozkan_pto_resample.html">ozkan_pto_resample()</a></code>)
 <ul><li>Random species inclusion/exclusion (50% probability per species)</li>
 <li>Configurable iteration count and seed for reproducibility</li>
@@ -140,6 +141,7 @@
 <div class="section level3">
 <h3 id="validation-0-1-0">Validation<a class="anchor" aria-label="anchor" href="#validation-0-1-0"></a></h3>
 <ul><li>Verified against Ozkan (2018) hypothetical examples</li>
+<li>Verified against Ozkan &amp; Mert (2022) reinforced estimator methodology</li>
 <li>Cross-validated with Kursad Ozkan’s Excel macro (TD_OMD.xlsm)</li>
 <li>Documented Excel macro bug: <code>Application.Calculate</code> missing inside tekerur2() and tekerur3() loops</li>
 </ul></div>
