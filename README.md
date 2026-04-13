@@ -245,6 +245,11 @@ diversity is significantly lower than expected by chance.
   *Turkish Journal of Forestry*, 19(4), 336-346.
   doi: [10.18182/tjf.441061](https://doi.org/10.18182/tjf.441061)
 
+- Ozkan, K. & Mert, A. (2022). Comparisons of Deng entropy-based taxonomic
+  diversity measures with the other diversity measures and introduction to
+  the new proposed (reinforced) estimators. *FORESTIST*, 72(2).
+  doi: [10.5152/forestist.2021.21025](https://doi.org/10.5152/forestist.2021.21025)
+
 - Deng, Y. (2016). Deng entropy. *Chaos, Solitons & Fractals*, 91, 549-553.
   doi: [10.1016/j.chaos.2016.08.011](https://doi.org/10.1016/j.chaos.2016.08.011)
 

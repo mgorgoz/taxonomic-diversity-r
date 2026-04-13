@@ -71,6 +71,11 @@ result$TO_plus   # Final maximum TO+
 Ozkan, K. (2018). A new proposed measure for estimating taxonomic
 diversity. Turkish Journal of Forestry, 19(4), 336-346.
 DOI: 10.18182/tjf.441061
+
+Ozkan, K. & Mert, A. (2022). Comparisons of Deng entropy-based
+taxonomic diversity measures with the other diversity measures and
+introduction to the new proposed (reinforced) estimators. FORESTIST,
+72(2). DOI: 10.5152/forestist.2021.21025
 }
 \seealso{
 \code{\link[=ozkan_pto]{ozkan_pto()}} for deterministic calculation only,

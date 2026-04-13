@@ -66,6 +66,11 @@
 #' diversity. Turkish Journal of Forestry, 19(4), 336-346.
 #' DOI: 10.18182/tjf.441061
 #'
+#' Ozkan, K. & Mert, A. (2022). Comparisons of Deng entropy-based
+#' taxonomic diversity measures with the other diversity measures and
+#' introduction to the new proposed (reinforced) estimators. FORESTIST,
+#' 72(2). DOI: 10.5152/forestist.2021.21025
+#'
 #' Deng, Y. (2016). Deng entropy. Chaos, Solitons & Fractals, 91,
 #' 549-553.
 #'
@@ -350,7 +355,7 @@ ozkan_pto <- function(community, tax_tree, max_level = NULL) {
 
 #' Calculate All Eight pTO Components (Convenience Wrapper)
 #'
-#' Returns a named numeric vector with all eight Ozkan (2018) components:
+#' Returns a named numeric vector with all eight Ozkan (2018; 2022) components:
 #' four using all taxonomic levels and four using only the informative
 #' levels (max version), matching the Excel macro's Run 1+2+3 output.
 #'

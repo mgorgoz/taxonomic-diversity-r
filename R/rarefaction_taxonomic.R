@@ -54,6 +54,11 @@
 #' Ozkan, K. (2018). A new proposed measure for estimating taxonomic
 #' diversity. Turkish Journal of Forestry, 19(4), 336-346.
 #'
+#' Ozkan, K. & Mert, A. (2022). Comparisons of Deng entropy-based
+#' taxonomic diversity measures with the other diversity measures and
+#' introduction to the new proposed (reinforced) estimators. FORESTIST,
+#' 72(2). DOI: 10.5152/forestist.2021.21025
+#'
 #' @seealso [plot_rarefaction()] for visualising the rarefaction curve,
 #'   [ozkan_pto()] for full pTO calculation, [shannon()] and [simpson()]
 #'   for classical indices, [avtd()] for average taxonomic distinctness.

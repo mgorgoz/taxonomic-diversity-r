@@ -47,6 +47,11 @@
 #' diversity. Turkish Journal of Forestry, 19(4), 336-346.
 #' DOI: 10.18182/tjf.441061
 #'
+#' Ozkan, K. & Mert, A. (2022). Comparisons of Deng entropy-based
+#' taxonomic diversity measures with the other diversity measures and
+#' introduction to the new proposed (reinforced) estimators. FORESTIST,
+#' 72(2). DOI: 10.5152/forestist.2021.21025
+#'
 #' @seealso [ozkan_pto()] for the core calculation,
 #'   [ozkan_pto_resample()] for Run 2,
 #'   [ozkan_pto_full()] for the full 3-run pipeline.
@@ -195,6 +200,11 @@ ozkan_pto_jackknife <- function(community, tax_tree,
 #' Ozkan, K. (2018). A new proposed measure for estimating taxonomic
 #' diversity. Turkish Journal of Forestry, 19(4), 336-346.
 #' DOI: 10.18182/tjf.441061
+#'
+#' Ozkan, K. & Mert, A. (2022). Comparisons of Deng entropy-based
+#' taxonomic diversity measures with the other diversity measures and
+#' introduction to the new proposed (reinforced) estimators. FORESTIST,
+#' 72(2). DOI: 10.5152/forestist.2021.21025
 #'
 #' @seealso [ozkan_pto_jackknife()] for the jackknife step,
 #'   [ozkan_pto_sensitivity()] for Run 3,
@@ -379,6 +389,11 @@ ozkan_pto_resample <- function(community, tax_tree, n_iter = 101L,
 #' Ozkan, K. (2018). A new proposed measure for estimating taxonomic
 #' diversity. Turkish Journal of Forestry, 19(4), 336-346.
 #' DOI: 10.18182/tjf.441061
+#'
+#' Ozkan, K. & Mert, A. (2022). Comparisons of Deng entropy-based
+#' taxonomic diversity measures with the other diversity measures and
+#' introduction to the new proposed (reinforced) estimators. FORESTIST,
+#' 72(2). DOI: 10.5152/forestist.2021.21025
 #'
 #' @seealso [ozkan_pto_resample()] for Run 2,
 #'   [ozkan_pto_full()] for the full pipeline.
@@ -579,6 +594,11 @@ ozkan_pto_sensitivity <- function(community, tax_tree, run2_result,
 #' Ozkan, K. (2018). A new proposed measure for estimating taxonomic
 #' diversity. Turkish Journal of Forestry, 19(4), 336-346.
 #' DOI: 10.18182/tjf.441061
+#'
+#' Ozkan, K. & Mert, A. (2022). Comparisons of Deng entropy-based
+#' taxonomic diversity measures with the other diversity measures and
+#' introduction to the new proposed (reinforced) estimators. FORESTIST,
+#' 72(2). DOI: 10.5152/forestist.2021.21025
 #'
 #' @seealso [ozkan_pto()] for deterministic calculation only,
 #'   [ozkan_pto_resample()] for Run 2 only,

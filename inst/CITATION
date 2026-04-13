@@ -25,6 +25,20 @@ bibentry(
 
 bibentry(
   bibtype  = "Article",
+  title    = "Comparisons of Deng Entropy-Based Taxonomic Diversity Measures with the Other Diversity Measures and Introduction to the New Proposed (Reinforced) Estimators",
+  author   = c(
+    person("Kursad", "Ozkan"),
+    person("Ahmet", "Mert")
+  ),
+  journal  = "FORESTIST",
+  year     = "2022",
+  volume   = "72",
+  number   = "2",
+  doi      = "10.5152/forestist.2021.21025"
+)
+
+bibentry(
+  bibtype  = "Article",
   title    = "Deng entropy",
   author   = person("Yong", "Deng"),
   journal  = "Chaos, Solitons \\& Fractals",

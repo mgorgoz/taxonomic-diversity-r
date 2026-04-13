@@ -20,7 +20,9 @@ knitr::opts_chunk$set(
 
 Ozkan (2018) introduced a novel approach to measuring taxonomic diversity
 using **Deng entropy** --- a generalization of Shannon entropy rooted in
-Dempster-Shafer evidence theory (Dempster, 1967; Shafer, 1976).
+Dempster-Shafer evidence theory (Dempster, 1967; Shafer, 1976). Ozkan &
+Mert (2022) extended this with **reinforced estimators** that use stochastic
+resampling (Run 2) and sensitivity analysis (Run 3) to refine the indices.
 
 The key idea: at each level of the taxonomic hierarchy (genus, family,
 order, etc.), **Deng entropy** measures how evenly species are distributed
@@ -291,6 +293,10 @@ evenness. If both drop equally, the community has lost taxonomic breadth.
 
 - Ozkan, K. (2018). A new proposed measure for estimating taxonomic
   diversity. *Turkish Journal of Forestry*, 19(4), 336-346.
+- Ozkan, K. & Mert, A. (2022). Comparisons of Deng entropy-based taxonomic
+  diversity measures with the other diversity measures and introduction to
+  the new proposed (reinforced) estimators. *FORESTIST*, 72(2).
+  doi: [10.5152/forestist.2021.21025](https://doi.org/10.5152/forestist.2021.21025)
 - Deng, Y. (2016). Deng entropy. *Chaos, Solitons & Fractals*, 91, 549-553.
 - Dempster, A.P. (1967). Upper and lower probabilities induced by a
   multivalued mapping. *The Annals of Mathematical Statistics*, 38(2),

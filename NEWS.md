@@ -9,6 +9,7 @@ Initial release of taxdiv — taxonomic diversity indices using Deng entropy.
   - 8 indices: uTO, TO, uTO+, TO+, uTO_max, TO_max, uTO+_max, TO+_max
   - `max_level` parameter for controlling taxonomic depth (NULL, "auto", integer)
   - Presence-based entropy: equal weight (1/S) at each slice
+* Ozkan & Mert (2022) reinforced estimators:
 * Stochastic resampling — Run 2 (`ozkan_pto_resample()`)
   - Random species inclusion/exclusion (50% probability per species)
   - Configurable iteration count and seed for reproducibility
@@ -78,6 +79,7 @@ Initial release of taxdiv — taxonomic diversity indices using Deng entropy.
 ## Validation
 
 * Verified against Ozkan (2018) hypothetical examples
+* Verified against Ozkan & Mert (2022) reinforced estimator methodology
 * Cross-validated with Kursad Ozkan's Excel macro (TD_OMD.xlsm)
 * Documented Excel macro bug: `Application.Calculate` missing inside
   tekerur2() and tekerur3() loops
