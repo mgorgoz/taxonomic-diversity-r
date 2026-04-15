@@ -361,13 +361,13 @@ cat("TO:  ", round(islem2$TO_det, 4), "\n\n")
 cat("=== Islem 2 (maksimum,", islem2$n_iter, "iterasyon) ===\n")
 #> === Islem 2 (maksimum, 101 iterasyon) ===
 cat("uTO+:", round(islem2$uTO_plus_max, 4), "\n")
-#> uTO+: 8.9019
+#> uTO+: 9.4113
 cat("TO+: ", round(islem2$TO_plus_max, 4), "\n")
-#> TO+:  15.4812
+#> TO+:  15.9905
 cat("uTO: ", round(islem2$uTO_max, 4), "\n")
-#> uTO:  8.6804
+#> uTO:  8.9886
 cat("TO:  ", round(islem2$TO_max, 4), "\n")
-#> TO:   15.2596
+#> TO:   15.5677
 ```
 
 Islem 2 degerleri her zaman Islem 1’e esit veya buyuktur, cunku
@@ -413,16 +413,16 @@ veri_cercevesi <- data.frame(
 )
 print(veri_cercevesi, row.names = FALSE)
 #>                  Tur Olasilik
-#>    Quercus_coccifera    0.902
-#>   Quercus_infectoria    0.902
-#>         Pinus_brutia    0.900
-#>          Pinus_nigra    0.900
-#>    Juniperus_excelsa    0.900
-#>  Juniperus_oxycedrus    0.900
-#>        Cedrus_libani    0.900
-#>       Abies_cilicica    0.900
-#>     Fagus_orientalis    0.902
-#>     Carpinus_betulus    0.902
+#>    Quercus_coccifera   0.8725
+#>   Quercus_infectoria   0.8725
+#>         Pinus_brutia   0.9000
+#>          Pinus_nigra   0.9000
+#>    Juniperus_excelsa   0.9000
+#>  Juniperus_oxycedrus   0.9000
+#>        Cedrus_libani   0.9000
+#>       Abies_cilicica   0.9000
+#>     Fagus_orientalis   0.8725
+#>     Carpinus_betulus   0.8725
 ```
 
 ## Adim 7: Tam Pipeline (ozkan_pto_full)
@@ -444,11 +444,11 @@ cat("Islem 1:", sprintf("%9.4f %9.4f %9.4f %9.4f",
 cat("Islem 2:", sprintf("%9.4f %9.4f %9.4f %9.4f",
     tam$run2$uTO_plus_max, tam$run2$TO_plus_max,
     tam$run2$uTO_max, tam$run2$TO_max), "\n")
-#> Islem 2:    8.9019   15.4812    8.6804   15.2596
+#> Islem 2:    9.4113   15.9905    8.9886   15.5677
 cat("Islem 3:", sprintf("%9.4f %9.4f %9.4f %9.4f",
     tam$run3$uTO_plus_max, tam$run3$TO_plus_max,
     tam$run3$uTO_max, tam$run3$TO_max), "\n")
-#> Islem 3:    9.3926   15.9718    9.0047   15.5839
+#> Islem 3:    9.4113   15.9905    9.0413   15.6205
 ```
 
 Her asama bir oncekine esit veya daha buyuk deger uretir.

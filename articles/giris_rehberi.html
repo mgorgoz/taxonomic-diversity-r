@@ -440,13 +440,13 @@ iterasyon yapilir ve <strong>maksimum</strong> pTO degeri alinir.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"=== Islem 2 (maksimum,"</span>, <span class="va">islem2</span><span class="op">$</span><span class="va">n_iter</span>, <span class="st">"iterasyon) ===\n"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; === Islem 2 (maksimum, 101 iterasyon) ===</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"uTO+:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">islem2</span><span class="op">$</span><span class="va">uTO_plus_max</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; uTO+: 8.9019</span></span>
+<span><span class="co">#&gt; uTO+: 9.4113</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"TO+: "</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">islem2</span><span class="op">$</span><span class="va">TO_plus_max</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; TO+:  15.4812</span></span>
+<span><span class="co">#&gt; TO+:  15.9905</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"uTO: "</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">islem2</span><span class="op">$</span><span class="va">uTO_max</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; uTO:  8.6804</span></span>
+<span><span class="co">#&gt; uTO:  8.9886</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"TO:  "</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">islem2</span><span class="op">$</span><span class="va">TO_max</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; TO:   15.2596</span></span></code></pre></div>
+<span><span class="co">#&gt; TO:   15.5677</span></span></code></pre></div>
 <p>Islem 2 degerleri her zaman Islem 1’e esit veya buyuktur, cunku
 deterministik hesaplama ilk iterasyon olarak dahil edilir.</p>
 </div>
@@ -488,16 +488,16 @@ turler farkli olasilikla dahil edilir.</p>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">veri_cercevesi</span>, row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                  Tur Olasilik</span></span>
-<span><span class="co">#&gt;    Quercus_coccifera    0.902</span></span>
-<span><span class="co">#&gt;   Quercus_infectoria    0.902</span></span>
-<span><span class="co">#&gt;         Pinus_brutia    0.900</span></span>
-<span><span class="co">#&gt;          Pinus_nigra    0.900</span></span>
-<span><span class="co">#&gt;    Juniperus_excelsa    0.900</span></span>
-<span><span class="co">#&gt;  Juniperus_oxycedrus    0.900</span></span>
-<span><span class="co">#&gt;        Cedrus_libani    0.900</span></span>
-<span><span class="co">#&gt;       Abies_cilicica    0.900</span></span>
-<span><span class="co">#&gt;     Fagus_orientalis    0.902</span></span>
-<span><span class="co">#&gt;     Carpinus_betulus    0.902</span></span></code></pre></div>
+<span><span class="co">#&gt;    Quercus_coccifera   0.8725</span></span>
+<span><span class="co">#&gt;   Quercus_infectoria   0.8725</span></span>
+<span><span class="co">#&gt;         Pinus_brutia   0.9000</span></span>
+<span><span class="co">#&gt;          Pinus_nigra   0.9000</span></span>
+<span><span class="co">#&gt;    Juniperus_excelsa   0.9000</span></span>
+<span><span class="co">#&gt;  Juniperus_oxycedrus   0.9000</span></span>
+<span><span class="co">#&gt;        Cedrus_libani   0.9000</span></span>
+<span><span class="co">#&gt;       Abies_cilicica   0.9000</span></span>
+<span><span class="co">#&gt;     Fagus_orientalis   0.8725</span></span>
+<span><span class="co">#&gt;     Carpinus_betulus   0.8725</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -519,11 +519,11 @@ calistirir:</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Islem 2:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%9.4f %9.4f %9.4f %9.4f"</span>,</span>
 <span>    <span class="va">tam</span><span class="op">$</span><span class="va">run2</span><span class="op">$</span><span class="va">uTO_plus_max</span>, <span class="va">tam</span><span class="op">$</span><span class="va">run2</span><span class="op">$</span><span class="va">TO_plus_max</span>,</span>
 <span>    <span class="va">tam</span><span class="op">$</span><span class="va">run2</span><span class="op">$</span><span class="va">uTO_max</span>, <span class="va">tam</span><span class="op">$</span><span class="va">run2</span><span class="op">$</span><span class="va">TO_max</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Islem 2:    8.9019   15.4812    8.6804   15.2596</span></span>
+<span><span class="co">#&gt; Islem 2:    9.4113   15.9905    8.9886   15.5677</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Islem 3:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%9.4f %9.4f %9.4f %9.4f"</span>,</span>
 <span>    <span class="va">tam</span><span class="op">$</span><span class="va">run3</span><span class="op">$</span><span class="va">uTO_plus_max</span>, <span class="va">tam</span><span class="op">$</span><span class="va">run3</span><span class="op">$</span><span class="va">TO_plus_max</span>,</span>
 <span>    <span class="va">tam</span><span class="op">$</span><span class="va">run3</span><span class="op">$</span><span class="va">uTO_max</span>, <span class="va">tam</span><span class="op">$</span><span class="va">run3</span><span class="op">$</span><span class="va">TO_max</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Islem 3:    9.3926   15.9718    9.0047   15.5839</span></span></code></pre></div>
+<span><span class="co">#&gt; Islem 3:    9.4113   15.9905    9.0413   15.6205</span></span></code></pre></div>
 <p>Her asama bir oncekine esit veya daha buyuk deger uretir.</p>
 </div>
 <div class="section level2">
