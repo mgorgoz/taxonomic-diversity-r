@@ -288,12 +288,12 @@ ozkan_pto <- function(community, tax_tree, max_level = NULL) {
     n_present <- sum(present_mask)
 
     if (n_present <= 1) {
-      # Single species: Ed = 0 at all levels, product = 1+1 = 2
-      ratio_species <- 0 + 1  # (e^0)^2 / e^0 + 1 = 1/1 + 1 = 2
-      core_u_full <- 1 * ratio_species
-      core_w_full <- 1 * ratio_species
-      core_u_max <- core_u_full
-      core_w_max <- core_w_full
+      # Single species: Ed = 0 at all levels, no active levels
+      # Product = 1 (empty product, computation terminated per Ozkan 2018)
+      core_u_full <- 1
+      core_w_full <- 1
+      core_u_max <- 1
+      core_w_max <- 1
     } else {
       # Compute full Deng entropy at all levels for this slice
       result_step <- compute_deng_all_levels(

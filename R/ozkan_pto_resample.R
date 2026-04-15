@@ -273,17 +273,12 @@ ozkan_pto_resample <- function(community, tax_tree, n_iter = 101L,
                      unname(det$uTO), unname(det$TO))
 
   # Iterations 2..n_iter: stochastic resampling
-  n_happy <- sum(is_happy)
 
   for (iter in 2:n_iter) {
-    resampled <- community
-
-    # Happy species: 50% random inclusion (RANDBETWEEN(0,1) * abundance)
-    # Unhappy species: always included (no change needed)
-    if (n_happy > 0) {
-      include_happy <- sample(c(0L, 1L), n_happy, replace = TRUE)
-      resampled[is_happy] <- community[is_happy] * include_happy
-    }
+    # ALL species get 50% coin flip (RANDBETWEEN(0,1) * abundance)
+    # Matches Excel macro: IF(H2 > 0, RANDBETWEEN(0,1) * H2, 0)
+    coin <- sample(c(0L, 1L), n_species, replace = TRUE)
+    resampled <- community * coin
 
     # Keep only non-zero species
     resampled <- resampled[resampled > 0]
