@@ -10,18 +10,20 @@
 - **Mehmet Guvenc Negiz**. Author.
   [](https://orcid.org/0009-0008-1507-8712)
 
+- **Ahmet Mert**. Author. [](https://orcid.org/0000-0001-6859-0308)
+
 ## Citation
 
 Source:
 [`inst/CITATION`](https://github.com/mgorgoz/taxonomic-diversity-r/blob/main/inst/CITATION)
 
-Gorgoz M, Ozkan K, Negiz M (2026). *taxdiv: Taxonomic Diversity Indices
-Using Deng Entropy*. R package version 0.1.0,
+Gorgoz M, Ozkan K, Negiz M, Mert A (2026). *taxdiv: Taxonomic Diversity
+Indices Using Deng Entropy*. R package version 0.1.0,
 <https://github.com/mgorgoz/taxonomic-diversity-r>.
 
     @Manual{,
       title = {taxdiv: Taxonomic Diversity Indices Using Deng Entropy},
-      author = {Muhammet Murat Gorgoz and Kursad Ozkan and Mehmet Guvenc Negiz},
+      author = {Muhammet Murat Gorgoz and Kursad Ozkan and Mehmet Guvenc Negiz and Ahmet Mert},
       year = {2026},
       note = {R package version 0.1.0},
       url = {https://github.com/mgorgoz/taxonomic-diversity-r},
