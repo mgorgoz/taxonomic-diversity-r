@@ -24,3 +24,7 @@ inst/doc/
 /doc/
 /Meta/
 tests/testthat/Rplots.pdf
+
+# Local AI agent context files (kept local, never pushed)
+CLAUDE.md
+AGENTS.md

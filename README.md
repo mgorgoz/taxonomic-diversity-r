@@ -6,7 +6,7 @@
 [![R-CMD-check](https://github.com/mgorgoz/taxonomic-diversity-r/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/mgorgoz/taxonomic-diversity-r/actions/workflows/R-CMD-check.yaml)
 [![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-![Tests](https://img.shields.io/badge/tests-610%20passing-brightgreen.svg)
+![Tests](https://img.shields.io/badge/tests-668%20passing-brightgreen.svg)
 ![R Version](https://img.shields.io/badge/R%20%E2%89%A5%204.1.0-blue.svg)
 [![codecov](https://codecov.io/gh/mgorgoz/taxonomic-diversity-r/graph/badge.svg?token=43b8b7e2-349a-41ad-b4f9-29b9d4862d19)](https://app.codecov.io/gh/mgorgoz/taxonomic-diversity-r)
 <!-- badges: end -->
@@ -102,7 +102,7 @@ Output (16 columns):
   A2        5    1.577   0.784  1.719      2.243 2.500  0.500  1.98  3.21    3.456   4.872    1.98   3.21        3.456       4.872
 ```
 
-A ready-to-use Excel template is included: [`inst/templates/taxdiv_template.xlsx`](inst/templates/taxdiv_template.xlsx)
+A ready-to-use Excel template is included: [`inst/templates/taxdiv_data_template.xlsx`](inst/templates/taxdiv_data_template.xlsx)
 
 ## Features
 
@@ -304,7 +304,7 @@ diversity is significantly lower than expected by chance.
 | Metric | Value |
 |--------|-------|
 | R CMD check | 0 errors, 0 warnings, 0 notes |
-| Unit tests | 610 passing |
+| Unit tests | 668 passing |
 | Exported functions | 26 |
 | S3 methods | 13 (print, summary, plot) |
 | R source files | 19 |

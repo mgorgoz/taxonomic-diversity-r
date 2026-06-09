@@ -28,7 +28,7 @@ It implements the Ozkan (2018) Deng entropy-based method alongside classical
 Shannon/Simpson indices and Clarke & Warwick's taxonomic distinctness family.
 The package provides 26 exported functions, 13 S3 methods, 7 plot types,
 7 vignettes (5 method guides + 2 language versions), and 3 example datasets.
-All 610 unit tests pass on all tested platforms.
+All 668 unit tests pass on all tested platforms.
 
 ## Downstream dependencies
 

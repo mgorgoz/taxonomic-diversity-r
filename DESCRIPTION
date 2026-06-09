@@ -1,6 +1,6 @@
 Package: taxdiv
 Title: Taxonomic Diversity Indices Using Deng Entropy
-Version: 0.1.0
+Version: 1.0.0
 Authors@R: c(
     person("Muhammet Murat", "Gorgoz", , "muratgorgoz350@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-6398-0005")),
@@ -19,7 +19,6 @@ Description: Calculates taxonomic diversity indices for ecological community
     that incorporate taxonomic hierarchy information. Includes tools for
     constructing taxonomic trees and computing pairwise taxonomic distances.
     Methods are described in Ozkan (2018) <doi:10.18182/tjf.441061>,
-    Ozkan (2018) <doi:10.26650/forestist.2018.340634>,
     Clarke & Warwick (1998) <doi:10.1046/j.1365-2664.1998.3540523.x>,
     Ozkan & Mert (2022) <doi:10.5152/forestist.2021.21025>,
     Shannon (1948) <doi:10.1002/j.1538-7305.1948.tb01338.x>, and
@@ -39,7 +38,13 @@ Suggests:
     testthat (>= 3.0.0),
     knitr,
     rmarkdown,
-    ggplot2
+    ggplot2,
+    shiny (>= 1.7.0),
+    bslib (>= 0.5.0),
+    DT (>= 0.28),
+    openxlsx (>= 4.2.5),
+    readxl (>= 1.4.0),
+    shinyjs (>= 2.1.0)
 Config/testthat/edition: 3
 VignetteBuilder: knitr
 URL: https://github.com/mgorgoz/taxonomic-diversity-r,
