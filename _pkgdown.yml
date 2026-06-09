@@ -90,6 +90,15 @@ reference:
       - batch_analysis
       - compare_indices
 
+  - title: "Interactive Dashboard"
+    icon: fa-desktop
+    desc: >
+      Launch the taxdiv Explorer — a Shiny dashboard for loading data,
+      computing every index, and producing publication-ready graphs
+      without writing code.
+    contents:
+      - taxdiv_explorer
+
   - title: "Classical Diversity Indices"
     icon: fa-calculator
     desc: >
