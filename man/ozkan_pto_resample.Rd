@@ -14,7 +14,11 @@ Names must match the first column of \code{tax_tree}.}
 is species names, subsequent columns are taxonomic ranks.}
 
 \item{n_iter}{Number of stochastic iterations to run (default: 101).
-Must be >= 101.}
+Must be a positive integer (>= 1). With \code{n_iter = 1}, only the
+deterministic first iteration runs, so the result equals \code{\link[=ozkan_pto]{ozkan_pto()}}
+(Run 1). Because the procedure returns the maximum across iterations,
+the result is non-decreasing in \code{n_iter}; use a fixed \code{n_iter} when
+comparing sites, and a high value (e.g. 500-1000) for final estimates.}
 
 \item{seed}{Optional random seed for reproducibility (default: NULL).}
 }

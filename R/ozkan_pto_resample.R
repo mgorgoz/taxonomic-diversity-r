@@ -154,7 +154,11 @@ ozkan_pto_jackknife <- function(community, tax_tree,
 #' @param tax_tree A data frame with taxonomic hierarchy. First column
 #'   is species names, subsequent columns are taxonomic ranks.
 #' @param n_iter Number of stochastic iterations to run (default: 101).
-#'   Must be >= 101.
+#'   Must be a positive integer (>= 1). With `n_iter = 1`, only the
+#'   deterministic first iteration runs, so the result equals [ozkan_pto()]
+#'   (Run 1). Because the procedure returns the maximum across iterations,
+#'   the result is non-decreasing in `n_iter`; use a fixed `n_iter` when
+#'   comparing sites, and a high value (e.g. 500-1000) for final estimates.
 #' @param seed Optional random seed for reproducibility (default: NULL).
 #'
 #' @return A named list with components:
@@ -239,8 +243,8 @@ ozkan_pto_resample <- function(community, tax_tree, n_iter = 101L,
   if (ncol(tax_tree) < 2) {
     stop("'tax_tree' must have at least 2 columns.", call. = FALSE)
   }
-  if (!is.numeric(n_iter) || length(n_iter) != 1 || n_iter < 101) {
-    stop("'n_iter' must be a single integer >= 101.", call. = FALSE)
+  if (!is.numeric(n_iter) || length(n_iter) != 1 || n_iter < 1) {
+    stop("'n_iter' must be a single positive integer (>= 1).", call. = FALSE)
   }
   n_iter <- as.integer(n_iter)
 
@@ -273,26 +277,28 @@ ozkan_pto_resample <- function(community, tax_tree, n_iter = 101L,
                      unname(det$uTO), unname(det$TO))
 
   # Iterations 2..n_iter: stochastic resampling
+  # When n_iter == 1, only the deterministic iteration runs (= Run 1).
+  if (n_iter >= 2) {
+    for (iter in 2:n_iter) {
+      # ALL species get 50% coin flip (RANDBETWEEN(0,1) * abundance)
+      # Matches Excel macro: IF(H2 > 0, RANDBETWEEN(0,1) * H2, 0)
+      coin <- sample(c(0L, 1L), n_species, replace = TRUE)
+      resampled <- community * coin
 
-  for (iter in 2:n_iter) {
-    # ALL species get 50% coin flip (RANDBETWEEN(0,1) * abundance)
-    # Matches Excel macro: IF(H2 > 0, RANDBETWEEN(0,1) * H2, 0)
-    coin <- sample(c(0L, 1L), n_species, replace = TRUE)
-    resampled <- community * coin
+      # Keep only non-zero species
+      resampled <- resampled[resampled > 0]
 
-    # Keep only non-zero species
-    resampled <- resampled[resampled > 0]
+      if (length(resampled) < 2) {
+        results[iter, ] <- c(0, 0, 0, 0)
+        next
+      }
 
-    if (length(resampled) < 2) {
-      results[iter, ] <- c(0, 0, 0, 0)
-      next
+      iter_result <- ozkan_pto(resampled, tax_tree)
+      results[iter, ] <- c(unname(iter_result$uTO_plus),
+                            unname(iter_result$TO_plus),
+                            unname(iter_result$uTO),
+                            unname(iter_result$TO))
     }
-
-    iter_result <- ozkan_pto(resampled, tax_tree)
-    results[iter, ] <- c(unname(iter_result$uTO_plus),
-                          unname(iter_result$TO_plus),
-                          unname(iter_result$uTO),
-                          unname(iter_result$TO))
   }
 
   # --- Compute maximums across all iterations ---
@@ -489,21 +495,24 @@ ozkan_pto_sensitivity <- function(community, tax_tree, run2_result,
                      unname(det_result$uTO), unname(det_result$TO))
 
   # Iterations 2..n_iter: probability-weighted resampling
-  for (iter in 2:n_iter) {
-    include <- stats::runif(n_species) < species_probs
-    resampled <- community * as.integer(include)
-    resampled <- resampled[resampled > 0]
+  # When n_iter == 1, only the deterministic iteration runs (= Run 1).
+  if (n_iter >= 2) {
+    for (iter in 2:n_iter) {
+      include <- stats::runif(n_species) < species_probs
+      resampled <- community * as.integer(include)
+      resampled <- resampled[resampled > 0]
 
-    if (length(resampled) < 2) {
-      results[iter, ] <- c(0, 0, 0, 0)
-      next
+      if (length(resampled) < 2) {
+        results[iter, ] <- c(0, 0, 0, 0)
+        next
+      }
+
+      iter_result <- ozkan_pto(resampled, tax_tree)
+      results[iter, ] <- c(unname(iter_result$uTO_plus),
+                            unname(iter_result$TO_plus),
+                            unname(iter_result$uTO),
+                            unname(iter_result$TO))
     }
-
-    iter_result <- ozkan_pto(resampled, tax_tree)
-    results[iter, ] <- c(unname(iter_result$uTO_plus),
-                          unname(iter_result$TO_plus),
-                          unname(iter_result$uTO),
-                          unname(iter_result$TO))
   }
 
   # --- Compute Run 3 maximums ---
@@ -555,7 +564,9 @@ ozkan_pto_sensitivity <- function(community, tax_tree, run2_result,
 #' @param tax_tree A data frame with taxonomic hierarchy. First column
 #'   is species names, subsequent columns are taxonomic ranks.
 #' @param n_iter Number of stochastic iterations for Run 2 and Run 3
-#'   (default: 101, minimum: 101).
+#'   (default: 101, minimum: 1). With `n_iter = 1`, both runs reduce to the
+#'   deterministic Run 1 result. The maximum-based result is non-decreasing
+#'   in `n_iter`, so keep it fixed when comparing sites.
 #' @param seed Optional random seed for reproducibility. If provided,
 #'   Run 2 uses this seed and Run 3 uses `seed + 1` to ensure
 #'   independent randomness.
@@ -617,8 +628,8 @@ ozkan_pto_sensitivity <- function(community, tax_tree, run2_result,
 ozkan_pto_full <- function(community, tax_tree, n_iter = 101L,
                             seed = NULL) {
   # --- Input validation (basic; ozkan_pto_resample does full validation) ---
-  if (!is.numeric(n_iter) || length(n_iter) != 1 || n_iter < 101) {
-    stop("'n_iter' must be a single integer >= 101.", call. = FALSE)
+  if (!is.numeric(n_iter) || length(n_iter) != 1 || n_iter < 1) {
+    stop("'n_iter' must be a single positive integer (>= 1).", call. = FALSE)
   }
   n_iter <- as.integer(n_iter)
 

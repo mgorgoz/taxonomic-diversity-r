@@ -14,7 +14,9 @@ Names must match the first column of \code{tax_tree}.}
 is species names, subsequent columns are taxonomic ranks.}
 
 \item{n_iter}{Number of stochastic iterations for Run 2 and Run 3
-(default: 101, minimum: 101).}
+(default: 101, minimum: 1). With \code{n_iter = 1}, both runs reduce to the
+deterministic Run 1 result. The maximum-based result is non-decreasing
+in \code{n_iter}, so keep it fixed when comparing sites.}
 
 \item{seed}{Optional random seed for reproducibility. If provided,
 Run 2 uses this seed and Run 3 uses \code{seed + 1} to ensure

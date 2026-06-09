@@ -220,7 +220,7 @@ uTO = ln(Numerator / 10)
 |--------------|------------------|-------------------------------------------|
 | `community`  | named numeric    | Species abundances                        |
 | `tax_tree`   | data.frame       | Taxonomic hierarchy                       |
-| `n_iter`     | integer (>=101)  | Number of iterations (default: 101)       |
+| `n_iter`     | integer (>=1)    | Number of iterations (default: 101)       |
 | `seed`       | integer or NULL  | Random seed for reproducibility           |
 
 **Output:**
@@ -244,7 +244,7 @@ uTO = ln(Numerator / 10)
 FUNCTION ozkan_pto_resample(community, tax_tree, n_iter = 101, seed = NULL):
 
     # === STEP 0: Validation ===
-    VALIDATE n_iter >= 101
+    VALIDATE n_iter >= 1            # n_iter = 1 returns deterministic Run 1 only
     VALIDATE at least 2 species with positive abundance
     IF seed is provided: SET random seed
 
@@ -446,7 +446,7 @@ by favoring the species composition that produced high diversity in Run 2.
                               v
                     ┌─────────────────────────────────┐
                     │  Run 2: ozkan_pto_resample()     │
-                    │  n_iter iterations (>= 101)      │
+                    │  n_iter iterations (>= 1)        │
                     │  50% random inclusion per species│
                     │  -> MAX of each component        │
                     └─────────┬───────────────────────┘
@@ -491,7 +491,8 @@ least as large as the deterministic calculation.
 | Only 1 node at a taxonomic level         | Ed = 0, computation stops      |
 | All species excluded in a stochastic run | That iteration returns 0       |
 | Only 1 species survives stochastic run   | That iteration returns 0       |
-| n_iter < 101                             | ERROR: minimum 101 required    |
+| n_iter < 1                               | ERROR: positive integer needed |
+| n_iter == 1                              | Deterministic Run 1 only       |
 
 ---
 
