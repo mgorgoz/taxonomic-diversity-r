@@ -15,7 +15,7 @@ tax <- data.frame(
 
 # Two different communities: one evenly distributed, one with a dominant species
 comm_equal   <- c(sp1 = 5, sp2 = 5, sp3 = 5, sp4 = 5)
-comm_unequal <- c(sp1 = 50, sp2 = 2, sp3 = 1, sp4 = 1)
+comm_unequal <- c(sp1 = 9, sp2 = 2, sp3 = 1, sp4 = 1)
 
 
 # ---- Test 1: Single community input should return correct data.frame ----

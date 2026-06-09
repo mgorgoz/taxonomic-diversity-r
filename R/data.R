@@ -8,9 +8,9 @@
 #'
 #' The three sites represent different forest types:
 #' \describe{
-#'   \item{Karisik_Orman}{Mixed forest -- both conifers and broadleaves (12 species)}
-#'   \item{Yaprakli_Orman}{Broadleaf-dominated forest (13 species)}
-#'   \item{Konifer_Orman}{Conifer-dominated forest (8 species)}
+#'   \item{Mixed_Forest}{Both conifers and broadleaves (12 species)}
+#'   \item{Broadleaf_Forest}{Broadleaf-dominated forest (13 species)}
+#'   \item{Conifer_Forest}{Conifer-dominated forest (8 species)}
 #' }
 #'
 #' @format A data frame with 33 rows and 9 columns:
@@ -36,7 +36,7 @@
 #' or \code{\link{compare_indices}}:
 #'
 #' \preformatted{
-#' site1 <- anatolian_trees[anatolian_trees$Site == "Karisik_Orman", ]
+#' site1 <- anatolian_trees[anatolian_trees$Site == "Mixed_Forest", ]
 #' community <- setNames(site1$Abundance, site1$Species)
 #' tax_tree  <- site1[, c("Species", "Genus", "Family", "Order",
 #'                         "Class", "Phylum", "Kingdom")]
@@ -60,7 +60,7 @@
 #' batch_analysis(anatolian_trees)
 #'
 #' # Single site extraction
-#' site1 <- anatolian_trees[anatolian_trees$Site == "Karisik_Orman", ]
+#' site1 <- anatolian_trees[anatolian_trees$Site == "Mixed_Forest", ]
 #' comm  <- setNames(site1$Abundance, site1$Species)
 #' tax   <- site1[, c("Species", "Genus", "Family", "Order",
 #'                     "Class", "Phylum", "Kingdom")]

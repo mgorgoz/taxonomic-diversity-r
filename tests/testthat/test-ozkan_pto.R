@@ -64,7 +64,7 @@ test_that("ozkan_pto satisfies ordering constraints", {
 test_that("ozkan_pto returns zero for single species", {
   # Diversity should be zero for a single-species community
   # Because there is no other species to compare with
-  comm <- c(sp1 = 10)
+  comm <- c(sp1 = 5)
   tax <- data.frame(
     Species = "sp1",
     Genus = "G1",
@@ -90,13 +90,13 @@ test_that("ozkan_pto validates input", {
   )
 
   # Unnamed vector: taxonomy cannot be matched without species names
-  expect_error(ozkan_pto(c(10, 5), tax), "named vector")
+  expect_error(ozkan_pto(c(5, 3), tax), "named vector")
 
   # Negative abundance: abundance cannot be negative in nature
   expect_error(ozkan_pto(c(sp1 = -1, sp2 = 5), tax), "non-negative")
 
   # Species name not in taxonomy: no match can be found
-  expect_error(ozkan_pto(c(sp_x = 10), tax), "not found")
+  expect_error(ozkan_pto(c(sp_x = 5), tax), "not found")
 })
 
 test_that("pto_components returns named numeric vector with 8 elements", {
@@ -129,8 +129,8 @@ test_that("ozkan_pto uses presence-based (equal weight) entropy at species level
   # which species survive during the "slicing" stage
   #
   # Therefore, species-level Deng entropy should equal ln(S)
-  # Regardless of abundances (100, 1, 1, 1, 1) -> Ed_S = ln(5)
-  comm <- c(sp1 = 100, sp2 = 1, sp3 = 1, sp4 = 1, sp5 = 1)
+  # Regardless of abundances (9, 1, 1, 1, 1) -> Ed_S = ln(5)
+  comm <- c(sp1 = 9, sp2 = 1, sp3 = 1, sp4 = 1, sp5 = 1)
   tax <- data.frame(
     Species = paste0("sp", 1:5),
     Genus   = c("G1", "G1", "G2", "G2", "G3"),

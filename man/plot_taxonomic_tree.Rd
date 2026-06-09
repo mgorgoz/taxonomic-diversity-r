@@ -75,9 +75,9 @@ tax <- build_tax_tree(
 plot_taxonomic_tree(tax)
 
 # Color by Family, with abundance info
-comm <- c(Quercus_robur = 25, Quercus_petraea = 18,
-          Pinus_nigra = 30, Pinus_brutia = 12,
-          Juniperus_excelsa = 8)
+comm <- c(Quercus_robur = 9, Quercus_petraea = 7,
+          Pinus_nigra = 9, Pinus_brutia = 5,
+          Juniperus_excelsa = 4)
 plot_taxonomic_tree(tax, community = comm, color_by = "Family")
 }
 

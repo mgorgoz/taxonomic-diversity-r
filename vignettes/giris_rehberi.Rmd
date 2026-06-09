@@ -39,21 +39,21 @@ library(taxdiv)
 ## Ornek Veri: Akdeniz Ormani Toplulugu
 
 Orneklerimizde 10 turlu hayali bir Akdeniz ormani toplulugu kullanacagiz.
-Her turun **bolluk degeri** (birey sayisi) ve **7 taksonomik seviyesi** vardir.
+Her turun **Westhoff-Maarel ortu-bolluk degeri** (1--9 olcegi) ve **7 taksonomik seviyesi** vardir.
 
 ```{r veri}
-# Tur bolluklari (ornek alanindaki birey sayisi)
+# Tur bolluklari (Westhoff-Maarel ortu-bolluk olcegi, 1-9)
 topluluk <- c(
-  Quercus_coccifera    = 25,
-  Quercus_infectoria   = 18,
-  Pinus_brutia         = 30,
-  Pinus_nigra          = 12,
-  Juniperus_excelsa    = 8,
-  Juniperus_oxycedrus  = 5,
-  Cedrus_libani        = 15,
-  Abies_cilicica       = 7,
-  Fagus_orientalis     = 20,
-  Carpinus_betulus      = 10
+  Quercus_coccifera    = 9,
+  Quercus_infectoria   = 7,
+  Pinus_brutia         = 9,
+  Pinus_nigra          = 5,
+  Juniperus_excelsa    = 3,
+  Juniperus_oxycedrus  = 2,
+  Cedrus_libani        = 6,
+  Abies_cilicica       = 3,
+  Fagus_orientalis     = 8,
+  Carpinus_betulus      = 4
 )
 
 # Taksonomik hiyerarsi (7 seviye: Tur, Cins, Familya, Takim, Sinif, Bolum, Alem)
@@ -352,7 +352,7 @@ veri <- data.frame(
   Site = rep(c("Alan_A", "Alan_B"), each = 5),
   Species = rep(c("Pinus_brutia", "Pinus_nigra", "Quercus_coccifera",
                   "Juniperus_excelsa", "Cedrus_libani"), 2),
-  Abundance = c(30, 12, 25, 8, 15, 5, 40, 10, 3, 2),
+  Abundance = c(8, 4, 7, 3, 5, 2, 9, 4, 1, 1),
   Genus = rep(c("Pinus", "Pinus", "Quercus", "Juniperus", "Cedrus"), 2),
   Family = rep(c("Pinaceae", "Pinaceae", "Fagaceae",
                  "Cupressaceae", "Pinaceae"), 2),
@@ -429,13 +429,13 @@ Birden fazla toplulugu tum indeksler uzerinden karsilastirir. Ikinci bir
 topluluk olusturuyoruz: ayni turler ama bir tur baskin:
 
 ```{r karsilastirma_veri}
-# Baskin topluluk: ayni turler, farkli bolluk dagilimi
+# Baskin topluluk: ayni turler, farkli bolluk dagilimi (Westhoff-Maarel)
 baskin_topluluk <- c(
-  Quercus_coccifera   = 80, Quercus_infectoria  = 5,
-  Pinus_brutia        = 3,  Pinus_nigra         = 2,
-  Juniperus_excelsa   = 2,  Juniperus_oxycedrus = 1,
-  Cedrus_libani       = 3,  Abies_cilicica      = 1,
-  Fagus_orientalis    = 2,  Carpinus_betulus     = 1
+  Quercus_coccifera   = 9,  Quercus_infectoria  = 3,
+  Pinus_brutia        = 1,  Pinus_nigra         = 1,
+  Juniperus_excelsa   = 1,  Juniperus_oxycedrus = 1,
+  Cedrus_libani       = 1,  Abies_cilicica      = 1,
+  Fagus_orientalis    = 1,  Carpinus_betulus     = 1
 )
 
 topluluklar <- list(

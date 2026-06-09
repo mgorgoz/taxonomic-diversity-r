@@ -6,7 +6,9 @@
 #' distance (TO+, uTO+).
 #'
 #' @param community A named numeric vector of species abundances.
-#'   Names must match the first column of `tax_tree`.
+#'   Names must match the first column of `tax_tree`. Westhoff-Maarel
+#'   cover-abundance scale (1-9) is recommended for compatibility with
+#'   Ozkan (2018), but any positive numeric values are accepted.
 #' @param tax_tree A data frame with taxonomic hierarchy. First column
 #'   is species names, subsequent columns are taxonomic ranks from
 #'   lowest to highest (e.g., Species, Genus, Family, Order, Class,
@@ -111,6 +113,7 @@ ozkan_pto <- function(community, tax_tree, max_level = NULL) {
 
   # Filter to non-zero abundances
   community <- community[community > 0]
+
   species_names <- names(community)
 
   # Check species in taxonomy

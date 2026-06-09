@@ -30,7 +30,7 @@
 #'
 #' @examples
 #' \donttest{
-#' comm <- c(sp1 = 10, sp2 = 20, sp3 = 15, sp4 = 5)
+#' comm <- c(sp1 = 9, sp2 = 7, sp3 = 6, sp4 = 3)
 #' tax <- build_tax_tree(
 #'   species = paste0("sp", 1:4),
 #'   Genus = c("G1", "G1", "G2", "G2"),

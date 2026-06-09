@@ -44,7 +44,7 @@ Requires the \pkg{ggplot2} package.
 }
 \examples{
 \donttest{
-comm <- c(sp1 = 10, sp2 = 5, sp3 = 8, sp4 = 2, sp5 = 3)
+comm <- c(sp1 = 9, sp2 = 5, sp3 = 8, sp4 = 2, sp5 = 3)
 tax <- data.frame(
   Species = paste0("sp", 1:5),
   Genus   = c("G1", "G1", "G2", "G2", "G3"),

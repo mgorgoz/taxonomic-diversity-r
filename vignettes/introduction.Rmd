@@ -38,21 +38,21 @@ library(taxdiv)
 
 We will use a hypothetical Mediterranean forest community to demonstrate the
 package functionality. This community has 10 tree and shrub species with
-known abundances and a 4-level taxonomic hierarchy.
+Westhoff-Maarel cover-abundance values (1--9) and a 4-level taxonomic hierarchy.
 
 ```{r data}
-# Species abundances (individuals per plot)
+# Species abundances (Westhoff-Maarel cover-abundance scale, 1-9)
 community <- c(
-  Quercus_coccifera    = 25,
-  Quercus_infectoria   = 18,
-  Pinus_brutia         = 30,
-  Pinus_nigra          = 12,
-  Juniperus_excelsa    = 8,
-  Juniperus_oxycedrus  = 6,
-  Arbutus_andrachne    = 15,
-  Styrax_officinalis   = 4,
-  Cercis_siliquastrum  = 3,
-  Olea_europaea        = 10
+  Quercus_coccifera    = 9,
+  Quercus_infectoria   = 7,
+  Pinus_brutia         = 9,
+  Pinus_nigra          = 5,
+  Juniperus_excelsa    = 4,
+  Juniperus_oxycedrus  = 3,
+  Arbutus_andrachne    = 6,
+  Styrax_officinalis   = 2,
+  Cercis_siliquastrum  = 1,
+  Olea_europaea        = 5
 )
 
 # Taxonomic hierarchy
@@ -188,9 +188,9 @@ Here we compare our Mediterranean community with a species-poor community:
 ```{r compare}
 # Degraded community (fewer species, less taxonomic breadth)
 degraded <- c(
-  Quercus_coccifera   = 40,
-  Pinus_brutia        = 35,
-  Juniperus_oxycedrus = 10
+  Quercus_coccifera   = 9,
+  Pinus_brutia        = 8,
+  Juniperus_oxycedrus = 5
 )
 
 tax_degraded <- tax_tree[tax_tree$Species %in% names(degraded), ]
@@ -372,11 +372,11 @@ where one species dominates:
 ```{r comparison_data}
 # Dominant community: same species, uneven abundances
 dominant_community <- c(
-  Quercus_coccifera   = 80, Quercus_infectoria  = 5,
-  Pinus_brutia        = 3,  Pinus_nigra         = 2,
-  Juniperus_excelsa   = 2,  Juniperus_oxycedrus = 1,
-  Arbutus_andrachne   = 3,  Styrax_officinalis  = 1,
-  Cercis_siliquastrum = 2,  Olea_europaea       = 1
+  Quercus_coccifera   = 9,  Quercus_infectoria  = 3,
+  Pinus_brutia        = 1,  Pinus_nigra         = 1,
+  Juniperus_excelsa   = 1,  Juniperus_oxycedrus = 1,
+  Arbutus_andrachne   = 1,  Styrax_officinalis  = 1,
+  Cercis_siliquastrum = 1,  Olea_europaea       = 1
 )
 
 communities <- list(

@@ -27,7 +27,7 @@ df_multi <- data.frame(
   Genus     = c("G1", "G1", "G2", "G2", "G1", "G1", "G2", "G2"),
   Family    = c("F1", "F1", "F1", "F2", "F1", "F1", "F1", "F2"),
   Order     = c("O1", "O1", "O1", "O1", "O1", "O1", "O1", "O1"),
-  Abundance = c(10, 20, 15, 5, 5, 5, 5, 5),
+  Abundance = c(7, 3, 5, 2, 4, 4, 4, 4),
   stringsAsFactors = FALSE
 )
 
@@ -171,7 +171,7 @@ test_that("batch_analysis: parallel with single site falls back to sequential", 
     Genus     = c("G1", "G1", "G2"),
     Family    = c("F1", "F1", "F1"),
     Order     = c("O1", "O1", "O1"),
-    Abundance = c(10, 20, 15),
+    Abundance = c(4, 7, 5),
     stringsAsFactors = FALSE
   )
   # parallel = TRUE with 1 site should still work (sequential fallback)

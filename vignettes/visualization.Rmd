@@ -25,18 +25,18 @@ that can be further customized.
 ```{r setup}
 library(taxdiv)
 
-# Mediterranean forest community
+# Mediterranean forest community (Westhoff-Maarel scale, 1-9)
 community <- c(
-  Quercus_coccifera    = 25,
-  Quercus_infectoria   = 18,
-  Pinus_brutia         = 30,
-  Pinus_nigra          = 12,
-  Juniperus_excelsa    = 8,
-  Juniperus_oxycedrus  = 6,
-  Arbutus_andrachne    = 15,
-  Styrax_officinalis   = 4,
-  Cercis_siliquastrum  = 3,
-  Olea_europaea        = 10
+  Quercus_coccifera    = 9,
+  Quercus_infectoria   = 7,
+  Pinus_brutia         = 9,
+  Pinus_nigra          = 5,
+  Juniperus_excelsa    = 4,
+  Juniperus_oxycedrus  = 3,
+  Arbutus_andrachne    = 6,
+  Styrax_officinalis   = 2,
+  Cercis_siliquastrum  = 1,
+  Olea_europaea        = 5
 )
 
 tax_tree <- build_tax_tree(
@@ -144,13 +144,13 @@ Overlays multiple communities on a single polar coordinate plot where each
 axis represents a different diversity index.
 
 ```{r radar_data}
-# Degraded community for comparison
+# Degraded community for comparison (Westhoff-Maarel scale)
 dominant_community <- c(
-  Quercus_coccifera   = 80, Quercus_infectoria  = 5,
-  Pinus_brutia        = 3,  Pinus_nigra         = 2,
-  Juniperus_excelsa   = 2,  Juniperus_oxycedrus = 1,
-  Arbutus_andrachne   = 3,  Styrax_officinalis  = 1,
-  Cercis_siliquastrum = 2,  Olea_europaea       = 1
+  Quercus_coccifera   = 9,  Quercus_infectoria  = 3,
+  Pinus_brutia        = 1,  Pinus_nigra         = 1,
+  Juniperus_excelsa   = 1,  Juniperus_oxycedrus = 1,
+  Arbutus_andrachne   = 1,  Styrax_officinalis  = 1,
+  Cercis_siliquastrum = 1,  Olea_europaea       = 1
 )
 
 communities <- list(

@@ -40,16 +40,16 @@ taxdiv needs two inputs:
 
 ```{r single_site}
 community <- c(
-  Quercus_coccifera    = 25,
-  Quercus_infectoria   = 18,
-  Pinus_brutia         = 30,
-  Pinus_nigra          = 12,
-  Juniperus_excelsa    = 8,
-  Juniperus_oxycedrus  = 6,
-  Arbutus_andrachne    = 15,
-  Styrax_officinalis   = 4,
-  Cercis_siliquastrum  = 3,
-  Olea_europaea        = 10
+  Quercus_coccifera    = 9,
+  Quercus_infectoria   = 7,
+  Pinus_brutia         = 9,
+  Pinus_nigra          = 5,
+  Juniperus_excelsa    = 4,
+  Juniperus_oxycedrus  = 3,
+  Arbutus_andrachne    = 6,
+  Styrax_officinalis   = 2,
+  Cercis_siliquastrum  = 1,
+  Olea_europaea        = 5
 )
 ```
 
@@ -86,8 +86,8 @@ multi_data <- data.frame(
               "Arbutus_andrachne", "Olea_europaea",
               "Quercus_coccifera", "Quercus_infectoria", "Pinus_brutia",
               "Pinus_nigra", "Cercis_siliquastrum"),
-  Abundance = c(25, 30, 8, 15, 10,
-                40, 20, 15, 10, 5),
+  Abundance = c(7, 8, 3, 5, 4,
+                9, 6, 5, 4, 2),
   Genus = c("Quercus", "Pinus", "Juniperus", "Arbutus", "Olea",
             "Quercus", "Quercus", "Pinus", "Pinus", "Cercis"),
   Family = c("Fagaceae", "Pinaceae", "Cupressaceae", "Ericaceae", "Oleaceae",
@@ -153,9 +153,9 @@ cat("  TO+  =", round(full$run3$TO_plus_max, 4), "\n")
 
 ```{r compare_plot, fig.width=10, fig.height=6, fig.alt="Bar chart comparing diversity indices between intact and degraded forest communities"}
 degraded <- c(
-  Quercus_coccifera   = 40,
-  Pinus_brutia        = 35,
-  Juniperus_oxycedrus = 10
+  Quercus_coccifera   = 9,
+  Pinus_brutia        = 8,
+  Juniperus_oxycedrus = 5
 )
 tax_degraded <- tax_tree[tax_tree$Species %in% names(degraded), ]
 

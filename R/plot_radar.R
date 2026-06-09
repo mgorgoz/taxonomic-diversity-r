@@ -38,7 +38,7 @@
 #'   Family  = c("F1", "F1", "F1", "F2")
 #' )
 #' comms <- list(
-#'   Site_A = c(sp1 = 10, sp2 = 20, sp3 = 15, sp4 = 5),
+#'   Site_A = c(sp1 = 9, sp2 = 7, sp3 = 6, sp4 = 3),
 #'   Site_B = c(sp1 = 5, sp2 = 5, sp3 = 5, sp4 = 5)
 #' )
 #' plot_radar(comms, tax)

@@ -6,6 +6,7 @@
 \usage{
 batch_analysis(
   data,
+  indices = c("classical", "clarke_warwick", "ozkan_pto"),
   site_column = NULL,
   tax_columns = NULL,
   abundance_column = "Abundance",
@@ -15,7 +16,8 @@ batch_analysis(
   seed = 42L,
   parallel = FALSE,
   n_cores = NULL,
-  progress = TRUE
+  progress = TRUE,
+  progress_fn = NULL
 )
 }
 \arguments{
@@ -23,11 +25,19 @@ batch_analysis(
 a species column, at least one taxonomic rank column, and an abundance
 column. Optionally includes a site/plot column for multi-site analysis.}
 
+\item{indices}{Character vector specifying which index groups to compute.
+One or more of \code{"classical"} (Shannon, Simpson),
+\code{"clarke_warwick"} (Delta, Delta*, AvTD, VarTD), and
+\code{"ozkan_pto"} (uTO, TO, uTO+, TO+ with optional Run 2+3).
+Default is all three groups. Unambiguous abbreviations are allowed (e.g.,
+\code{"clas"} for classical, \code{"clark"} for clarke_warwick,
+\code{"oz"} for ozkan_pto). Note that \code{"cl"} and \code{"cla"} are
+ambiguous and will produce an error.}
+
 \item{site_column}{Character string specifying the name of the site column.
 If \code{NULL} (default), the function searches for columns named
-\code{"Site"}, \code{"site"}, \code{"Alan"}, \code{"alan"}, \code{"Plot"},
-or \code{"plot"}. If no such column is found, all data is treated as a
-single site.}
+\code{"Site"}, \code{"site"}, \code{"Plot"}, or \code{"plot"}.
+If no such column is found, all data is treated as a single site.}
 
 \item{tax_columns}{Character vector specifying the names of the taxonomic
 columns (from Species to highest rank). If \code{NULL} (default), the
@@ -40,20 +50,23 @@ abundance column. Default is \code{"Abundance"} (case-insensitive match).}
 
 \item{correction}{Bias correction for the Shannon index. One of
 \code{"none"} (default), \code{"miller_madow"}, \code{"grassberger"}, or
-\code{"chao_shen"}. Passed to \code{\link[=shannon]{shannon()}}. See \code{\link[=shannon]{shannon()}} for details.}
+\code{"chao_shen"}. Passed to \code{\link[=shannon]{shannon()}}. See \code{\link[=shannon]{shannon()}} for details.
+Ignored when \code{"classical"} is not in \code{indices}.}
 
 \item{full}{Logical. If \code{TRUE} (default), run the full Ozkan pipeline
 (Run 1+2+3) using \code{\link[=ozkan_pto_full]{ozkan_pto_full()}} instead of deterministic-only
 \code{\link[=pto_components]{pto_components()}}. This produces max values across all three runs,
 matching the Excel macro output. Set to \code{FALSE} for deterministic
-Run 1 only (faster but incomplete).}
+Run 1 only (faster but incomplete). Ignored when \code{"ozkan_pto"} is not
+in \code{indices}.}
 
 \item{n_iter}{Number of stochastic iterations for Run 2 and Run 3 when
-\code{full = TRUE}. Default \code{101}. Ignored when \code{full = FALSE}.}
+\code{full = TRUE}. Default \code{101}. Ignored when \code{full = FALSE} or when
+\code{"ozkan_pto"} is not in \code{indices}.}
 
 \item{seed}{Random seed for reproducibility when \code{full = TRUE}.
 Default \code{42}. Set to \code{NULL} for non-deterministic results.
-Ignored when \code{full = FALSE}.}
+Ignored when \code{full = FALSE} or when \code{"ozkan_pto"} is not in \code{indices}.}
 
 \item{parallel}{Logical. If \code{TRUE}, use parallel processing to compute
 indices for multiple sites concurrently. Default \code{FALSE}.}
@@ -64,71 +77,72 @@ indices for multiple sites concurrently. Default \code{FALSE}.}
 \item{progress}{Logical. If \code{TRUE} (default), display a progress bar
 during sequential computation. Ignored when \code{parallel = TRUE}.
 Set to \code{FALSE} to suppress progress output.}
+
+\item{progress_fn}{Optional callback function for custom progress reporting
+(e.g. Shiny). When provided, it is called after each site completes with
+named arguments \code{i} (current site index), \code{n} (total sites), and
+\code{site} (site name). Useful for integrating with \code{shiny::withProgress()}.}
 }
 \value{
-A data frame with one row per site and columns:
-\code{Site}, \code{N_Species}, \code{Shannon}, \code{Simpson}, \code{Delta},
-\code{Delta_star}, \code{AvTD}, \code{VarTD}, \code{uTO}, \code{TO},
-\code{uTO_plus}, \code{TO_plus}, \code{uTO_max}, \code{TO_max},
-\code{uTO_plus_max}, \code{TO_plus_max}. When \code{full = TRUE}, the max
-columns reflect the maximum across Run 1, 2, and 3.
+A data frame with one row per site. Columns always include
+\code{Site} and \code{N_Species}. Additional columns depend on the
+\code{indices} parameter:
+\itemize{
+\item \code{"classical"}: \code{Shannon}, \code{Simpson}
+\item \code{"clarke_warwick"}: \code{Delta}, \code{Delta_star},
+\code{AvTD}, \code{VarTD}
+\item \code{"ozkan_pto"}: \code{uTO}, \code{TO}, \code{uTO_plus},
+\code{TO_plus}, \code{uTO_max}, \code{TO_max},
+\code{uTO_plus_max}, \code{TO_plus_max}
+}
 }
 \description{
-Computes all diversity indices for one or more sample sites from a single
-data frame (e.g., imported from Excel). The function automatically detects
-the site column, taxonomic columns, and abundance column, splits the data
-by site, and returns a summary data frame with species count and 14
+Computes selected diversity indices for one or more sample sites from a
+single data frame (e.g., imported from Excel). The function automatically
+detects the site column, taxonomic columns, and abundance column, splits
+the data by site, and returns a summary data frame with species count and
 diversity indices per site.
 }
 \details{
 When no site column is present (or all values are identical), the entire
 data set is treated as a single community.
 
-The function calculates the following indices per site:
-\itemize{
-\item \strong{Shannon}: Shannon-Wiener entropy (\code{\link{shannon}})
-\item \strong{Simpson}: Gini-Simpson index (\code{\link{simpson}})
-\item \strong{Delta}: Clarke & Warwick taxonomic diversity (\code{\link{delta}})
-\item \strong{Delta_star}: Clarke & Warwick taxonomic distinctness (\code{\link{delta_star}})
-\item \strong{AvTD}: Average taxonomic distinctness (\code{\link{avtd}})
-\item \strong{VarTD}: Variation in taxonomic distinctness (\code{\link{vartd}})
-\item \strong{uTO}: Unweighted taxonomic diversity (Ozkan pTO, all levels)
-\item \strong{TO}: Weighted taxonomic diversity (Ozkan pTO, all levels)
-\item \strong{uTO_plus}: Unweighted taxonomic distance (Ozkan pTO, all levels)
-\item \strong{TO_plus}: Weighted taxonomic distance (Ozkan pTO, all levels)
-\item \strong{uTO_max}: Unweighted taxonomic diversity (informative levels only)
-\item \strong{TO_max}: Weighted taxonomic diversity (informative levels only)
-\item \strong{uTO_plus_max}: Unweighted taxonomic distance (informative levels only)
-\item \strong{TO_plus_max}: Weighted taxonomic distance (informative levels only)
+Three groups of indices are available via the \code{indices} parameter:
+\describe{
+\item{\code{"classical"}}{Shannon-Wiener entropy and Gini-Simpson index.
+These are species-level diversity measures that do not use taxonomic
+hierarchy.}
+\item{\code{"clarke_warwick"}}{Delta, Delta*, AvTD, and VarTD.
+Taxonomy-aware distinctness measures from Clarke & Warwick (1998).}
+\item{\code{"ozkan_pto"}}{Deng entropy-based taxonomic diversity and
+distance (uTO, TO, uTO+, TO+) from Ozkan (2018). When \code{full = TRUE},
+also computes max values across Run 1+2+3. The Westhoff-Maarel
+cover-abundance scale (integer values 1-9) is recommended for
+compatibility with the original paper, but any positive numeric
+abundance values are accepted.}
 }
 }
 \examples{
-# Single-site data (no Site column) — full pipeline by default
+# All indices (default)
 \donttest{
 df <- data.frame(
   Species   = c("sp1", "sp2", "sp3", "sp4"),
   Genus     = c("G1", "G1", "G2", "G2"),
   Family    = c("F1", "F1", "F1", "F2"),
   Order     = c("O1", "O1", "O1", "O1"),
-  Abundance = c(10, 20, 15, 5),
+  Abundance = c(4, 2, 3, 1),
   stringsAsFactors = FALSE
 )
 batch_analysis(df)
 
-# Multi-site data (with Site column)
-df2 <- data.frame(
-  Site      = c("A", "A", "A", "B", "B", "B"),
-  Species   = c("sp1", "sp2", "sp3", "sp1", "sp3", "sp4"),
-  Genus     = c("G1", "G1", "G2", "G1", "G2", "G2"),
-  Family    = c("F1", "F1", "F1", "F1", "F1", "F2"),
-  Order     = c("O1", "O1", "O1", "O1", "O1", "O1"),
-  Abundance = c(10, 20, 15, 5, 25, 10),
-  stringsAsFactors = FALSE
-)
-batch_analysis(df2)
+# Only classical indices (fast)
+batch_analysis(df, indices = "classical")
 
-# Fast mode: deterministic Run 1 only (no stochastic runs)
-batch_analysis(df, full = FALSE)
+# Classical + Clarke & Warwick (no pTO)
+batch_analysis(df, indices = c("classical", "clarke_warwick"))
+
+# Only Ozkan pTO, deterministic Run 1
+batch_analysis(df, indices = "ozkan_pto", full = FALSE)
 }
 
 }

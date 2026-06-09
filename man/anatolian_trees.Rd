@@ -31,9 +31,9 @@ from species to kingdom.
 \details{
 The three sites represent different forest types:
 \describe{
-\item{Karisik_Orman}{Mixed forest -- both conifers and broadleaves (12 species)}
-\item{Yaprakli_Orman}{Broadleaf-dominated forest (13 species)}
-\item{Konifer_Orman}{Conifer-dominated forest (8 species)}
+\item{Mixed_Forest}{Both conifers and broadleaves (12 species)}
+\item{Broadleaf_Forest}{Broadleaf-dominated forest (13 species)}
+\item{Conifer_Forest}{Conifer-dominated forest (8 species)}
 }
 
 This dataset can be used directly with \code{\link{batch_analysis}}
@@ -45,7 +45,7 @@ To extract a single community for use with \code{\link{ozkan_pto}}
 or \code{\link{compare_indices}}:
 
 \preformatted{
-site1 <- anatolian_trees[anatolian_trees$Site == "Karisik_Orman", ]
+site1 <- anatolian_trees[anatolian_trees$Site == "Mixed_Forest", ]
 community <- setNames(site1$Abundance, site1$Species)
 tax_tree  <- site1[, c("Species", "Genus", "Family", "Order",
                         "Class", "Phylum", "Kingdom")]
@@ -60,7 +60,7 @@ head(anatolian_trees)
 batch_analysis(anatolian_trees)
 
 # Single site extraction
-site1 <- anatolian_trees[anatolian_trees$Site == "Karisik_Orman", ]
+site1 <- anatolian_trees[anatolian_trees$Site == "Mixed_Forest", ]
 comm  <- setNames(site1$Abundance, site1$Species)
 tax   <- site1[, c("Species", "Genus", "Family", "Order",
                     "Class", "Phylum", "Kingdom")]

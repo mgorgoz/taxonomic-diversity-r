@@ -6,7 +6,7 @@ make_test_data <- function() {
     Family  = c("F1", "F1", "F1", "F2", "F2"),
     Order   = c("O1", "O1", "O1", "O1", "O1")
   )
-  comm <- c(sp1 = 10, sp2 = 5, sp3 = 8, sp4 = 2, sp5 = 3)
+  comm <- c(sp1 = 9, sp2 = 5, sp3 = 8, sp4 = 2, sp5 = 3)
   list(tax = tax, comm = comm)
 }
 
@@ -64,7 +64,7 @@ test_that("batch_analysis returns S3 class", {
     Genus     = c("G1", "G1", "G2", "G1", "G2", "G2"),
     Family    = c("F1", "F1", "F1", "F1", "F1", "F2"),
     Order     = c("O1", "O1", "O1", "O1", "O1", "O1"),
-    Abundance = c(10, 20, 15, 5, 25, 10),
+    Abundance = c(4, 7, 5, 2, 8, 3),
     stringsAsFactors = FALSE
   )
   result <- batch_analysis(df)
@@ -78,7 +78,7 @@ test_that("batch_analysis print method works", {
     Genus     = c("G1", "G1", "G2"),
     Family    = c("F1", "F1", "F1"),
     Order     = c("O1", "O1", "O1"),
-    Abundance = c(10, 20, 15),
+    Abundance = c(4, 7, 5),
     stringsAsFactors = FALSE
   )
   result <- batch_analysis(df)
@@ -92,7 +92,7 @@ test_that("batch_analysis summary method works", {
     Genus     = c("G1", "G1", "G2", "G1", "G2", "G2"),
     Family    = c("F1", "F1", "F1", "F1", "F1", "F2"),
     Order     = c("O1", "O1", "O1", "O1", "O1", "O1"),
-    Abundance = c(10, 20, 15, 5, 25, 10),
+    Abundance = c(4, 7, 5, 2, 8, 3),
     stringsAsFactors = FALSE
   )
   result <- batch_analysis(df)
@@ -105,7 +105,7 @@ test_that("batch_analysis backward compatible with data.frame ops", {
     Genus     = c("G1", "G1", "G2"),
     Family    = c("F1", "F1", "F1"),
     Order     = c("O1", "O1", "O1"),
-    Abundance = c(10, 20, 15),
+    Abundance = c(4, 7, 5),
     stringsAsFactors = FALSE
   )
   result <- batch_analysis(df)

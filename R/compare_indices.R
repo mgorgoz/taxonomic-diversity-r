@@ -50,12 +50,12 @@
 #' )
 #'
 #' # Single community
-#' comm <- c(sp1 = 10, sp2 = 20, sp3 = 15, sp4 = 5)
+#' comm <- c(sp1 = 9, sp2 = 7, sp3 = 6, sp4 = 3)
 #' compare_indices(comm, tax)
 #'
 #' # Multiple communities
 #' comm_list <- list(
-#'   Site_A = c(sp1 = 10, sp2 = 20, sp3 = 15, sp4 = 5),
+#'   Site_A = c(sp1 = 9, sp2 = 7, sp3 = 6, sp4 = 3),
 #'   Site_B = c(sp1 = 5, sp2 = 5, sp3 = 5, sp4 = 5)
 #' )
 #' compare_indices(comm_list, tax)

@@ -36,16 +36,16 @@ pipeline, each answering a slightly different question about the community.
 library(taxdiv)
 
 community <- c(
-  Quercus_coccifera    = 25,
-  Quercus_infectoria   = 18,
-  Pinus_brutia         = 30,
-  Pinus_nigra          = 12,
-  Juniperus_excelsa    = 8,
-  Juniperus_oxycedrus  = 6,
-  Arbutus_andrachne    = 15,
-  Styrax_officinalis   = 4,
-  Cercis_siliquastrum  = 3,
-  Olea_europaea        = 10
+  Quercus_coccifera    = 9,
+  Quercus_infectoria   = 7,
+  Pinus_brutia         = 9,
+  Pinus_nigra          = 5,
+  Juniperus_excelsa    = 4,
+  Juniperus_oxycedrus  = 3,
+  Arbutus_andrachne    = 6,
+  Styrax_officinalis   = 2,
+  Cercis_siliquastrum  = 1,
+  Olea_europaea        = 5
 )
 
 tax_tree <- build_tax_tree(
@@ -270,9 +270,9 @@ cat("Unhappy species:", jk$n_unhappy, "\n")
 
 ```{r compare, fig.width=8, fig.height=8, fig.alt="Radar chart comparing diversity indices between diverse and degraded communities"}
 degraded <- c(
-  Quercus_coccifera = 40,
-  Pinus_brutia      = 35,
-  Juniperus_oxycedrus = 10
+  Quercus_coccifera   = 9,
+  Pinus_brutia        = 8,
+  Juniperus_oxycedrus = 5
 )
 
 communities <- list(

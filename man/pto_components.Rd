@@ -8,7 +8,9 @@ pto_components(community, tax_tree)
 }
 \arguments{
 \item{community}{A named numeric vector of species abundances.
-Names must match the first column of \code{tax_tree}.}
+Names must match the first column of \code{tax_tree}. Westhoff-Maarel
+cover-abundance scale (1-9) is recommended for compatibility with
+Ozkan (2018), but any positive numeric values are accepted.}
 
 \item{tax_tree}{A data frame with taxonomic hierarchy. First column
 is species names, subsequent columns are taxonomic ranks from

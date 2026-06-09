@@ -40,7 +40,7 @@ contribution to overall taxonomic diversity.
 }
 \examples{
 \donttest{
-comm <- c(sp1 = 25, sp2 = 18, sp3 = 30, sp4 = 12, sp5 = 8)
+comm <- c(sp1 = 9, sp2 = 7, sp3 = 9, sp4 = 5, sp5 = 4)
 tax <- build_tax_tree(
   species = paste0("sp", 1:5),
   Genus   = c("G1", "G1", "G2", "G2", "G3"),
