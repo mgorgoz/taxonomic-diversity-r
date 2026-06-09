@@ -25,6 +25,7 @@ Pair with
 [`gazi_gytk`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/gazi_gytk.md)
 for analysis:
 
+
     ozkan_pto(gazi_comm, gazi_gytk)
     compare_indices(gazi_comm, gazi_gytk)
 

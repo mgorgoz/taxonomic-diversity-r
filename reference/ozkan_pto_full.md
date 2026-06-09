@@ -26,7 +26,9 @@ ozkan_pto_full(community, tax_tree, n_iter = 101L, seed = NULL)
 - n_iter:
 
   Number of stochastic iterations for Run 2 and Run 3 (default: 101,
-  minimum: 101).
+  minimum: 1). With `n_iter = 1`, both runs reduce to the deterministic
+  Run 1 result. The maximum-based result is non-decreasing in `n_iter`,
+  so keep it fixed when comparing sites.
 
 - seed:
 

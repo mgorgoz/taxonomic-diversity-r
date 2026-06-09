@@ -8,10 +8,8 @@ taxonomic distinctness (VarTD/Lambda+), and Deng entropy-based measures
 that incorporate taxonomic hierarchy information. Includes tools for
 constructing taxonomic trees and computing pairwise taxonomic distances.
 Methods are described in Ozkan (2018)
-[doi:10.18182/tjf.441061](https://doi.org/10.18182/tjf.441061) , Ozkan
-(2018)
-[doi:10.26650/forestist.2018.340634](https://doi.org/10.26650/forestist.2018.340634)
-, Clarke & Warwick (1998)
+[doi:10.18182/tjf.441061](https://doi.org/10.18182/tjf.441061) , Clarke
+& Warwick (1998)
 [doi:10.1046/j.1365-2664.1998.3540523.x](https://doi.org/10.1046/j.1365-2664.1998.3540523.x)
 , Ozkan & Mert (2022)
 [doi:10.5152/forestist.2021.21025](https://doi.org/10.5152/forestist.2021.21025)
@@ -41,3 +39,5 @@ Authors:
 - Kursad Ozkan ([ORCID](https://orcid.org/0000-0002-8526-7243))
 
 - Mehmet Guvenc Negiz ([ORCID](https://orcid.org/0009-0008-1507-8712))
+
+- Ahmet Mert ([ORCID](https://orcid.org/0000-0001-6859-0308))

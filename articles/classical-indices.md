@@ -18,6 +18,7 @@ indices capture the **abundance structure**, while taxonomic indices
 capture the **hierarchical structure**.
 
 ``` r
+
 library(taxdiv)
 
 # Example community
@@ -47,16 +48,18 @@ next individual belongs to.
 
 ### The formula
 
-$$H\prime = - \sum\limits_{i = 1}^{S}p_{i}\ln\left( p_{i} \right)$$
+``` math
+H' = -\sum_{i=1}^{S} p_i \ln(p_i)
+```
 
-where $p_{i}$ is the proportion of species $i$ and $S$ is the total
+where $`p_i`$ is the proportion of species $`i`$ and $`S`$ is the total
 number of species.
 
 ### Key properties
 
-- **Minimum**: $H\prime = 0$ when there is only one species (no
+- **Minimum**: $`H' = 0`$ when there is only one species (no
   uncertainty)
-- **Maximum**: $H\prime = \ln(S)$ when all species have equal abundance
+- **Maximum**: $`H' = \ln(S)`$ when all species have equal abundance
   (maximum uncertainty)
 - **Units**: Measured in “nats” when using natural logarithm, “bits”
   when using log base 2
@@ -66,6 +69,7 @@ number of species.
 ### Usage in taxdiv
 
 ``` r
+
 # Default: natural logarithm
 H <- shannon(community)
 cat("Shannon H':", round(H, 4), "\n")
@@ -84,6 +88,7 @@ the true value because rare species are likely missing from the sample.
 taxdiv provides three correction methods:
 
 ``` r
+
 cat("Uncorrected:  ", round(shannon(community), 4), "\n")
 #> Uncorrected:   2.0948
 cat("Miller-Madow: ", round(shannon(community, correction = "miller_madow"), 4), "\n")
@@ -99,8 +104,8 @@ cat("Chao-Shen:    ", round(shannon(community, correction = "chao_shen"), 4), "\
 - **No correction**: When sample size is large relative to species
   richness (N \>\> S). This is the standard approach used in most
   published studies.
-- **Miller-Madow**: Simple first-order correction. Adds $(S - 1)/2N$ to
-  the estimate. Appropriate when you want a lightweight adjustment.
+- **Miller-Madow**: Simple first-order correction. Adds $`(S-1) / 2N`$
+  to the estimate. Appropriate when you want a lightweight adjustment.
 - **Grassberger**: Uses the digamma function for a more accurate
   correction. Performs well across a range of sample sizes.
 - **Chao-Shen**: Uses Horvitz-Thompson estimation to account for unseen
@@ -121,6 +126,7 @@ community has a low probability (high diversity).
 taxdiv provides all three common Simpson variants:
 
 ``` r
+
 # Dominance (D): probability of same-species pair
 D <- simpson(community, type = "dominance")
 cat("Simpson dominance (D):    ", round(D, 4), "\n")
@@ -139,11 +145,11 @@ cat("Inverse Simpson (1/D):    ", round(inv, 4), "\n")
 
 ### Understanding the variants
 
-| Variant                   | Formula              | Range  | Interpretation                                |
-|---------------------------|----------------------|--------|-----------------------------------------------|
-| **Dominance (D)**         | $\sum p_{i}^{2}$     | 0 to 1 | Higher = less diverse (one species dominates) |
-| **Gini-Simpson (1-D)**    | $1 - \sum p_{i}^{2}$ | 0 to 1 | Higher = more diverse (common choice)         |
-| **Inverse Simpson (1/D)** | $1/\sum p_{i}^{2}$   | 1 to S | Effective number of equally abundant species  |
+| Variant | Formula | Range | Interpretation |
+|----|----|----|----|
+| **Dominance (D)** | $`\sum p_i^2`$ | 0 to 1 | Higher = less diverse (one species dominates) |
+| **Gini-Simpson (1-D)** | $`1 - \sum p_i^2`$ | 0 to 1 | Higher = more diverse (common choice) |
+| **Inverse Simpson (1/D)** | $`1 / \sum p_i^2`$ | 1 to S | Effective number of equally abundant species |
 
 The **inverse Simpson** is often the most intuitive: a value of 6.5
 means the community is as diverse as one with 6.5 perfectly even
@@ -152,6 +158,7 @@ species.
 ## Shannon vs Simpson: When to Use Which?
 
 ``` r
+
 # Even community
 even <- c(sp1 = 20, sp2 = 20, sp3 = 20, sp4 = 20, sp5 = 20)
 
@@ -190,6 +197,7 @@ many rare species, Shannon will detect them; Simpson may not.
 Classical indices treat all species as interchangeable. Consider:
 
 ``` r
+
 # Community A: 5 species from 5 different orders
 comm_A <- c(sp1 = 20, sp2 = 20, sp3 = 20, sp4 = 20, sp5 = 20)
 

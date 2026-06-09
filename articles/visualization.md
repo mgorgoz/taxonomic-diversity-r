@@ -7,20 +7,21 @@ answer a specific analytical question. All plot functions return ggplot
 objects that can be further customized.
 
 ``` r
+
 library(taxdiv)
 
-# Mediterranean forest community
+# Mediterranean forest community (Westhoff-Maarel scale, 1-9)
 community <- c(
-  Quercus_coccifera    = 25,
-  Quercus_infectoria   = 18,
-  Pinus_brutia         = 30,
-  Pinus_nigra          = 12,
-  Juniperus_excelsa    = 8,
-  Juniperus_oxycedrus  = 6,
-  Arbutus_andrachne    = 15,
-  Styrax_officinalis   = 4,
-  Cercis_siliquastrum  = 3,
-  Olea_europaea        = 10
+  Quercus_coccifera    = 9,
+  Quercus_infectoria   = 7,
+  Pinus_brutia         = 9,
+  Pinus_nigra          = 5,
+  Juniperus_excelsa    = 4,
+  Juniperus_oxycedrus  = 3,
+  Arbutus_andrachne    = 6,
+  Styrax_officinalis   = 2,
+  Cercis_siliquastrum  = 1,
+  Olea_europaea        = 5
 )
 
 tax_tree <- build_tax_tree(
@@ -39,15 +40,15 @@ tax_tree <- build_tax_tree(
 
 ## Quick Reference
 
-| Plot              | Function                                                                                                    | Question it answers                            |
-|-------------------|-------------------------------------------------------------------------------------------------------------|------------------------------------------------|
-| Taxonomic Tree    | [`plot_taxonomic_tree()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/plot_taxonomic_tree.md) | How are species related?                       |
-| Heatmap           | [`plot_heatmap()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/plot_heatmap.md)               | Which species pairs are closest/farthest?      |
-| Bubble Chart      | [`plot_bubble()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/plot_bubble.md)                 | Which species contribute most to diversity?    |
-| Radar Chart       | [`plot_radar()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/plot_radar.md)                   | How do communities compare across all indices? |
-| Iteration Plot    | [`plot_iteration()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/plot_iteration.md)           | How stable is pTO across resampling?           |
-| Rarefaction Curve | [`plot_rarefaction()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/plot_rarefaction.md)       | Is my sampling effort sufficient?              |
-| Funnel Plot       | [`plot_funnel()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/plot_funnel.md)                 | Is my community’s AvTD/VarTD significant?      |
+| Plot | Function | Question it answers |
+|----|----|----|
+| Taxonomic Tree | [`plot_taxonomic_tree()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/plot_taxonomic_tree.md) | How are species related? |
+| Heatmap | [`plot_heatmap()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/plot_heatmap.md) | Which species pairs are closest/farthest? |
+| Bubble Chart | [`plot_bubble()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/plot_bubble.md) | Which species contribute most to diversity? |
+| Radar Chart | [`plot_radar()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/plot_radar.md) | How do communities compare across all indices? |
+| Iteration Plot | [`plot_iteration()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/plot_iteration.md) | How stable is pTO across resampling? |
+| Rarefaction Curve | [`plot_rarefaction()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/plot_rarefaction.md) | Is my sampling effort sufficient? |
+| Funnel Plot | [`plot_funnel()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/plot_funnel.md) | Is my community’s AvTD/VarTD significant? |
 
 ## 1. Taxonomic Tree (Dendrogram)
 
@@ -58,6 +59,7 @@ Shows the hierarchical classification as a dendrogram. Species on the
 same branch share closer taxonomic classification.
 
 ``` r
+
 plot_taxonomic_tree(tax_tree, community = community,
                     color_by = "Family", label_size = 3.5,
                     title = "Mediterranean Forest - Taxonomic Tree")
@@ -84,6 +86,7 @@ hierarchy?*
 Displays the full pairwise taxonomic distance matrix as a color grid.
 
 ``` r
+
 plot_heatmap(tax_tree, label_size = 2.8,
              title = "Pairwise Taxonomic Distances")
 ```
@@ -110,6 +113,7 @@ average taxonomic distance to all other species (y-axis). Bubble size
 reflects the combined contribution.
 
 ``` r
+
 plot_bubble(community, tax_tree, color_by = "Family",
             title = "Species Contributions to Diversity")
 ```
@@ -140,13 +144,14 @@ Overlays multiple communities on a single polar coordinate plot where
 each axis represents a different diversity index.
 
 ``` r
-# Degraded community for comparison
+
+# Degraded community for comparison (Westhoff-Maarel scale)
 dominant_community <- c(
-  Quercus_coccifera   = 80, Quercus_infectoria  = 5,
-  Pinus_brutia        = 3,  Pinus_nigra         = 2,
-  Juniperus_excelsa   = 2,  Juniperus_oxycedrus = 1,
-  Arbutus_andrachne   = 3,  Styrax_officinalis  = 1,
-  Cercis_siliquastrum = 2,  Olea_europaea       = 1
+  Quercus_coccifera   = 9,  Quercus_infectoria  = 3,
+  Pinus_brutia        = 1,  Pinus_nigra         = 1,
+  Juniperus_excelsa   = 1,  Juniperus_oxycedrus = 1,
+  Arbutus_andrachne   = 1,  Styrax_officinalis  = 1,
+  Cercis_siliquastrum = 1,  Olea_europaea       = 1
 )
 
 communities <- list(
@@ -156,6 +161,7 @@ communities <- list(
 ```
 
 ``` r
+
 plot_radar(communities, tax_tree,
            title = "Diverse vs Dominant Community")
 #> Warning: Removed 2 rows containing missing values or values outside the scale range
@@ -189,10 +195,12 @@ Shows the pTO value at each iteration of Run 2, where different species
 subsets are randomly included or excluded.
 
 ``` r
+
 run2 <- ozkan_pto_resample(community, tax_tree, n_iter = 101, seed = 42)
 ```
 
 ``` r
+
 plot_iteration(run2, component = "TO",
                title = "Run 2: TO Values Across Iterations")
 ```
@@ -224,12 +232,14 @@ Shows how the diversity estimate changes as you increase the number of
 individuals sampled, with bootstrap confidence intervals.
 
 ``` r
+
 rare <- rarefaction_taxonomic(community, tax_tree,
                                index = "shannon",
                                steps = 10, n_boot = 50, seed = 42)
 ```
 
 ``` r
+
 plot_rarefaction(rare)
 ```
 
@@ -257,6 +267,7 @@ Plots observed values against simulated 95% confidence intervals from
 random subsamples of a master species pool.
 
 ``` r
+
 data(anatolian_trees)
 
 sim <- simulate_td(
@@ -269,6 +280,7 @@ sim <- simulate_td(
 ```
 
 ``` r
+
 spp <- names(community)
 obs_avtd <- avtd(spp, tax_tree)
 
@@ -306,6 +318,7 @@ All plot functions return ggplot objects. You can customize them with
 standard ggplot2 functions:
 
 ``` r
+
 library(ggplot2)
 
 plot_rarefaction(rare) +
@@ -320,6 +333,7 @@ theme](visualization_files/figure-html/custom-1.png)
 Common customizations:
 
 ``` r
+
 # Change theme
 p + theme_classic()
 

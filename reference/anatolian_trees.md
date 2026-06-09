@@ -56,15 +56,15 @@ A data frame with 33 rows and 9 columns:
 
 The three sites represent different forest types:
 
-- Karisik_Orman:
+- Mixed_Forest:
 
-  Mixed forest – both conifers and broadleaves (12 species)
+  Both conifers and broadleaves (12 species)
 
-- Yaprakli_Orman:
+- Broadleaf_Forest:
 
   Broadleaf-dominated forest (13 species)
 
-- Konifer_Orman:
+- Conifer_Forest:
 
   Conifer-dominated forest (8 species)
 
@@ -79,7 +79,8 @@ To extract a single community for use with
 or
 [`compare_indices`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/compare_indices.md):
 
-    site1 <- anatolian_trees[anatolian_trees$Site == "Karisik_Orman", ]
+
+    site1 <- anatolian_trees[anatolian_trees$Site == "Mixed_Forest", ]
     community <- setNames(site1$Abundance, site1$Species)
     tax_tree  <- site1[, c("Species", "Genus", "Family", "Order",
                             "Class", "Phylum", "Kingdom")]
@@ -105,13 +106,13 @@ for a single-community example.
 ``` r
 data(anatolian_trees)
 head(anatolian_trees)
-#>            Site            Species   Genus   Family   Order         Class
-#> 1 Karisik_Orman        Pinus_nigra   Pinus Pinaceae Pinales     Pinopsida
-#> 2 Karisik_Orman      Cedrus_libani  Cedrus Pinaceae Pinales     Pinopsida
-#> 3 Karisik_Orman Abies_nordmanniana   Abies Pinaceae Pinales     Pinopsida
-#> 4 Karisik_Orman     Quercus_cerris Quercus Fagaceae Fagales Magnoliopsida
-#> 5 Karisik_Orman    Quercus_petraea Quercus Fagaceae Fagales Magnoliopsida
-#> 6 Karisik_Orman   Fagus_orientalis   Fagus Fagaceae Fagales Magnoliopsida
+#>           Site            Species   Genus   Family   Order         Class
+#> 1 Mixed_Forest        Pinus_nigra   Pinus Pinaceae Pinales     Pinopsida
+#> 2 Mixed_Forest      Cedrus_libani  Cedrus Pinaceae Pinales     Pinopsida
+#> 3 Mixed_Forest Abies_nordmanniana   Abies Pinaceae Pinales     Pinopsida
+#> 4 Mixed_Forest     Quercus_cerris Quercus Fagaceae Fagales Magnoliopsida
+#> 5 Mixed_Forest    Quercus_petraea Quercus Fagaceae Fagales Magnoliopsida
+#> 6 Mixed_Forest   Fagus_orientalis   Fagus Fagaceae Fagales Magnoliopsida
 #>          Phylum Kingdom Abundance
 #> 1     Pinophyta Plantae         5
 #> 2     Pinophyta Plantae         4
@@ -126,21 +127,21 @@ batch_analysis(anatolian_trees)
 #>   Sites: 3 
 #>   Indices: 14 
 #> 
-#>            Site N_Species  Shannon  Simpson    Delta Delta_star     AvTD
-#>   Karisik_Orman        12 2.317570 0.889414 3.826087   4.208289 4.575758
-#>   Konifer_Orman         8 1.868458 0.824142 2.526882   2.967172 4.071429
-#>  Yaprakli_Orman        13 2.399399 0.897929 2.822775   3.083196 3.435897
+#>              Site N_Species  Shannon  Simpson    Delta Delta_star     AvTD
+#>  Broadleaf_Forest        13 2.399399 0.897929 2.822775   3.083196 3.435897
+#>    Conifer_Forest         8 1.868458 0.824142 2.526882   2.967172 4.071429
+#>      Mixed_Forest        12 2.317570 0.889414 3.826087   4.208289 4.575758
 #>     VarTD      uTO       TO uTO_plus  TO_plus  uTO_max   TO_max uTO_plus_max
-#>  2.335170 8.984158 15.56321 9.717193 16.29644 9.551268 16.13051    10.393644
-#>  3.066327 7.236543 13.80194 8.416052 14.99530 8.400411 14.97703     9.280162
 #>  0.733070 6.887741 10.05336 7.872282 11.05034 7.468801 10.64251     8.506628
+#>  3.066327 7.236543 13.80194 8.416052 14.99530 8.400411 14.97703     9.280162
+#>  2.335170 8.984158 15.56321 9.717193 16.29644 9.551268 16.13051    10.393644
 #>  TO_plus_max
-#>     16.97290
-#>     15.85941
 #>     11.68468
+#>     15.85941
+#>     16.97290
 
 # Single site extraction
-site1 <- anatolian_trees[anatolian_trees$Site == "Karisik_Orman", ]
+site1 <- anatolian_trees[anatolian_trees$Site == "Mixed_Forest", ]
 comm  <- setNames(site1$Abundance, site1$Species)
 tax   <- site1[, c("Species", "Genus", "Family", "Order",
                     "Class", "Phylum", "Kingdom")]

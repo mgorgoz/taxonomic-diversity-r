@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Ozkan pTO Method: Deng Entropy-Based Taxonomic Diversity • taxdiv</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Ozkan pTO Method: Deng Entropy-Based Taxonomic Diversity">
 <meta name="google-site-verification" content="">
@@ -21,7 +21,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">taxdiv</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -101,16 +101,16 @@ question about the community.</p>
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/mgorgoz/taxonomic-diversity-r" class="external-link">taxdiv</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">community</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>  Quercus_coccifera    <span class="op">=</span> <span class="fl">25</span>,</span>
-<span>  Quercus_infectoria   <span class="op">=</span> <span class="fl">18</span>,</span>
-<span>  Pinus_brutia         <span class="op">=</span> <span class="fl">30</span>,</span>
-<span>  Pinus_nigra          <span class="op">=</span> <span class="fl">12</span>,</span>
-<span>  Juniperus_excelsa    <span class="op">=</span> <span class="fl">8</span>,</span>
-<span>  Juniperus_oxycedrus  <span class="op">=</span> <span class="fl">6</span>,</span>
-<span>  Arbutus_andrachne    <span class="op">=</span> <span class="fl">15</span>,</span>
-<span>  Styrax_officinalis   <span class="op">=</span> <span class="fl">4</span>,</span>
-<span>  Cercis_siliquastrum  <span class="op">=</span> <span class="fl">3</span>,</span>
-<span>  Olea_europaea        <span class="op">=</span> <span class="fl">10</span></span>
+<span>  Quercus_coccifera    <span class="op">=</span> <span class="fl">9</span>,</span>
+<span>  Quercus_infectoria   <span class="op">=</span> <span class="fl">7</span>,</span>
+<span>  Pinus_brutia         <span class="op">=</span> <span class="fl">9</span>,</span>
+<span>  Pinus_nigra          <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>  Juniperus_excelsa    <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>  Juniperus_oxycedrus  <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  Arbutus_andrachne    <span class="op">=</span> <span class="fl">6</span>,</span>
+<span>  Styrax_officinalis   <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  Cercis_siliquastrum  <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  Olea_europaea        <span class="op">=</span> <span class="fl">5</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">tax_tree</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_tax_tree.html">build_tax_tree</a></span><span class="op">(</span></span>
@@ -141,16 +141,16 @@ level, a group (e.g., “Family Fagaceae”) acts as a focal element with a
 mass proportional to the species it contains. The entropy accounts for
 both the mass distribution and the <strong>size of each focal
 element</strong> (how many species it contains):</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>E</mi><mi>d</mi></msub><mo>=</mo><mo>−</mo><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover><mi>m</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>F</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><msub><mo>log</mo><mn>2</mn></msub><mfrac><mrow><mi>m</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>F</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><mrow><msup><mn>2</mn><mrow><mo stretchy="true" form="prefix">|</mo><msub><mi>F</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">|</mo></mrow></msup><mo>−</mo><mn>1</mn></mrow></mfrac></mrow><annotation encoding="application/x-tex">E_d = -\sum_{i=1}^{n} m(F_i) \log_2 \frac{m(F_i)}{2^{|F_i|} - 1}</annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>E</mi><mi>d</mi></msub><mo>=</mo><mi>−</mi><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover><mi>m</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>F</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo><msub><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mn>2</mn></msub><mfrac><mrow><mi>m</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>F</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow><mrow><msup><mn>2</mn><mrow><mo stretchy="false" form="prefix">|</mo><msub><mi>F</mi><mi>i</mi></msub><mo stretchy="false" form="prefix">|</mo></mrow></msup><mo>−</mo><mn>1</mn></mrow></mfrac></mrow><annotation encoding="application/x-tex">E_d = -\sum_{i=1}^{n} m(F_i) \log_2 \frac{m(F_i)}{2^{|F_i|} - 1}</annotation></semantics></math></p>
 <p>where
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>F</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">m(F_i)</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>F</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">m(F_i)</annotation></semantics></math>
 is the mass of focal element
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>F</mi><mi>i</mi></msub><annotation encoding="application/x-tex">F_i</annotation></semantics></math>
 and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="true" form="prefix">|</mo><msub><mi>F</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">|</mo></mrow><annotation encoding="application/x-tex">|F_i|</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">|</mo><msub><mi>F</mi><mi>i</mi></msub><mo stretchy="false" form="prefix">|</mo></mrow><annotation encoding="application/x-tex">|F_i|</annotation></semantics></math>
 is the number of species it contains.</p>
 <p>The term
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>2</mn><mrow><mo stretchy="true" form="prefix">|</mo><msub><mi>F</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">|</mo></mrow></msup><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">2^{|F_i|} - 1</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>2</mn><mrow><mo stretchy="false" form="prefix">|</mo><msub><mi>F</mi><mi>i</mi></msub><mo stretchy="false" form="prefix">|</mo></mrow></msup><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">2^{|F_i|} - 1</annotation></semantics></math>
 accounts for all possible non-empty subsets of species within the group.
 A genus with 3 species has
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>2</mn><mn>3</mn></msup><mo>−</mo><mn>1</mn><mo>=</mo><mn>7</mn></mrow><annotation encoding="application/x-tex">2^3 - 1 = 7</annotation></semantics></math>
@@ -241,9 +241,9 @@ taxonomic structure</li>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Standard (all levels):\n"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Standard (all levels):</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"  uTO      ="</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">result</span><span class="op">$</span><span class="va">uTO</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"  (unweighted diversity)\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   uTO      = 7.4895   (unweighted diversity)</span></span>
+<span><span class="co">#&gt;   uTO      = 7.7613   (unweighted diversity)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"  TO       ="</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">result</span><span class="op">$</span><span class="va">TO</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"  (weighted diversity)\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   TO       = 10.6675   (weighted diversity)</span></span>
+<span><span class="co">#&gt;   TO       = 10.9393   (weighted diversity)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"  uTO+     ="</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">result</span><span class="op">$</span><span class="va">uTO_plus</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"  (unweighted distance)\n"</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   uTO+     = 8.5502   (unweighted distance)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"  TO+      ="</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">result</span><span class="op">$</span><span class="va">TO_plus</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"  (weighted distance)\n\n"</span><span class="op">)</span></span>
@@ -252,9 +252,9 @@ taxonomic structure</li>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Max-informative levels:\n"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Max-informative levels:</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"  uTO_max  ="</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">result</span><span class="op">$</span><span class="va">uTO_max</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"  (unweighted, informative only)\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   uTO_max  = 7.4895   (unweighted, informative only)</span></span>
+<span><span class="co">#&gt;   uTO_max  = 7.7613   (unweighted, informative only)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"  TO_max   ="</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">result</span><span class="op">$</span><span class="va">TO_max</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"  (weighted, informative only)\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   TO_max   = 10.6675   (weighted, informative only)</span></span>
+<span><span class="co">#&gt;   TO_max   = 10.9393   (weighted, informative only)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"  uTO+_max ="</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">result</span><span class="op">$</span><span class="va">uTO_plus_max</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"  (unweighted distance, informative only)\n"</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   uTO+_max = 8.5502   (unweighted distance, informative only)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"  TO+_max  ="</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">result</span><span class="op">$</span><span class="va">TO_plus_max</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"  (weighted distance, informative only)\n"</span><span class="op">)</span></span>
@@ -388,15 +388,15 @@ in the product just drags the value down without adding insight.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Run 1:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%9.4f %9.4f %9.4f %9.4f"</span>,</span>
 <span>    <span class="va">full</span><span class="op">$</span><span class="va">run1</span><span class="op">$</span><span class="va">uTO_plus</span>, <span class="va">full</span><span class="op">$</span><span class="va">run1</span><span class="op">$</span><span class="va">TO_plus</span>,</span>
 <span>    <span class="va">full</span><span class="op">$</span><span class="va">run1</span><span class="op">$</span><span class="va">uTO</span>, <span class="va">full</span><span class="op">$</span><span class="va">run1</span><span class="op">$</span><span class="va">TO</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Run 1:    8.5502   11.7283    7.4895   10.6675</span></span>
+<span><span class="co">#&gt; Run 1:    8.5502   11.7283    7.7613   10.9393</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Run 2:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%9.4f %9.4f %9.4f %9.4f"</span>,</span>
 <span>    <span class="va">full</span><span class="op">$</span><span class="va">run2</span><span class="op">$</span><span class="va">uTO_plus_max</span>, <span class="va">full</span><span class="op">$</span><span class="va">run2</span><span class="op">$</span><span class="va">TO_plus_max</span>,</span>
 <span>    <span class="va">full</span><span class="op">$</span><span class="va">run2</span><span class="op">$</span><span class="va">uTO_max</span>, <span class="va">full</span><span class="op">$</span><span class="va">run2</span><span class="op">$</span><span class="va">TO_max</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Run 2:    8.5502   11.7283    7.4895   10.6675</span></span>
+<span><span class="co">#&gt; Run 2:    8.5502   11.7283    7.7613   10.9393</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Run 3:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%9.4f %9.4f %9.4f %9.4f"</span>,</span>
 <span>    <span class="va">full</span><span class="op">$</span><span class="va">run3</span><span class="op">$</span><span class="va">uTO_plus_max</span>, <span class="va">full</span><span class="op">$</span><span class="va">run3</span><span class="op">$</span><span class="va">TO_plus_max</span>,</span>
 <span>    <span class="va">full</span><span class="op">$</span><span class="va">run3</span><span class="op">$</span><span class="va">uTO_max</span>, <span class="va">full</span><span class="op">$</span><span class="va">run3</span><span class="op">$</span><span class="va">TO_max</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Run 3:    8.5502   11.7283    7.5029   10.6808</span></span></code></pre></div>
+<span><span class="co">#&gt; Run 3:    8.5502   11.7283    7.7613   10.9393</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -446,9 +446,9 @@ diversity (they are taxonomically redundant)</li>
 </h2>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">degraded</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>  Quercus_coccifera <span class="op">=</span> <span class="fl">40</span>,</span>
-<span>  Pinus_brutia      <span class="op">=</span> <span class="fl">35</span>,</span>
-<span>  Juniperus_oxycedrus <span class="op">=</span> <span class="fl">10</span></span>
+<span>  Quercus_coccifera   <span class="op">=</span> <span class="fl">9</span>,</span>
+<span>  Pinus_brutia        <span class="op">=</span> <span class="fl">8</span>,</span>
+<span>  Juniperus_oxycedrus <span class="op">=</span> <span class="fl">5</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">communities</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>

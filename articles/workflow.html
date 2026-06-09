@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Complete Workflow: From Data to Results • taxdiv</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Complete Workflow: From Data to Results">
 <meta name="google-site-verification" content="">
@@ -21,7 +21,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">taxdiv</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -109,16 +109,16 @@ Family, Order, etc.)</li>
 </h3>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">community</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>  Quercus_coccifera    <span class="op">=</span> <span class="fl">25</span>,</span>
-<span>  Quercus_infectoria   <span class="op">=</span> <span class="fl">18</span>,</span>
-<span>  Pinus_brutia         <span class="op">=</span> <span class="fl">30</span>,</span>
-<span>  Pinus_nigra          <span class="op">=</span> <span class="fl">12</span>,</span>
-<span>  Juniperus_excelsa    <span class="op">=</span> <span class="fl">8</span>,</span>
-<span>  Juniperus_oxycedrus  <span class="op">=</span> <span class="fl">6</span>,</span>
-<span>  Arbutus_andrachne    <span class="op">=</span> <span class="fl">15</span>,</span>
-<span>  Styrax_officinalis   <span class="op">=</span> <span class="fl">4</span>,</span>
-<span>  Cercis_siliquastrum  <span class="op">=</span> <span class="fl">3</span>,</span>
-<span>  Olea_europaea        <span class="op">=</span> <span class="fl">10</span></span>
+<span>  Quercus_coccifera    <span class="op">=</span> <span class="fl">9</span>,</span>
+<span>  Quercus_infectoria   <span class="op">=</span> <span class="fl">7</span>,</span>
+<span>  Pinus_brutia         <span class="op">=</span> <span class="fl">9</span>,</span>
+<span>  Pinus_nigra          <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>  Juniperus_excelsa    <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>  Juniperus_oxycedrus  <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  Arbutus_andrachne    <span class="op">=</span> <span class="fl">6</span>,</span>
+<span>  Styrax_officinalis   <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  Cercis_siliquastrum  <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  Olea_europaea        <span class="op">=</span> <span class="fl">5</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -165,8 +165,8 @@ progressively higher ranks:</p>
 <span>              <span class="st">"Arbutus_andrachne"</span>, <span class="st">"Olea_europaea"</span>,</span>
 <span>              <span class="st">"Quercus_coccifera"</span>, <span class="st">"Quercus_infectoria"</span>, <span class="st">"Pinus_brutia"</span>,</span>
 <span>              <span class="st">"Pinus_nigra"</span>, <span class="st">"Cercis_siliquastrum"</span><span class="op">)</span>,</span>
-<span>  Abundance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">25</span>, <span class="fl">30</span>, <span class="fl">8</span>, <span class="fl">15</span>, <span class="fl">10</span>,</span>
-<span>                <span class="fl">40</span>, <span class="fl">20</span>, <span class="fl">15</span>, <span class="fl">10</span>, <span class="fl">5</span><span class="op">)</span>,</span>
+<span>  Abundance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">7</span>, <span class="fl">8</span>, <span class="fl">3</span>, <span class="fl">5</span>, <span class="fl">4</span>,</span>
+<span>                <span class="fl">9</span>, <span class="fl">6</span>, <span class="fl">5</span>, <span class="fl">4</span>, <span class="fl">2</span><span class="op">)</span>,</span>
 <span>  Genus <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Quercus"</span>, <span class="st">"Pinus"</span>, <span class="st">"Juniperus"</span>, <span class="st">"Arbutus"</span>, <span class="st">"Olea"</span>,</span>
 <span>            <span class="st">"Quercus"</span>, <span class="st">"Quercus"</span>, <span class="st">"Pinus"</span>, <span class="st">"Pinus"</span>, <span class="st">"Cercis"</span><span class="op">)</span>,</span>
 <span>  Family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Fagaceae"</span>, <span class="st">"Pinaceae"</span>, <span class="st">"Cupressaceae"</span>, <span class="st">"Ericaceae"</span>, <span class="st">"Oleaceae"</span>,</span>
@@ -177,12 +177,12 @@ progressively higher ranks:</p>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">multi_data</span><span class="op">)</span></span>
 <span><span class="co">#&gt;       Site           Species Abundance     Genus       Family    Order</span></span>
-<span><span class="co">#&gt; 1 Forest_A Quercus_coccifera        25   Quercus     Fagaceae  Fagales</span></span>
-<span><span class="co">#&gt; 2 Forest_A      Pinus_brutia        30     Pinus     Pinaceae  Pinales</span></span>
-<span><span class="co">#&gt; 3 Forest_A Juniperus_excelsa         8 Juniperus Cupressaceae  Pinales</span></span>
-<span><span class="co">#&gt; 4 Forest_A Arbutus_andrachne        15   Arbutus    Ericaceae Ericales</span></span>
-<span><span class="co">#&gt; 5 Forest_A     Olea_europaea        10      Olea     Oleaceae Lamiales</span></span>
-<span><span class="co">#&gt; 6 Forest_B Quercus_coccifera        40   Quercus     Fagaceae  Fagales</span></span></code></pre></div>
+<span><span class="co">#&gt; 1 Forest_A Quercus_coccifera         7   Quercus     Fagaceae  Fagales</span></span>
+<span><span class="co">#&gt; 2 Forest_A      Pinus_brutia         8     Pinus     Pinaceae  Pinales</span></span>
+<span><span class="co">#&gt; 3 Forest_A Juniperus_excelsa         3 Juniperus Cupressaceae  Pinales</span></span>
+<span><span class="co">#&gt; 4 Forest_A Arbutus_andrachne         5   Arbutus    Ericaceae Ericales</span></span>
+<span><span class="co">#&gt; 5 Forest_A     Olea_europaea         4      Olea     Oleaceae Lamiales</span></span>
+<span><span class="co">#&gt; 6 Forest_B Quercus_coccifera         9   Quercus     Fagaceae  Fagales</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -199,9 +199,9 @@ progressively higher ranks:</p>
 <span><span class="co">#&gt;   Indices: Shannon, Simpson, Delta, Delta_star, AvTD, VarTD, uTO, TO, uTO_plus, TO_plus, uTO_max, TO_max, uTO_plus_max, TO_plus_max </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Community N_Species  Shannon  Simpson    Delta Delta_star     AvTD    VarTD</span></span>
-<span><span class="co">#&gt;  Community        10 2.094838 0.857642 2.391192   2.766816 2.866667 0.248889</span></span>
+<span><span class="co">#&gt;  Community        10 2.162342 0.874279 2.487059   2.788918 2.866667 0.248889</span></span>
 <span><span class="co">#&gt;       uTO       TO uTO_plus  TO_plus  uTO_max   TO_max uTO_plus_max TO_plus_max</span></span>
-<span><span class="co">#&gt;  7.489477 10.66751  8.55023 11.72828 7.489477 10.66751      8.55023    11.72828</span></span></code></pre></div>
+<span><span class="co">#&gt;  7.761257 10.93931  8.55023 11.72828 7.761257 10.93931      8.55023    11.72828</span></span></code></pre></div>
 <p>This returns all 14 indices: Shannon, Simpson, Delta, Delta*, AvTD,
 VarTD, and the 8 Ozkan pTO indices (uTO, TO, uTO+, TO+, and their max
 variants).</p>
@@ -217,11 +217,11 @@ variants).</p>
 <span><span class="co">#&gt;   Indices: 14 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;      Site N_Species  Shannon  Simpson    Delta Delta_star AvTD VarTD      uTO</span></span>
-<span><span class="co">#&gt;  Forest_A         5 1.491087 0.752841 2.284483    3.00000  3.0  0.00 6.465853</span></span>
-<span><span class="co">#&gt;  Forest_B         5 1.397992 0.709877 1.679151    2.33913  2.6  0.64 5.352907</span></span>
-<span><span class="co">#&gt;        TO uTO_plus   TO_plus  uTO_max   TO_max uTO_plus_max TO_plus_max</span></span>
-<span><span class="co">#&gt;  9.643859 7.033776 10.211830 6.465853 9.643859     7.033776   10.211830</span></span>
-<span><span class="co">#&gt;  8.527886 6.379634  9.557688 5.420217 8.597968     6.379634    9.557688</span></span></code></pre></div>
+<span><span class="co">#&gt;  Forest_A         5 1.549722 0.776406 2.418803   3.000000  3.0  0.00 6.669760</span></span>
+<span><span class="co">#&gt;  Forest_B         5 1.507933 0.760355 1.916923   2.424125  2.6  0.64 5.737233</span></span>
+<span><span class="co">#&gt;       TO uTO_plus   TO_plus  uTO_max  TO_max uTO_plus_max TO_plus_max</span></span>
+<span><span class="co">#&gt;  9.84778 7.033776 10.211830 6.669760 9.84778     7.033776   10.211830</span></span>
+<span><span class="co">#&gt;  8.91405 6.379634  9.557688 5.737233 8.91405     6.379634    9.557688</span></span></code></pre></div>
 <p><code><a href="../reference/batch_analysis.html">batch_analysis()</a></code> automatically detects the
 <code>Site</code>, <code>Species</code>, and <code>Abundance</code>
 columns and computes all indices for each site. You can also use
@@ -232,18 +232,18 @@ columns and computes all indices for each site. You can also use
 <span><span class="co">#&gt;   Sites: 2 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;         Index      Min     Mean       Max       SD</span></span>
-<span><span class="co">#&gt;       Shannon 1.397992 1.444539  1.491087 0.065828</span></span>
-<span><span class="co">#&gt;       Simpson 0.709877 0.731359  0.752841 0.030380</span></span>
-<span><span class="co">#&gt;         Delta 1.679151 1.981817  2.284483 0.428034</span></span>
-<span><span class="co">#&gt;    Delta_star 2.339130 2.669565  3.000000 0.467306</span></span>
+<span><span class="co">#&gt;       Shannon 1.507933 1.528828  1.549722 0.029549</span></span>
+<span><span class="co">#&gt;       Simpson 0.760355 0.768381  0.776406 0.011350</span></span>
+<span><span class="co">#&gt;         Delta 1.916923 2.167863  2.418803 0.354883</span></span>
+<span><span class="co">#&gt;    Delta_star 2.424125 2.712062  3.000000 0.407205</span></span>
 <span><span class="co">#&gt;          AvTD 2.600000 2.800000  3.000000 0.282843</span></span>
 <span><span class="co">#&gt;         VarTD 0.000000 0.320000  0.640000 0.452548</span></span>
-<span><span class="co">#&gt;           uTO 5.352907 5.909380  6.465853 0.786972</span></span>
-<span><span class="co">#&gt;            TO 8.527886 9.085873  9.643859 0.789112</span></span>
+<span><span class="co">#&gt;           uTO 5.737233 6.203496  6.669760 0.659396</span></span>
+<span><span class="co">#&gt;            TO 8.914050 9.380915  9.847780 0.660247</span></span>
 <span><span class="co">#&gt;      uTO_plus 6.379634 6.706705  7.033776 0.462548</span></span>
 <span><span class="co">#&gt;       TO_plus 9.557688 9.884759 10.211830 0.462548</span></span>
-<span><span class="co">#&gt;       uTO_max 5.420217 5.943035  6.465853 0.739376</span></span>
-<span><span class="co">#&gt;        TO_max 8.597968 9.120914  9.643859 0.739557</span></span>
+<span><span class="co">#&gt;       uTO_max 5.737233 6.203496  6.669760 0.659396</span></span>
+<span><span class="co">#&gt;        TO_max 8.914050 9.380915  9.847780 0.660247</span></span>
 <span><span class="co">#&gt;  uTO_plus_max 6.379634 6.706705  7.033776 0.462548</span></span>
 <span><span class="co">#&gt;   TO_plus_max 9.557688 9.884759 10.211830 0.462548</span></span></code></pre></div>
 </div>
@@ -285,9 +285,9 @@ species-level contributions to diversity:</p>
 </h3>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">degraded</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>  Quercus_coccifera   <span class="op">=</span> <span class="fl">40</span>,</span>
-<span>  Pinus_brutia        <span class="op">=</span> <span class="fl">35</span>,</span>
-<span>  Juniperus_oxycedrus <span class="op">=</span> <span class="fl">10</span></span>
+<span>  Quercus_coccifera   <span class="op">=</span> <span class="fl">9</span>,</span>
+<span>  Pinus_brutia        <span class="op">=</span> <span class="fl">8</span>,</span>
+<span>  Juniperus_oxycedrus <span class="op">=</span> <span class="fl">5</span></span>
 <span><span class="op">)</span></span>
 <span><span class="va">tax_degraded</span> <span class="op">&lt;-</span> <span class="va">tax_tree</span><span class="op">[</span><span class="va">tax_tree</span><span class="op">$</span><span class="va">Species</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">degraded</span><span class="op">)</span>, <span class="op">]</span></span>
 <span></span>

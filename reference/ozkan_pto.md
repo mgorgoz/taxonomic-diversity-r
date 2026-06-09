@@ -16,7 +16,9 @@ ozkan_pto(community, tax_tree, max_level = NULL)
 - community:
 
   A named numeric vector of species abundances. Names must match the
-  first column of `tax_tree`.
+  first column of `tax_tree`. Westhoff-Maarel cover-abundance scale
+  (1-9) is recommended for compatibility with Ozkan (2018), but any
+  positive numeric values are accepted.
 
 - tax_tree:
 

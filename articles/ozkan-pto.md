@@ -20,19 +20,20 @@ pipeline, each answering a slightly different question about the
 community.
 
 ``` r
+
 library(taxdiv)
 
 community <- c(
-  Quercus_coccifera    = 25,
-  Quercus_infectoria   = 18,
-  Pinus_brutia         = 30,
-  Pinus_nigra          = 12,
-  Juniperus_excelsa    = 8,
-  Juniperus_oxycedrus  = 6,
-  Arbutus_andrachne    = 15,
-  Styrax_officinalis   = 4,
-  Cercis_siliquastrum  = 3,
-  Olea_europaea        = 10
+  Quercus_coccifera    = 9,
+  Quercus_infectoria   = 7,
+  Pinus_brutia         = 9,
+  Pinus_nigra          = 5,
+  Juniperus_excelsa    = 4,
+  Juniperus_oxycedrus  = 3,
+  Arbutus_andrachne    = 6,
+  Styrax_officinalis   = 2,
+  Cercis_siliquastrum  = 1,
+  Olea_europaea        = 5
 )
 
 tax_tree <- build_tax_tree(
@@ -52,7 +53,7 @@ tax_tree <- build_tax_tree(
 ## From Shannon to Deng: Why a New Entropy?
 
 Shannon entropy treats each species as an independent event with
-probability $p_{i}$. But in a taxonomic hierarchy, species are grouped —
+probability $`p_i`$. But in a taxonomic hierarchy, species are grouped —
 two oak species share more information than an oak and a pine. Shannon
 cannot capture this grouping.
 
@@ -62,19 +63,22 @@ Fagaceae”) acts as a focal element with a mass proportional to the
 species it contains. The entropy accounts for both the mass distribution
 and the **size of each focal element** (how many species it contains):
 
-$$E_{d} = - \sum\limits_{i = 1}^{n}m\left( F_{i} \right)\log_{2}\frac{m\left( F_{i} \right)}{2^{|F_{i}|} - 1}$$
+``` math
+E_d = -\sum_{i=1}^{n} m(F_i) \log_2 \frac{m(F_i)}{2^{|F_i|} - 1}
+```
 
-where $m\left( F_{i} \right)$ is the mass of focal element $F_{i}$ and
-$\left| F_{i} \right|$ is the number of species it contains.
+where $`m(F_i)`$ is the mass of focal element $`F_i`$ and $`|F_i|`$ is
+the number of species it contains.
 
-The term $2^{|F_{i}|} - 1$ accounts for all possible non-empty subsets
-of species within the group. A genus with 3 species has $2^{3} - 1 = 7$
+The term $`2^{|F_i|} - 1`$ accounts for all possible non-empty subsets
+of species within the group. A genus with 3 species has $`2^3 - 1 = 7`$
 possible subcombinations, giving it more “evidential weight” than a
 single-species genus.
 
 ## Deng Entropy at Each Taxonomic Level
 
 ``` r
+
 result <- ozkan_pto(community, tax_tree)
 
 cat("Deng entropy by taxonomic level:\n\n")
@@ -129,14 +133,15 @@ The Ozkan method produces 8 values organized in a 2 x 2 x 2 structure:
   uninformative levels)
 
 ``` r
+
 cat("=== All 8 Ozkan pTO indices ===\n\n")
 #> === All 8 Ozkan pTO indices ===
 cat("Standard (all levels):\n")
 #> Standard (all levels):
 cat("  uTO      =", round(result$uTO, 4), "  (unweighted diversity)\n")
-#>   uTO      = 7.4895   (unweighted diversity)
+#>   uTO      = 7.7613   (unweighted diversity)
 cat("  TO       =", round(result$TO, 4), "  (weighted diversity)\n")
-#>   TO       = 10.6675   (weighted diversity)
+#>   TO       = 10.9393   (weighted diversity)
 cat("  uTO+     =", round(result$uTO_plus, 4), "  (unweighted distance)\n")
 #>   uTO+     = 8.5502   (unweighted distance)
 cat("  TO+      =", round(result$TO_plus, 4), "  (weighted distance)\n\n")
@@ -145,9 +150,9 @@ cat("  TO+      =", round(result$TO_plus, 4), "  (weighted distance)\n\n")
 cat("Max-informative levels:\n")
 #> Max-informative levels:
 cat("  uTO_max  =", round(result$uTO_max, 4), "  (unweighted, informative only)\n")
-#>   uTO_max  = 7.4895   (unweighted, informative only)
+#>   uTO_max  = 7.7613   (unweighted, informative only)
 cat("  TO_max   =", round(result$TO_max, 4), "  (weighted, informative only)\n")
-#>   TO_max   = 10.6675   (weighted, informative only)
+#>   TO_max   = 10.9393   (weighted, informative only)
 cat("  uTO+_max =", round(result$uTO_plus_max, 4), "  (unweighted distance, informative only)\n")
 #>   uTO+_max = 8.5502   (unweighted distance, informative only)
 cat("  TO+_max  =", round(result$TO_plus_max, 4), "  (weighted distance, informative only)\n")
@@ -170,6 +175,7 @@ cat("  TO+_max  =", round(result$TO_plus_max, 4), "  (weighted distance, informa
 Uses the full community as-is. Computes all 8 indices directly.
 
 ``` r
+
 cat("Run 1 results:\n")
 #> Run 1 results:
 cat("  uTO+ =", round(result$uTO_plus, 4), "\n")
@@ -189,6 +195,7 @@ procedure reveals two things:
 2.  **Each species’ contribution** to overall diversity
 
 ``` r
+
 run2 <- ozkan_pto_resample(community, tax_tree, n_iter = 101, seed = 42)
 
 cat("Run 1 (deterministic):  uTO+ =", round(run2$uTO_plus_det, 4), "\n")
@@ -206,6 +213,7 @@ diversity. The species whose removal *increases* diversity is called an
 ### Visualizing Run 2
 
 ``` r
+
 plot_iteration(run2, component = "TO_plus",
                title = "Run 2: TO+ Across Iterations")
 ```
@@ -231,6 +239,7 @@ the product just drags the value down without adding insight.
 Run 3 repeats the calculation using only levels where Deng entropy \> 0:
 
 ``` r
+
 run3 <- ozkan_pto_sensitivity(community, tax_tree, run2, seed = 123)
 
 cat("All levels:       TO+ =", round(run3$TO_plus_max, 4), "\n")
@@ -242,6 +251,7 @@ cat("Informative only: TO+ =", round(result$TO_plus_max, 4), "\n")
 ### Full Pipeline in One Call
 
 ``` r
+
 full <- ozkan_pto_full(community, tax_tree, n_iter = 101, seed = 42)
 
 cat("Complete pipeline summary:\n\n")
@@ -251,15 +261,15 @@ cat("         uTO+      TO+       uTO       TO\n")
 cat("Run 1:", sprintf("%9.4f %9.4f %9.4f %9.4f",
     full$run1$uTO_plus, full$run1$TO_plus,
     full$run1$uTO, full$run1$TO), "\n")
-#> Run 1:    8.5502   11.7283    7.4895   10.6675
+#> Run 1:    8.5502   11.7283    7.7613   10.9393
 cat("Run 2:", sprintf("%9.4f %9.4f %9.4f %9.4f",
     full$run2$uTO_plus_max, full$run2$TO_plus_max,
     full$run2$uTO_max, full$run2$TO_max), "\n")
-#> Run 2:    8.5502   11.7283    7.4895   10.6675
+#> Run 2:    8.5502   11.7283    7.7613   10.9393
 cat("Run 3:", sprintf("%9.4f %9.4f %9.4f %9.4f",
     full$run3$uTO_plus_max, full$run3$TO_plus_max,
     full$run3$uTO_max, full$run3$TO_max), "\n")
-#> Run 3:    8.5502   11.7283    7.5029   10.6808
+#> Run 3:    8.5502   11.7283    7.7613   10.9393
 ```
 
 ## Jackknife Leave-One-Out Analysis
@@ -269,6 +279,7 @@ recalculates all indices. This directly measures each species’
 contribution:
 
 ``` r
+
 jk <- ozkan_pto_jackknife(community, tax_tree)
 
 cat("Jackknife results (TO+ when each species is removed):\n\n")
@@ -305,10 +316,11 @@ cat("Unhappy species:", jk$n_unhappy, "\n")
 ## Comparing Communities
 
 ``` r
+
 degraded <- c(
-  Quercus_coccifera = 40,
-  Pinus_brutia      = 35,
-  Juniperus_oxycedrus = 10
+  Quercus_coccifera   = 9,
+  Pinus_brutia        = 8,
+  Juniperus_oxycedrus = 5
 )
 
 communities <- list(

@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Clarke &amp; Warwick Taxonomic Distinctness • taxdiv</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Clarke &amp; Warwick Taxonomic Distinctness">
 <meta name="google-site-verification" content="">
@@ -21,7 +21,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">taxdiv</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -195,7 +195,7 @@ possible path length.</p>
 between two randomly chosen <em>individuals</em> from the community.</p>
 <p><strong>Key property:</strong> Abundance-weighted. Communities where
 abundant species are taxonomically distant score higher.</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><mo>=</mo><mfrac><mrow><mo>∑</mo><munder><mo>∑</mo><mrow><mi>i</mi><mo>&lt;</mo><mi>j</mi></mrow></munder><msub><mi>ω</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mspace width="0.167em"></mspace><msub><mi>x</mi><mi>i</mi></msub><mspace width="0.167em"></mspace><msub><mi>x</mi><mi>j</mi></msub></mrow><mrow><mo>∑</mo><munder><mo>∑</mo><mrow><mi>i</mi><mo>&lt;</mo><mi>j</mi></mrow></munder><msub><mi>x</mi><mi>i</mi></msub><mspace width="0.167em"></mspace><msub><mi>x</mi><mi>j</mi></msub></mrow></mfrac></mrow><annotation encoding="application/x-tex">\Delta = \frac{\displaystyle\sum\sum_{i&lt;j} \omega_{ij} \, x_i \, x_j}{\displaystyle\sum\sum_{i&lt;j} x_i \, x_j}</annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mo>=</mo><mfrac><mrow><mo>∑</mo><munder><mo>∑</mo><mrow><mi>i</mi><mo>&lt;</mo><mi>j</mi></mrow></munder><msub><mi>ω</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mspace width="0.167em"></mspace><msub><mi>x</mi><mi>i</mi></msub><mspace width="0.167em"></mspace><msub><mi>x</mi><mi>j</mi></msub></mrow><mrow><mo>∑</mo><munder><mo>∑</mo><mrow><mi>i</mi><mo>&lt;</mo><mi>j</mi></mrow></munder><msub><mi>x</mi><mi>i</mi></msub><mspace width="0.167em"></mspace><msub><mi>x</mi><mi>j</mi></msub></mrow></mfrac></mrow><annotation encoding="application/x-tex">\Delta = \frac{\displaystyle\sum\sum_{i&lt;j} \omega_{ij} \, x_i \, x_j}{\displaystyle\sum\sum_{i&lt;j} x_i \, x_j}</annotation></semantics></math></p>
 <p>where
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>ω</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><annotation encoding="application/x-tex">\omega_{ij}</annotation></semantics></math>
 is the taxonomic distance between species
@@ -219,7 +219,7 @@ pairs of individuals from <em>different species</em>. This removes the
 diluting effect of within-species pairs.</p>
 <p><strong>Key property:</strong> Pure taxonomic signal, still weighted
 by abundance.</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>Δ</mi><mo>*</mo></msup><mo>=</mo><mfrac><mrow><mo>∑</mo><munder><mo>∑</mo><mrow><mi>i</mi><mo>&lt;</mo><mi>j</mi></mrow></munder><msub><mi>ω</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mspace width="0.167em"></mspace><msub><mi>x</mi><mi>i</mi></msub><mspace width="0.167em"></mspace><msub><mi>x</mi><mi>j</mi></msub></mrow><mrow><mo>∑</mo><munder><mo>∑</mo><mrow><mi>i</mi><mo>&lt;</mo><mi>j</mi></mrow></munder><msub><mi>x</mi><mi>i</mi></msub><mspace width="0.167em"></mspace><msub><mi>x</mi><mi>j</mi></msub></mrow></mfrac></mrow><annotation encoding="application/x-tex">\Delta^* = \frac{\displaystyle\sum\sum_{i&lt;j} \omega_{ij} \, x_i \, x_j}{\displaystyle\sum\sum_{i&lt;j} x_i \, x_j}</annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi mathvariant="normal">Δ</mi><mo>*</mo></msup><mo>=</mo><mfrac><mrow><mo>∑</mo><munder><mo>∑</mo><mrow><mi>i</mi><mo>&lt;</mo><mi>j</mi></mrow></munder><msub><mi>ω</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mspace width="0.167em"></mspace><msub><mi>x</mi><mi>i</mi></msub><mspace width="0.167em"></mspace><msub><mi>x</mi><mi>j</mi></msub></mrow><mrow><mo>∑</mo><munder><mo>∑</mo><mrow><mi>i</mi><mo>&lt;</mo><mi>j</mi></mrow></munder><msub><mi>x</mi><mi>i</mi></msub><mspace width="0.167em"></mspace><msub><mi>x</mi><mi>j</mi></msub></mrow></mfrac></mrow><annotation encoding="application/x-tex">\Delta^* = \frac{\displaystyle\sum\sum_{i&lt;j} \omega_{ij} \, x_i \, x_j}{\displaystyle\sum\sum_{i&lt;j} x_i \, x_j}</annotation></semantics></math></p>
 <p>(Same formula as Delta, but
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi><mo>≠</mo><mi>j</mi></mrow><annotation encoding="application/x-tex">i \neq j</annotation></semantics></math>
 excludes same-species pairs.)</p>
@@ -237,7 +237,7 @@ only</strong>.</p>
 <p><strong>Key property:</strong> Independent of sample size and
 abundance. This makes AvTD the ideal index for comparing communities
 sampled with different effort levels or different methods.</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>Δ</mi><mo>+</mo></msup><mo>=</mo><mfrac><mrow><mo>∑</mo><munder><mo>∑</mo><mrow><mi>i</mi><mo>&lt;</mo><mi>j</mi></mrow></munder><msub><mi>ω</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mrow><mrow><mi>S</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>S</mi><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mi>/</mi><mn>2</mn></mrow></mfrac></mrow><annotation encoding="application/x-tex">\Delta^+ = \frac{\displaystyle\sum\sum_{i&lt;j} \omega_{ij}}{S(S-1)/2}</annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi mathvariant="normal">Δ</mi><mo>+</mo></msup><mo>=</mo><mfrac><mrow><mo>∑</mo><munder><mo>∑</mo><mrow><mi>i</mi><mo>&lt;</mo><mi>j</mi></mrow></munder><msub><mi>ω</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mrow><mrow><mi>S</mi><mo stretchy="false" form="prefix">(</mo><mi>S</mi><mo>−</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mi>/</mi><mn>2</mn></mrow></mfrac></mrow><annotation encoding="application/x-tex">\Delta^+ = \frac{\displaystyle\sum\sum_{i&lt;j} \omega_{ij}}{S(S-1)/2}</annotation></semantics></math></p>
 <p>where
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>S</mi><annotation encoding="application/x-tex">S</annotation></semantics></math>
 is the number of species.</p>

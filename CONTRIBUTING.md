@@ -38,6 +38,7 @@ describing:
 ## Development Setup
 
 ``` r
+
 # Install development dependencies
 install.packages(c("devtools", "testthat", "roxygen2", "knitr", "rmarkdown"))
 

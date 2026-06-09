@@ -12,6 +12,7 @@ species spanning many families and orders while the other has species
 from a single genus, the first is taxonomically more distinct.
 
 ``` r
+
 library(taxdiv)
 
 # Mediterranean forest community
@@ -49,6 +50,7 @@ The distance between two species equals the number of steps up the
 taxonomic tree to reach their lowest common ancestor:
 
 ``` r
+
 dist_mat <- tax_distance_matrix(tax_tree)
 round(dist_mat, 2)
 #>                     Quercus_coccifera Quercus_infectoria Pinus_brutia
@@ -116,12 +118,15 @@ randomly chosen *individuals* from the community.
 **Key property:** Abundance-weighted. Communities where abundant species
 are taxonomically distant score higher.
 
-$$\Delta = \frac{\sum\sum\limits_{i < j}\omega_{ij}\, x_{i}\, x_{j}}{\sum\sum\limits_{i < j}x_{i}\, x_{j}}$$
+``` math
+\Delta = \frac{\displaystyle\sum\sum_{i<j} \omega_{ij} \, x_i \, x_j}{\displaystyle\sum\sum_{i<j} x_i \, x_j}
+```
 
-where $\omega_{ij}$ is the taxonomic distance between species $i$ and
-$j$, and $x_{i}$ is the abundance of species $i$.
+where $`\omega_{ij}`$ is the taxonomic distance between species $`i`$
+and $`j`$, and $`x_i`$ is the abundance of species $`i`$.
 
 ``` r
+
 d <- delta(community, tax_tree)
 cat("Delta:", round(d, 4), "\n")
 #> Delta: 2.3912
@@ -135,11 +140,14 @@ of within-species pairs.
 
 **Key property:** Pure taxonomic signal, still weighted by abundance.
 
-$$\Delta^{*} = \frac{\sum\sum\limits_{i < j}\omega_{ij}\, x_{i}\, x_{j}}{\sum\sum\limits_{i < j}x_{i}\, x_{j}}$$
+``` math
+\Delta^* = \frac{\displaystyle\sum\sum_{i<j} \omega_{ij} \, x_i \, x_j}{\displaystyle\sum\sum_{i<j} x_i \, x_j}
+```
 
-(Same formula as Delta, but $i \neq j$ excludes same-species pairs.)
+(Same formula as Delta, but $`i \neq j`$ excludes same-species pairs.)
 
 ``` r
+
 ds <- delta_star(community, tax_tree)
 cat("Delta*:", round(ds, 4), "\n")
 #> Delta*: 2.7668
@@ -154,11 +162,14 @@ species pairs, using **presence/absence only**.
 AvTD the ideal index for comparing communities sampled with different
 effort levels or different methods.
 
-$$\Delta^{+} = \frac{\sum\sum\limits_{i < j}\omega_{ij}}{S(S - 1)/2}$$
+``` math
+\Delta^+ = \frac{\displaystyle\sum\sum_{i<j} \omega_{ij}}{S(S-1)/2}
+```
 
-where $S$ is the number of species.
+where $`S`$ is the number of species.
 
 ``` r
+
 spp <- names(community)
 avg_td <- avtd(spp, tax_tree)
 cat("AvTD (Delta+):", round(avg_td, 4), "\n")
@@ -181,6 +192,7 @@ community where some species pairs are closely related while others are
 very distant will have high VarTD.
 
 ``` r
+
 var_td <- vartd(spp, tax_tree)
 cat("VarTD (Lambda+):", round(var_td, 4), "\n")
 #> VarTD (Lambda+): 0.2489
@@ -194,6 +206,7 @@ taxonomically balanced tree.
 ## Comparing the Four Indices
 
 ``` r
+
 cat("Delta  (abundance-weighted diversity):  ", round(d, 4), "\n")
 #> Delta  (abundance-weighted diversity):   2.3912
 cat("Delta* (abundance-weighted distinctness):", round(ds, 4), "\n")
@@ -204,12 +217,12 @@ cat("VarTD  (variation in distinctness):      ", round(var_td, 4), "\n")
 #> VarTD  (variation in distinctness):       0.2489
 ```
 
-| Index       | Uses abundance? | Sample-size independent? | Best for                                         |
-|-------------|:---------------:|:------------------------:|--------------------------------------------------|
-| **Delta**   |       Yes       |            No            | Comparing sites with equal sampling effort       |
-| **Delta**\* |       Yes       |            No            | Isolating taxonomic signal from abundance effect |
-| **AvTD**    |       No        |         **Yes**          | Comparing sites with different sampling effort   |
-| **VarTD**   |       No        |         **Yes**          | Detecting uneven taxonomic structure             |
+| Index | Uses abundance? | Sample-size independent? | Best for |
+|----|:--:|:--:|----|
+| **Delta** | Yes | No | Comparing sites with equal sampling effort |
+| **Delta**\* | Yes | No | Isolating taxonomic signal from abundance effect |
+| **AvTD** | No | **Yes** | Comparing sites with different sampling effort |
+| **VarTD** | No | **Yes** | Detecting uneven taxonomic structure |
 
 ## Significance Testing with Funnel Plots
 
@@ -218,7 +231,7 @@ Clarke & Warwick (2001) proposed a simulation approach:
 
 1.  Define a **master species pool** (e.g., all species known from the
     region)
-2.  Draw random subsets of size $n$ from this pool
+2.  Draw random subsets of size $`n`$ from this pool
 3.  Compute AvTD (or VarTD) for each random subset
 4.  Repeat many times to build an expected distribution
 5.  Plot observed values against the 95% confidence funnel
@@ -231,6 +244,7 @@ degradation).
 ### Running the simulation
 
 ``` r
+
 # Use the built-in anatolian_trees dataset as species pool
 data(anatolian_trees)
 
@@ -251,6 +265,7 @@ cat("Species pool size:", nrow(anatolian_trees), "\n")
 ### Funnel plot
 
 ``` r
+
 plot_funnel(sim,
             observed = data.frame(
               site = "Mediterranean",
@@ -281,13 +296,13 @@ show more variation, hence the wider funnel at the left.
 
 ## When to Use Clarke & Warwick vs Ozkan pTO
 
-| Situation                                    | Recommended                                |
-|----------------------------------------------|--------------------------------------------|
-| Comparing sites with unequal sampling effort | **AvTD** (sample-size independent)         |
-| Need statistical significance testing        | **AvTD/VarTD + funnel plot**               |
-| Want abundance-weighted taxonomic diversity  | **Delta** or **Ozkan pTO**                 |
-| Want to identify species contributions       | **Ozkan pTO** (slicing procedure)          |
-| Need a complete analysis                     | **Both** (they answer different questions) |
+| Situation | Recommended |
+|----|----|
+| Comparing sites with unequal sampling effort | **AvTD** (sample-size independent) |
+| Need statistical significance testing | **AvTD/VarTD + funnel plot** |
+| Want abundance-weighted taxonomic diversity | **Delta** or **Ozkan pTO** |
+| Want to identify species contributions | **Ozkan pTO** (slicing procedure) |
+| Need a complete analysis | **Both** (they answer different questions) |
 
 The Clarke & Warwick and Ozkan pTO frameworks are complementary, not
 competing. taxdiv computes both simultaneously through

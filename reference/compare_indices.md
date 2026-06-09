@@ -115,20 +115,20 @@ tax <- build_tax_tree(
 )
 
 # Single community
-comm <- c(sp1 = 10, sp2 = 20, sp3 = 15, sp4 = 5)
+comm <- c(sp1 = 9, sp2 = 7, sp3 = 6, sp4 = 3)
 compare_indices(comm, tax)
 #> taxdiv -- Index Comparison
 #>   Communities: 1 
 #>   Indices: Shannon, Simpson, Delta, Delta_star, AvTD, VarTD, uTO, TO, uTO_plus, TO_plus, uTO_max, TO_max, uTO_plus_max, TO_plus_max 
 #> 
-#>  Community N_Species  Shannon Simpson    Delta Delta_star AvTD    VarTD
-#>  Community         4 1.279854     0.7 1.326531   1.857143    2 0.666667
-#>       uTO       TO uTO_plus  TO_plus  uTO_max   TO_max uTO_plus_max TO_plus_max
-#>  3.413215 5.066836  4.04615 5.837909 3.413215 5.066836      4.04615    5.837909
+#>  Community N_Species  Shannon Simpson Delta Delta_star AvTD    VarTD      uTO
+#>  Community         4 1.321164    0.72  1.39   1.853333    2 0.666667 3.559537
+#>        TO uTO_plus  TO_plus  uTO_max   TO_max uTO_plus_max TO_plus_max
+#>  5.257519  4.04615 5.837909 3.559537 5.257519      4.04615    5.837909
 
 # Multiple communities
 comm_list <- list(
-  Site_A = c(sp1 = 10, sp2 = 20, sp3 = 15, sp4 = 5),
+  Site_A = c(sp1 = 9, sp2 = 7, sp3 = 6, sp4 = 3),
   Site_B = c(sp1 = 5, sp2 = 5, sp3 = 5, sp4 = 5)
 )
 compare_indices(comm_list, tax)
@@ -137,9 +137,9 @@ compare_indices(comm_list, tax)
 #>   Indices: Shannon, Simpson, Delta, Delta_star, AvTD, VarTD, uTO, TO, uTO_plus, TO_plus, uTO_max, TO_max, uTO_plus_max, TO_plus_max 
 #> 
 #>  Community N_Species  Shannon Simpson    Delta Delta_star AvTD    VarTD
-#>     Site_A         4 1.279854    0.70 1.326531   1.857143    2 0.666667
+#>     Site_A         4 1.321164    0.72 1.390000   1.853333    2 0.666667
 #>     Site_B         4 1.386294    0.75 1.578947   2.000000    2 0.666667
 #>       uTO       TO uTO_plus  TO_plus  uTO_max   TO_max uTO_plus_max TO_plus_max
-#>  3.413215 5.066836  4.04615 5.837909 3.413215 5.066836      4.04615    5.837909
+#>  3.559537 5.257519  4.04615 5.837909 3.559537 5.257519      4.04615    5.837909
 #>  4.046150 5.837909  4.04615 5.837909 4.046150 5.837909      4.04615    5.837909
 ```

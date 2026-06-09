@@ -18,6 +18,7 @@ The package implements three main approaches:
     reinforced estimators
 
 ``` r
+
 library(taxdiv)
 ```
 
@@ -25,21 +26,23 @@ library(taxdiv)
 
 We will use a hypothetical Mediterranean forest community to demonstrate
 the package functionality. This community has 10 tree and shrub species
-with known abundances and a 4-level taxonomic hierarchy.
+with Westhoff-Maarel cover-abundance values (1–9) and a 4-level
+taxonomic hierarchy.
 
 ``` r
-# Species abundances (individuals per plot)
+
+# Species abundances (Westhoff-Maarel cover-abundance scale, 1-9)
 community <- c(
-  Quercus_coccifera    = 25,
-  Quercus_infectoria   = 18,
-  Pinus_brutia         = 30,
-  Pinus_nigra          = 12,
-  Juniperus_excelsa    = 8,
-  Juniperus_oxycedrus  = 6,
-  Arbutus_andrachne    = 15,
-  Styrax_officinalis   = 4,
-  Cercis_siliquastrum  = 3,
-  Olea_europaea        = 10
+  Quercus_coccifera    = 9,
+  Quercus_infectoria   = 7,
+  Pinus_brutia         = 9,
+  Pinus_nigra          = 5,
+  Juniperus_excelsa    = 4,
+  Juniperus_oxycedrus  = 3,
+  Arbutus_andrachne    = 6,
+  Styrax_officinalis   = 2,
+  Cercis_siliquastrum  = 1,
+  Olea_europaea        = 5
 )
 
 # Taxonomic hierarchy
@@ -76,10 +79,11 @@ Shannon and Simpson indices measure diversity based solely on species
 abundance distribution:
 
 ``` r
+
 # Shannon diversity (natural log)
 H <- shannon(community)
 cat("Shannon H':", round(H, 4), "\n")
-#> Shannon H': 2.0948
+#> Shannon H': 2.1623
 
 # Simpson indices
 D <- simpson(community, type = "dominance")
@@ -87,11 +91,11 @@ GS <- simpson(community, type = "gini_simpson")
 inv_D <- simpson(community, type = "inverse")
 
 cat("Simpson dominance (D):", round(D, 4), "\n")
-#> Simpson dominance (D): 0.1424
+#> Simpson dominance (D): 0.1257
 cat("Gini-Simpson (1-D):", round(GS, 4), "\n")
-#> Gini-Simpson (1-D): 0.8576
+#> Gini-Simpson (1-D): 0.8743
 cat("Inverse Simpson (1/D):", round(inv_D, 4), "\n")
-#> Inverse Simpson (1/D): 7.0246
+#> Inverse Simpson (1/D): 7.9541
 ```
 
 These indices tell us about the evenness and richness of the community,
@@ -104,6 +108,7 @@ Before computing taxonomic diversity, we can examine the pairwise
 taxonomic distances between species:
 
 ``` r
+
 dist_mat <- tax_distance_matrix(tax_tree)
 round(dist_mat, 2)
 #>                     Quercus_coccifera Quercus_infectoria Pinus_brutia
@@ -162,15 +167,16 @@ The Clarke & Warwick framework provides abundance-weighted and
 presence/absence-based measures:
 
 ``` r
+
 # Delta: average taxonomic diversity (abundance-weighted)
 d <- delta(community, tax_tree)
 cat("Delta (taxonomic diversity):", round(d, 4), "\n")
-#> Delta (taxonomic diversity): 2.3912
+#> Delta (taxonomic diversity): 2.4871
 
 # Delta*: taxonomic distinctness (abundance-weighted, excludes same-species)
 ds <- delta_star(community, tax_tree)
 cat("Delta* (taxonomic distinctness):", round(ds, 4), "\n")
-#> Delta* (taxonomic distinctness): 2.7668
+#> Delta* (taxonomic distinctness): 2.7889
 
 # AvTD (Delta+): average taxonomic distinctness (presence/absence)
 spp <- names(community)
@@ -201,12 +207,13 @@ Ozkan (2018) uses Deng entropy to construct four measures:
 - **TO+**: Weighted taxonomic distance
 
 ``` r
+
 result <- ozkan_pto(community, tax_tree)
 
 cat("uTO  (unweighted diversity):", round(result$uTO, 4), "\n")
-#> uTO  (unweighted diversity): 7.4895
+#> uTO  (unweighted diversity): 7.7613
 cat("TO   (weighted diversity):", round(result$TO, 4), "\n")
-#> TO   (weighted diversity): 10.6675
+#> TO   (weighted diversity): 10.9393
 cat("uTO+ (unweighted distance):", round(result$uTO_plus, 4), "\n")
 #> uTO+ (unweighted distance): 8.5502
 cat("TO+  (weighted distance):", round(result$TO_plus, 4), "\n")
@@ -217,6 +224,7 @@ The Deng entropy values at each taxonomic level reveal the contribution
 of each hierarchical level to overall diversity:
 
 ``` r
+
 cat("Deng entropy at each level:\n")
 #> Deng entropy at each level:
 for (i in seq_along(result$Ed_levels)) {
@@ -240,9 +248,10 @@ The
 function returns all four values as a named vector:
 
 ``` r
+
 pto_components(community, tax_tree)
 #>          uTO           TO     uTO_plus      TO_plus      uTO_max       TO_max 
-#>     7.489477    10.667513     8.550230    11.728284     7.489477    10.667513 
+#>     7.761257    10.939311     8.550230    11.728284     7.761257    10.939311 
 #> uTO_plus_max  TO_plus_max 
 #>     8.550230    11.728284
 ```
@@ -254,11 +263,12 @@ Here we compare our Mediterranean community with a species-poor
 community:
 
 ``` r
+
 # Degraded community (fewer species, less taxonomic breadth)
 degraded <- c(
-  Quercus_coccifera   = 40,
-  Pinus_brutia        = 35,
-  Juniperus_oxycedrus = 10
+  Quercus_coccifera   = 9,
+  Pinus_brutia        = 8,
+  Juniperus_oxycedrus = 5
 )
 
 tax_degraded <- tax_tree[tax_tree$Species %in% names(degraded), ]
@@ -266,7 +276,7 @@ tax_degraded <- tax_tree[tax_tree$Species %in% names(degraded), ]
 cat("=== Original community (10 species) ===\n")
 #> === Original community (10 species) ===
 cat("Shannon:", round(shannon(community), 4), "\n")
-#> Shannon: 2.0948
+#> Shannon: 2.1623
 r1 <- ozkan_pto(community, tax_tree)
 cat("uTO+:", round(r1$uTO_plus, 4), "\n")
 #> uTO+: 8.5502
@@ -276,7 +286,7 @@ cat("TO+:", round(r1$TO_plus, 4), "\n\n")
 cat("=== Degraded community (3 species) ===\n")
 #> === Degraded community (3 species) ===
 cat("Shannon:", round(shannon(degraded), 4), "\n")
-#> Shannon: 0.9718
+#> Shannon: 1.0702
 r2 <- ozkan_pto(degraded, tax_degraded)
 cat("uTO+:", round(r2$uTO_plus, 4), "\n")
 #> uTO+: 5.3496
@@ -297,6 +307,7 @@ probability across many iterations, then taking the maximum pTO value
 observed.
 
 ``` r
+
 set.seed(42)
 run2 <- ozkan_pto_resample(community, tax_tree, n_iter = 101, seed = 42)
 
@@ -307,9 +318,9 @@ cat("uTO+:", round(run2$uTO_plus_det, 4), "\n")
 cat("TO+: ", round(run2$TO_plus_det, 4), "\n")
 #> TO+:  11.7283
 cat("uTO: ", round(run2$uTO_det, 4), "\n")
-#> uTO:  7.4895
+#> uTO:  7.7613
 cat("TO:  ", round(run2$TO_det, 4), "\n\n")
-#> TO:   10.6675
+#> TO:   10.9393
 
 cat("=== Run 2 (max across", run2$n_iter, "iterations) ===\n")
 #> === Run 2 (max across 101 iterations) ===
@@ -318,9 +329,9 @@ cat("uTO+:", round(run2$uTO_plus_max, 4), "\n")
 cat("TO+: ", round(run2$TO_plus_max, 4), "\n")
 #> TO+:  11.7283
 cat("uTO: ", round(run2$uTO_max, 4), "\n")
-#> uTO:  7.4895
+#> uTO:  7.7613
 cat("TO:  ", round(run2$TO_max, 4), "\n")
-#> TO:   10.6675
+#> TO:   10.9393
 ```
 
 The maximum values from Run 2 are always \>= the deterministic values
@@ -330,6 +341,7 @@ first iteration.
 We can examine how the pTO values vary across iterations:
 
 ``` r
+
 iter_df <- run2$iteration_results
 cat("uTO+ range:", round(min(iter_df$uTO_plus), 4), "to",
     round(max(iter_df$uTO_plus), 4), "\n")
@@ -347,6 +359,7 @@ higher diversity in Run 2 get different inclusion probabilities than
 those that did not.
 
 ``` r
+
 run3 <- ozkan_pto_sensitivity(community, tax_tree, run2, seed = 123)
 
 cat("=== Run 3 (sensitivity analysis) ===\n")
@@ -363,9 +376,9 @@ cat("uTO+:", round(run3$uTO_plus_max, 4), "\n")
 cat("TO+: ", round(run3$TO_plus_max, 4), "\n")
 #> TO+:  11.7283
 cat("uTO: ", round(run3$uTO_max, 4), "\n")
-#> uTO:  7.5029
+#> uTO:  7.7613
 cat("TO:  ", round(run3$TO_max, 4), "\n")
-#> TO:   10.6808
+#> TO:   10.9393
 ```
 
 The overall maximum across all three runs represents the “potential”
@@ -379,6 +392,7 @@ Run 3 assigns each species a probability of being included in each
 iteration:
 
 ``` r
+
 probs <- run3$species_probs
 prob_df <- data.frame(
   Species = names(probs),
@@ -403,6 +417,7 @@ print(prob_df, row.names = FALSE)
 The complete Ozkan (2018) analysis pipeline runs three stages:
 
 ``` r
+
 cat("Pipeline: Run 1 -> Run 2 -> Run 3\n\n")
 #> Pipeline: Run 1 -> Run 2 -> Run 3
 
@@ -411,15 +426,15 @@ cat("         uTO+      TO+       uTO       TO\n")
 cat("Run 1:", sprintf("%9.4f %9.4f %9.4f %9.4f",
     run2$uTO_plus_det, run2$TO_plus_det,
     run2$uTO_det, run2$TO_det), "\n")
-#> Run 1:    8.5502   11.7283    7.4895   10.6675
+#> Run 1:    8.5502   11.7283    7.7613   10.9393
 cat("Run 2:", sprintf("%9.4f %9.4f %9.4f %9.4f",
     run2$uTO_plus_max, run2$TO_plus_max,
     run2$uTO_max, run2$TO_max), "\n")
-#> Run 2:    8.5502   11.7283    7.4895   10.6675
+#> Run 2:    8.5502   11.7283    7.7613   10.9393
 cat("Run 3:", sprintf("%9.4f %9.4f %9.4f %9.4f",
     run3$uTO_plus_max, run3$TO_plus_max,
     run3$uTO_max, run3$TO_max), "\n")
-#> Run 3:    8.5502   11.7283    7.5029   10.6808
+#> Run 3:    8.5502   11.7283    7.7613   10.9393
 ```
 
 Each subsequent run finds values \>= the previous run, reflecting the
@@ -434,6 +449,7 @@ function computes bootstrap-based rarefaction for any index supported by
 taxdiv:
 
 ``` r
+
 rare <- rarefaction_taxonomic(community, tax_tree,
                                index = "shannon",
                                steps = 10, n_boot = 100, seed = 42)
@@ -442,22 +458,22 @@ cat("Rarefaction results (Shannon):\n")
 print(round(rare, 4))
 #> taxdiv -- Rarefaction Curve
 #>   Index: shannon 
-#>   Total N: 131 
+#>   Total N: 51 
 #>   Bootstrap: 100 replicates
 #>   CI: 95 %
 #>   Steps: 10 
 #> 
 #>  sample_size   mean  lower  upper     sd
-#>            3 0.9351 0.6365 1.0986 0.2374
-#>           17 1.8396 1.5052 2.1621 0.1730
-#>           31 1.9452 1.6796 2.1678 0.1207
-#>           46 2.0298 1.8698 2.1666 0.0811
-#>           60 2.0365 1.8982 2.1428 0.0676
-#>           74 2.0614 1.9784 2.1361 0.0451
-#>           88 2.0784 2.0000 2.1427 0.0413
-#>          103 2.0847 2.0060 2.1335 0.0318
-#>          117 2.0913 2.0513 2.1265 0.0200
-#>          131 2.0948 2.0948 2.0948 0.0000
+#>            2 0.6169 0.0000 0.6931 0.2180
+#>            7 1.5616 1.1537 1.8518 0.1974
+#>           13 1.8643 1.5650 2.0981 0.1412
+#>           18 1.9614 1.7249 2.1543 0.1153
+#>           24 2.0322 1.8614 2.1885 0.0941
+#>           29 2.0724 1.9313 2.2005 0.0719
+#>           35 2.1084 1.9787 2.2013 0.0606
+#>           40 2.1364 2.0509 2.1968 0.0369
+#>           46 2.1497 2.0845 2.1900 0.0268
+#>           51 2.1623 2.1623 2.1623 0.0000
 ```
 
 The curve should reach a plateau if sampling is adequate. A steep curve
@@ -475,6 +491,7 @@ Visualizes the taxonomic hierarchy of species as a dendrogram. Species
 on the same branch share closer taxonomic classification:
 
 ``` r
+
 plot_taxonomic_tree(tax_tree, community = community,
                     color_by = "Family", label_size = 3.5,
                     title = "Mediterranean Forest - Taxonomic Tree")
@@ -492,6 +509,7 @@ groupings. Longer branches represent greater taxonomic distance.
 Displays the pairwise taxonomic distance matrix as a color grid:
 
 ``` r
+
 plot_heatmap(tax_tree, label_size = 2.8,
              title = "Taxonomic Distance Heatmap")
 ```
@@ -511,13 +529,14 @@ disturbance types affect taxonomic structure. We create a second
 community where one species dominates:
 
 ``` r
+
 # Dominant community: same species, uneven abundances
 dominant_community <- c(
-  Quercus_coccifera   = 80, Quercus_infectoria  = 5,
-  Pinus_brutia        = 3,  Pinus_nigra         = 2,
-  Juniperus_excelsa   = 2,  Juniperus_oxycedrus = 1,
-  Arbutus_andrachne   = 3,  Styrax_officinalis  = 1,
-  Cercis_siliquastrum = 2,  Olea_europaea       = 1
+  Quercus_coccifera   = 9,  Quercus_infectoria  = 3,
+  Pinus_brutia        = 1,  Pinus_nigra         = 1,
+  Juniperus_excelsa   = 1,  Juniperus_oxycedrus = 1,
+  Arbutus_andrachne   = 1,  Styrax_officinalis  = 1,
+  Cercis_siliquastrum = 1,  Olea_europaea       = 1
 )
 
 communities <- list(
@@ -527,6 +546,7 @@ communities <- list(
 ```
 
 ``` r
+
 comparison <- compare_indices(communities, tax_tree, plot = TRUE)
 comparison$plot
 ```
@@ -544,20 +564,18 @@ assessment.
 Index values:
 
 ``` r
+
 comparison$table
 #> taxdiv -- Index Comparison
 #>   Communities: 2 
 #>   Indices: Shannon, Simpson, Delta, Delta_star, AvTD, VarTD, uTO, TO, uTO_plus, TO_plus, uTO_max, TO_max, uTO_plus_max, TO_plus_max 
 #> 
 #>  Community N_Species  Shannon  Simpson    Delta Delta_star     AvTD    VarTD
-#>    Diverse        10 2.094838 0.857642 2.391192   2.766816 2.866667 0.248889
-#>   Dominant        10 0.911571 0.354200 0.908485   2.539243 2.866667 0.248889
-#>       uTO        TO uTO_plus  TO_plus  uTO_max    TO_max uTO_plus_max
-#>  7.489477 10.667513  8.55023 11.72828 7.489477 10.667513      8.55023
-#>  5.207604  8.380285  8.55023 11.72828 5.207604  8.380285      8.55023
-#>  TO_plus_max
-#>     11.72828
-#>     11.72828
+#>    Diverse        10 2.162342 0.874279 2.487059   2.788918 2.866667 0.248889
+#>   Dominant        10 1.842189 0.755000 2.078947   2.615894 2.866667 0.248889
+#>       uTO       TO uTO_plus  TO_plus  uTO_max   TO_max uTO_plus_max TO_plus_max
+#>  7.761257 10.93931  8.55023 11.72828 7.761257 10.93931      8.55023    11.72828
+#>  6.942210 10.11890  8.55023 11.72828 6.942210 10.11890      8.55023    11.72828
 ```
 
 ### Iteration Plot (Run 2)
@@ -565,6 +583,7 @@ comparison$table
 Shows how pTO values change across stochastic resampling iterations:
 
 ``` r
+
 plot_iteration(run2, component = "TO",
                title = "Run 2 - TO Values Across Iterations")
 ```
@@ -590,6 +609,7 @@ Shows each species’ contribution to community diversity based on
 abundance and average taxonomic distance to all other species:
 
 ``` r
+
 plot_bubble(community, tax_tree, color_by = "Family",
             title = "Species Contributions to Diversity")
 ```
@@ -613,6 +633,7 @@ species that is also abundant.
 Provides a multivariate comparison of all indices simultaneously:
 
 ``` r
+
 plot_radar(communities, tax_tree,
            title = "Diverse vs Dominant - Radar Comparison")
 #> Warning: Removed 2 rows containing missing values or values outside the scale range
@@ -635,6 +656,7 @@ communities share the same species pool but differ in evenness.
 Visualizes how diversity estimates change with increasing sample size:
 
 ``` r
+
 plot_rarefaction(rare)
 ```
 

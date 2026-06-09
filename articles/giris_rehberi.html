@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>taxdiv Paketi Kullanim Rehberi (Turkce) • taxdiv</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="taxdiv Paketi Kullanim Rehberi (Turkce)">
 <meta name="google-site-verification" content="">
@@ -21,7 +21,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">taxdiv</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -108,21 +108,22 @@ Delta, Delta*, AvTD, VarTD</li>
 <h2 id="ornek-veri-akdeniz-ormani-toplulugu">Ornek Veri: Akdeniz Ormani Toplulugu<a class="anchor" aria-label="anchor" href="#ornek-veri-akdeniz-ormani-toplulugu"></a>
 </h2>
 <p>Orneklerimizde 10 turlu hayali bir Akdeniz ormani toplulugu
-kullanacagiz. Her turun <strong>bolluk degeri</strong> (birey sayisi) ve
-<strong>7 taksonomik seviyesi</strong> vardir.</p>
+kullanacagiz. Her turun <strong>Westhoff-Maarel ortu-bolluk
+degeri</strong> (1–9 olcegi) ve <strong>7 taksonomik seviyesi</strong>
+vardir.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Tur bolluklari (ornek alanindaki birey sayisi)</span></span>
+<code class="sourceCode R"><span><span class="co"># Tur bolluklari (Westhoff-Maarel ortu-bolluk olcegi, 1-9)</span></span>
 <span><span class="va">topluluk</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>  Quercus_coccifera    <span class="op">=</span> <span class="fl">25</span>,</span>
-<span>  Quercus_infectoria   <span class="op">=</span> <span class="fl">18</span>,</span>
-<span>  Pinus_brutia         <span class="op">=</span> <span class="fl">30</span>,</span>
-<span>  Pinus_nigra          <span class="op">=</span> <span class="fl">12</span>,</span>
-<span>  Juniperus_excelsa    <span class="op">=</span> <span class="fl">8</span>,</span>
-<span>  Juniperus_oxycedrus  <span class="op">=</span> <span class="fl">5</span>,</span>
-<span>  Cedrus_libani        <span class="op">=</span> <span class="fl">15</span>,</span>
-<span>  Abies_cilicica       <span class="op">=</span> <span class="fl">7</span>,</span>
-<span>  Fagus_orientalis     <span class="op">=</span> <span class="fl">20</span>,</span>
-<span>  Carpinus_betulus      <span class="op">=</span> <span class="fl">10</span></span>
+<span>  Quercus_coccifera    <span class="op">=</span> <span class="fl">9</span>,</span>
+<span>  Quercus_infectoria   <span class="op">=</span> <span class="fl">7</span>,</span>
+<span>  Pinus_brutia         <span class="op">=</span> <span class="fl">9</span>,</span>
+<span>  Pinus_nigra          <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>  Juniperus_excelsa    <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  Juniperus_oxycedrus  <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  Cedrus_libani        <span class="op">=</span> <span class="fl">6</span>,</span>
+<span>  Abies_cilicica       <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  Fagus_orientalis     <span class="op">=</span> <span class="fl">8</span>,</span>
+<span>  Carpinus_betulus      <span class="op">=</span> <span class="fl">4</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Taksonomik hiyerarsi (7 seviye: Tur, Cins, Familya, Takim, Sinif, Bolum, Alem)</span></span>
@@ -185,7 +186,7 @@ bolluklarini</strong> kullanir. Taksonomik yapiyi dikkate almazlar.</p>
 <code class="sourceCode R"><span><span class="co"># Shannon cesitliligi (dogal logaritma)</span></span>
 <span><span class="va">H</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/shannon.html">shannon</a></span><span class="op">(</span><span class="va">topluluk</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Shannon H':"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">H</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Shannon H': 2.1692</span></span>
+<span><span class="co">#&gt; Shannon H': 2.2016</span></span>
 <span></span>
 <span><span class="co"># Simpson indeksleri</span></span>
 <span><span class="va">D</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simpson.html">simpson</a></span><span class="op">(</span><span class="va">topluluk</span>, type <span class="op">=</span> <span class="st">"dominance"</span><span class="op">)</span>       <span class="co"># Baskinlik</span></span>
@@ -193,11 +194,11 @@ bolluklarini</strong> kullanir. Taksonomik yapiyi dikkate almazlar.</p>
 <span><span class="va">inv_D</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simpson.html">simpson</a></span><span class="op">(</span><span class="va">topluluk</span>, type <span class="op">=</span> <span class="st">"inverse"</span><span class="op">)</span>      <span class="co"># 1 / D</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Simpson baskinlik (D):"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">D</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Simpson baskinlik (D): 0.1269</span></span>
+<span><span class="co">#&gt; Simpson baskinlik (D): 0.1193</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Gini-Simpson (1-D):"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">GS</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Gini-Simpson (1-D): 0.8731</span></span>
+<span><span class="co">#&gt; Gini-Simpson (1-D): 0.8807</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Ters Simpson (1/D):"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">inv_D</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Ters Simpson (1/D): 7.8782</span></span></code></pre></div>
+<span><span class="co">#&gt; Ters Simpson (1/D): 8.385</span></span></code></pre></div>
 <p><strong>Yorum</strong>: Shannon degeri ne kadar yuksekse topluluk o
 kadar cesitlidir. Simpson baskinlik degeri ne kadar dusukse o kadar iyi
 dagilim vardir.</p>
@@ -207,9 +208,9 @@ kullanilabilir:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">H_duz</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/shannon.html">shannon</a></span><span class="op">(</span><span class="va">topluluk</span>, correction <span class="op">=</span> <span class="st">"chao_shen"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Shannon (Chao-Shen duzeltmeli):"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">H_duz</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Shannon (Chao-Shen duzeltmeli): 2.17</span></span>
+<span><span class="co">#&gt; Shannon (Chao-Shen duzeltmeli): 2.2394</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Shannon (duzeltmesiz):         "</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">H</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Shannon (duzeltmesiz):          2.1692</span></span></code></pre></div>
+<span><span class="co">#&gt; Shannon (duzeltmesiz):          2.2016</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="adim-2-taksonomik-mesafe-matrisi">Adim 2: Taksonomik Mesafe Matrisi<a class="anchor" aria-label="anchor" href="#adim-2-taksonomik-mesafe-matrisi"></a>
@@ -291,12 +292,12 @@ uzak mesafe)</li>
 <code class="sourceCode R"><span><span class="co"># Delta: Taksonomik cesitlilik (bolluk agirlikli)</span></span>
 <span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/delta.html">delta</a></span><span class="op">(</span><span class="va">topluluk</span>, <span class="va">agac</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Delta (taksonomik cesitlilik):"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">d</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Delta (taksonomik cesitlilik): 3.8246</span></span>
+<span><span class="co">#&gt; Delta (taksonomik cesitlilik): 3.8929</span></span>
 <span></span>
 <span><span class="co"># Delta*: Taksonomik ayirt edicilik (bolluk agirlikli, ayni tur ciftleri haric)</span></span>
 <span><span class="va">ds</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/delta_star.html">delta_star</a></span><span class="op">(</span><span class="va">topluluk</span>, <span class="va">agac</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Delta* (taksonomik ayirt edicilik):"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">ds</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Delta* (taksonomik ayirt edicilik): 4.3515</span></span>
+<span><span class="co">#&gt; Delta* (taksonomik ayirt edicilik): 4.3411</span></span>
 <span></span>
 <span><span class="co"># AvTD (Delta+): Ortalama taksonomik ayirt edicilik (sadece tur listesi, bolluk onemsiz)</span></span>
 <span><span class="va">turler</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">topluluk</span><span class="op">)</span></span>
@@ -341,9 +342,9 @@ listesi)</li>
 <code class="sourceCode R"><span><span class="va">sonuc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ozkan_pto.html">ozkan_pto</a></span><span class="op">(</span><span class="va">topluluk</span>, <span class="va">agac</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"uTO  (agirliksiz cesitlilik):"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">sonuc</span><span class="op">$</span><span class="va">uTO</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; uTO  (agirliksiz cesitlilik): 8.6804</span></span>
+<span><span class="co">#&gt; uTO  (agirliksiz cesitlilik): 8.8043</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"TO   (agirlikli cesitlilik):"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">sonuc</span><span class="op">$</span><span class="va">TO</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; TO   (agirlikli cesitlilik): 15.2596</span></span>
+<span><span class="co">#&gt; TO   (agirlikli cesitlilik): 15.3835</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"uTO+ (agirliksiz uzaklik):"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">sonuc</span><span class="op">$</span><span class="va">uTO_plus</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; uTO+ (agirliksiz uzaklik): 8.9019</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"TO+  (agirlikli uzaklik):"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">sonuc</span><span class="op">$</span><span class="va">TO_plus</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
@@ -375,13 +376,13 @@ sinirlanabilir. Varsayilan <code>NULL</code> tum seviyeleri kullanir.
 <span><span class="va">r_full</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ozkan_pto.html">ozkan_pto</a></span><span class="op">(</span><span class="va">topluluk</span>, <span class="va">agac</span>, max_level <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Tum seviyeler: uTO ="</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">r_full</span><span class="op">$</span><span class="va">uTO</span>, <span class="fl">4</span><span class="op">)</span>,</span>
 <span>    <span class="st">" TO ="</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">r_full</span><span class="op">$</span><span class="va">TO</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Tum seviyeler: uTO = 8.6804  TO = 15.2596</span></span>
+<span><span class="co">#&gt; Tum seviyeler: uTO = 8.8043  TO = 15.3835</span></span>
 <span></span>
 <span><span class="co"># Otomatik seviye secimi</span></span>
 <span><span class="va">r_auto</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ozkan_pto.html">ozkan_pto</a></span><span class="op">(</span><span class="va">topluluk</span>, <span class="va">agac</span>, max_level <span class="op">=</span> <span class="st">"auto"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Auto seviye:   uTO ="</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">r_auto</span><span class="op">$</span><span class="va">uTO</span>, <span class="fl">4</span><span class="op">)</span>,</span>
 <span>    <span class="st">" TO ="</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">r_auto</span><span class="op">$</span><span class="va">TO</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Auto seviye:   uTO = 8.6804  TO = 15.2596</span></span>
+<span><span class="co">#&gt; Auto seviye:   uTO = 8.8043  TO = 15.3835</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Bilgilendirici seviye:"</span>, <span class="va">r_auto</span><span class="op">$</span><span class="va">max_informative_level</span>, <span class="st">"\n"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Bilgilendirici seviye: 5</span></span>
 <span></span>
@@ -389,7 +390,7 @@ sinirlanabilir. Varsayilan <code>NULL</code> tum seviyeleri kullanir.
 <span><span class="va">r_3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ozkan_pto.html">ozkan_pto</a></span><span class="op">(</span><span class="va">topluluk</span>, <span class="va">agac</span>, max_level <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Ilk 3 seviye:  uTO ="</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">r_3</span><span class="op">$</span><span class="va">uTO</span>, <span class="fl">4</span><span class="op">)</span>,</span>
 <span>    <span class="st">" TO ="</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">r_3</span><span class="op">$</span><span class="va">TO</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Ilk 3 seviye:  uTO = 8.6804  TO = 15.2596</span></span></code></pre></div>
+<span><span class="co">#&gt; Ilk 3 seviye:  uTO = 8.8043  TO = 15.3835</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="bilesenli-cikti">8 Bilesenli Cikti<a class="anchor" aria-label="anchor" href="#bilesenli-cikti"></a>
@@ -400,17 +401,17 @@ standart hem max_level degerlerini dondurur:</p>
 <code class="sourceCode R"><span><span class="va">sonuc8</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ozkan_pto.html">ozkan_pto</a></span><span class="op">(</span><span class="va">topluluk</span>, <span class="va">agac</span>, max_level <span class="op">=</span> <span class="st">"auto"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Standart:  uTO ="</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">sonuc8</span><span class="op">$</span><span class="va">uTO</span>, <span class="fl">4</span><span class="op">)</span>,</span>
 <span>    <span class="st">" TO ="</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">sonuc8</span><span class="op">$</span><span class="va">TO</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Standart:  uTO = 8.6804  TO = 15.2596</span></span>
+<span><span class="co">#&gt; Standart:  uTO = 8.8043  TO = 15.3835</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Max-level: uTO_max ="</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">sonuc8</span><span class="op">$</span><span class="va">uTO_max</span>, <span class="fl">4</span><span class="op">)</span>,</span>
 <span>    <span class="st">" TO_max ="</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">sonuc8</span><span class="op">$</span><span class="va">TO_max</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Max-level: uTO_max = 8.6804  TO_max = 15.2596</span></span>
+<span><span class="co">#&gt; Max-level: uTO_max = 8.8043  TO_max = 15.3835</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Bilgilendirici seviye sayisi:"</span>, <span class="va">sonuc8</span><span class="op">$</span><span class="va">max_informative_level</span>, <span class="st">"\n"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Bilgilendirici seviye sayisi: 5</span></span></code></pre></div>
 <p><code><a href="../reference/pto_components.html">pto_components()</a></code> ile tek satirda alabilirsiniz:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/pto_components.html">pto_components</a></span><span class="op">(</span><span class="va">topluluk</span>, <span class="va">agac</span><span class="op">)</span></span>
 <span><span class="co">#&gt;          uTO           TO     uTO_plus      TO_plus      uTO_max       TO_max </span></span>
-<span><span class="co">#&gt;     8.680386    15.259632     8.901929    15.481180     8.680386    15.259632 </span></span>
+<span><span class="co">#&gt;     8.804283    15.383534     8.901929    15.481180     8.804283    15.383534 </span></span>
 <span><span class="co">#&gt; uTO_plus_max  TO_plus_max </span></span>
 <span><span class="co">#&gt;     8.901929    15.481180</span></span></code></pre></div>
 </div>
@@ -433,9 +434,9 @@ iterasyon yapilir ve <strong>maksimum</strong> pTO degeri alinir.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"TO+: "</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">islem2</span><span class="op">$</span><span class="va">TO_plus_det</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; TO+:  15.4812</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"uTO: "</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">islem2</span><span class="op">$</span><span class="va">uTO_det</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; uTO:  8.6804</span></span>
+<span><span class="co">#&gt; uTO:  8.8043</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"TO:  "</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">islem2</span><span class="op">$</span><span class="va">TO_det</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"\n\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; TO:   15.2596</span></span>
+<span><span class="co">#&gt; TO:   15.3835</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"=== Islem 2 (maksimum,"</span>, <span class="va">islem2</span><span class="op">$</span><span class="va">n_iter</span>, <span class="st">"iterasyon) ===\n"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; === Islem 2 (maksimum, 101 iterasyon) ===</span></span>
@@ -444,9 +445,9 @@ iterasyon yapilir ve <strong>maksimum</strong> pTO degeri alinir.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"TO+: "</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">islem2</span><span class="op">$</span><span class="va">TO_plus_max</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; TO+:  15.9905</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"uTO: "</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">islem2</span><span class="op">$</span><span class="va">uTO_max</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; uTO:  8.9886</span></span>
+<span><span class="co">#&gt; uTO:  9.0248</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"TO:  "</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">islem2</span><span class="op">$</span><span class="va">TO_max</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; TO:   15.5677</span></span></code></pre></div>
+<span><span class="co">#&gt; TO:   15.604</span></span></code></pre></div>
 <p>Islem 2 degerleri her zaman Islem 1’e esit veya buyuktur, cunku
 deterministik hesaplama ilk iterasyon olarak dahil edilir.</p>
 </div>
@@ -473,9 +474,9 @@ turler farkli olasilikla dahil edilir.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"TO+: "</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">islem3</span><span class="op">$</span><span class="va">TO_plus_max</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; TO+:  15.9905</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"uTO: "</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">islem3</span><span class="op">$</span><span class="va">uTO_max</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; uTO:  9.0047</span></span>
+<span><span class="co">#&gt; uTO:  9.0689</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"TO:  "</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">islem3</span><span class="op">$</span><span class="va">TO_max</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; TO:   15.5839</span></span></code></pre></div>
+<span><span class="co">#&gt; TO:   15.6481</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="tur-dahil-etme-olasiliklari">Tur Dahil Etme Olasiliklari<a class="anchor" aria-label="anchor" href="#tur-dahil-etme-olasiliklari"></a>
 </h3>
@@ -515,15 +516,15 @@ calistirir:</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Islem 1:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%9.4f %9.4f %9.4f %9.4f"</span>,</span>
 <span>    <span class="va">tam</span><span class="op">$</span><span class="va">run1</span><span class="op">$</span><span class="va">uTO_plus</span>, <span class="va">tam</span><span class="op">$</span><span class="va">run1</span><span class="op">$</span><span class="va">TO_plus</span>,</span>
 <span>    <span class="va">tam</span><span class="op">$</span><span class="va">run1</span><span class="op">$</span><span class="va">uTO</span>, <span class="va">tam</span><span class="op">$</span><span class="va">run1</span><span class="op">$</span><span class="va">TO</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Islem 1:    8.9019   15.4812    8.6804   15.2596</span></span>
+<span><span class="co">#&gt; Islem 1:    8.9019   15.4812    8.8043   15.3835</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Islem 2:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%9.4f %9.4f %9.4f %9.4f"</span>,</span>
 <span>    <span class="va">tam</span><span class="op">$</span><span class="va">run2</span><span class="op">$</span><span class="va">uTO_plus_max</span>, <span class="va">tam</span><span class="op">$</span><span class="va">run2</span><span class="op">$</span><span class="va">TO_plus_max</span>,</span>
 <span>    <span class="va">tam</span><span class="op">$</span><span class="va">run2</span><span class="op">$</span><span class="va">uTO_max</span>, <span class="va">tam</span><span class="op">$</span><span class="va">run2</span><span class="op">$</span><span class="va">TO_max</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Islem 2:    9.4113   15.9905    8.9886   15.5677</span></span>
+<span><span class="co">#&gt; Islem 2:    9.4113   15.9905    9.0248   15.6040</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Islem 3:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%9.4f %9.4f %9.4f %9.4f"</span>,</span>
 <span>    <span class="va">tam</span><span class="op">$</span><span class="va">run3</span><span class="op">$</span><span class="va">uTO_plus_max</span>, <span class="va">tam</span><span class="op">$</span><span class="va">run3</span><span class="op">$</span><span class="va">TO_plus_max</span>,</span>
 <span>    <span class="va">tam</span><span class="op">$</span><span class="va">run3</span><span class="op">$</span><span class="va">uTO_max</span>, <span class="va">tam</span><span class="op">$</span><span class="va">run3</span><span class="op">$</span><span class="va">TO_max</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Islem 3:    9.4113   15.9905    9.0413   15.6205</span></span></code></pre></div>
+<span><span class="co">#&gt; Islem 3:    9.4113   15.9905    9.0689   15.6481</span></span></code></pre></div>
 <p>Her asama bir oncekine esit veya daha buyuk deger uretir.</p>
 </div>
 <div class="section level2">
@@ -544,12 +545,12 @@ calistirir:</p>
 <span><span class="co"># Her turun cikarildiginda sonuc nasil degisiyor?</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">jk</span><span class="op">$</span><span class="va">jackknife_results</span><span class="op">)</span></span>
 <span><span class="co">#&gt;               species uTO_plus  TO_plus      uTO       TO is_happy</span></span>
-<span><span class="co">#&gt; 1   Quercus_coccifera 8.733962 15.31321 8.559784 15.13901     TRUE</span></span>
-<span><span class="co">#&gt; 2  Quercus_infectoria 8.733962 15.31321 8.582377 15.16162     TRUE</span></span>
-<span><span class="co">#&gt; 3        Pinus_brutia 9.285601 15.86485 8.875835 15.45488    FALSE</span></span>
-<span><span class="co">#&gt; 4         Pinus_nigra 9.285601 15.86485 8.843811 15.42306    FALSE</span></span>
-<span><span class="co">#&gt; 5   Juniperus_excelsa 9.112068 15.69132 8.731124 15.31037    FALSE</span></span>
-<span><span class="co">#&gt; 6 Juniperus_oxycedrus 9.112068 15.69132 8.764605 15.34385    FALSE</span></span></code></pre></div>
+<span><span class="co">#&gt; 1   Quercus_coccifera 8.733962 15.31321 8.685926 15.26517     TRUE</span></span>
+<span><span class="co">#&gt; 2  Quercus_infectoria 8.733962 15.31321 8.697188 15.27644     TRUE</span></span>
+<span><span class="co">#&gt; 3        Pinus_brutia 9.285601 15.86485 8.921840 15.50092    FALSE</span></span>
+<span><span class="co">#&gt; 4         Pinus_nigra 9.285601 15.86485 8.986643 15.56589    FALSE</span></span>
+<span><span class="co">#&gt; 5   Juniperus_excelsa 9.112068 15.69132 8.882034 15.46129    FALSE</span></span>
+<span><span class="co">#&gt; 6 Juniperus_oxycedrus 9.112068 15.69132 8.897231 15.47648    FALSE</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="adim-9-toplu-analiz-batch_analysis">Adim 9: Toplu Analiz (batch_analysis)<a class="anchor" aria-label="anchor" href="#adim-9-toplu-analiz-batch_analysis"></a>
@@ -563,7 +564,7 @@ ve 14 cesitlilik indeksini otomatik hesaplar:</p>
 <span>  Site <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Alan_A"</span>, <span class="st">"Alan_B"</span><span class="op">)</span>, each <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>,</span>
 <span>  Species <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Pinus_brutia"</span>, <span class="st">"Pinus_nigra"</span>, <span class="st">"Quercus_coccifera"</span>,</span>
 <span>                  <span class="st">"Juniperus_excelsa"</span>, <span class="st">"Cedrus_libani"</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>,</span>
-<span>  Abundance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">30</span>, <span class="fl">12</span>, <span class="fl">25</span>, <span class="fl">8</span>, <span class="fl">15</span>, <span class="fl">5</span>, <span class="fl">40</span>, <span class="fl">10</span>, <span class="fl">3</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span>  Abundance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">8</span>, <span class="fl">4</span>, <span class="fl">7</span>, <span class="fl">3</span>, <span class="fl">5</span>, <span class="fl">2</span>, <span class="fl">9</span>, <span class="fl">4</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>,</span>
 <span>  Genus <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Pinus"</span>, <span class="st">"Pinus"</span>, <span class="st">"Quercus"</span>, <span class="st">"Juniperus"</span>, <span class="st">"Cedrus"</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>,</span>
 <span>  Family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Pinaceae"</span>, <span class="st">"Pinaceae"</span>, <span class="st">"Fagaceae"</span>,</span>
 <span>                 <span class="st">"Cupressaceae"</span>, <span class="st">"Pinaceae"</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>,</span>
@@ -577,11 +578,11 @@ ve 14 cesitlilik indeksini otomatik hesaplar:</p>
 <span><span class="co">#&gt;   Indices: 14 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;    Site N_Species  Shannon  Simpson    Delta Delta_star AvTD VarTD      uTO</span></span>
-<span><span class="co">#&gt;  Alan_A         5 1.504443 0.758272 1.963296   2.560404  2.6  0.44 5.444330</span></span>
-<span><span class="co">#&gt;  Alan_B         5 1.039172 0.517222 1.301130   2.473684  2.6  0.44 4.330512</span></span>
+<span><span class="co">#&gt;  Alan_A         5 1.549722 0.776406 2.065527   2.561837  2.6  0.44 5.564160</span></span>
+<span><span class="co">#&gt;  Alan_B         5 1.262243 0.643599 1.705882   2.494624  2.6  0.44 4.772005</span></span>
 <span><span class="co">#&gt;        TO uTO_plus  TO_plus  uTO_max   TO_max uTO_plus_max TO_plus_max</span></span>
-<span><span class="co">#&gt;  8.622250 5.845169 9.023223 5.444330 8.622250     5.845169    9.023223</span></span>
-<span><span class="co">#&gt;  7.501388 5.845169 9.023223 5.105595 8.282063     5.845169    9.023223</span></span></code></pre></div>
+<span><span class="co">#&gt;  8.742112 5.845169 9.023223 5.564160 8.742112     5.845169    9.023223</span></span>
+<span><span class="co">#&gt;  7.947352 5.845169 9.023223 5.060345 8.236574     5.845169    9.023223</span></span></code></pre></div>
 <p>Cikti 16 sutundan olusur: Site, N_Species ve 14 cesitlilik
 indeksi.</p>
 </div>
@@ -600,22 +601,22 @@ yeterlidir:</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">rare</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; taxdiv -- Rarefaction Curve</span></span>
 <span><span class="co">#&gt;   Index: shannon </span></span>
-<span><span class="co">#&gt;   Total N: 150 </span></span>
+<span><span class="co">#&gt;   Total N: 56 </span></span>
 <span><span class="co">#&gt;   Bootstrap: 100 replicates</span></span>
 <span><span class="co">#&gt;   CI: 95 %</span></span>
 <span><span class="co">#&gt;   Steps: 10 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  sample_size   mean  lower  upper     sd</span></span>
-<span><span class="co">#&gt;            5 1.3380 0.9503 1.6094 0.2354</span></span>
-<span><span class="co">#&gt;           21 1.9429 1.5955 2.1907 0.1521</span></span>
-<span><span class="co">#&gt;           37 2.0616 1.8675 2.1989 0.0926</span></span>
-<span><span class="co">#&gt;           53 2.1004 1.9616 2.2042 0.0640</span></span>
-<span><span class="co">#&gt;           69 2.1268 2.0265 2.1993 0.0470</span></span>
-<span><span class="co">#&gt;           86 2.1421 2.0617 2.2006 0.0375</span></span>
-<span><span class="co">#&gt;          102 2.1525 2.0814 2.1980 0.0298</span></span>
-<span><span class="co">#&gt;          118 2.1596 2.1205 2.2018 0.0214</span></span>
-<span><span class="co">#&gt;          134 2.1664 2.1307 2.1929 0.0159</span></span>
-<span><span class="co">#&gt;          150 2.1692 2.1692 2.1692 0.0000</span></span></code></pre></div>
+<span><span class="co">#&gt;            2 0.6585 0.0000 0.6931 0.1518</span></span>
+<span><span class="co">#&gt;            8 1.6524 1.3209 1.9062 0.1568</span></span>
+<span><span class="co">#&gt;           14 1.9203 1.6394 2.2056 0.1438</span></span>
+<span><span class="co">#&gt;           20 2.0132 1.8128 2.2241 0.1132</span></span>
+<span><span class="co">#&gt;           26 2.0774 1.8788 2.2179 0.0943</span></span>
+<span><span class="co">#&gt;           32 2.1206 1.9785 2.2206 0.0685</span></span>
+<span><span class="co">#&gt;           38 2.1537 2.0483 2.2329 0.0552</span></span>
+<span><span class="co">#&gt;           44 2.1726 2.0939 2.2209 0.0343</span></span>
+<span><span class="co">#&gt;           50 2.1873 2.1291 2.2257 0.0261</span></span>
+<span><span class="co">#&gt;           56 2.2016 2.2016 2.2016 0.0000</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="adim-11-simuelasyon-ve-huni-grafigi-funnel-plot">Adim 11: Simuelasyon ve Huni Grafigi (Funnel Plot)<a class="anchor" aria-label="anchor" href="#adim-11-simuelasyon-ve-huni-grafigi-funnel-plot"></a>
@@ -679,13 +680,13 @@ Kosegen her zaman sifirdir.</p>
 <p>Birden fazla toplulugu tum indeksler uzerinden karsilastirir. Ikinci
 bir topluluk olusturuyoruz: ayni turler ama bir tur baskin:</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Baskin topluluk: ayni turler, farkli bolluk dagilimi</span></span>
+<code class="sourceCode R"><span><span class="co"># Baskin topluluk: ayni turler, farkli bolluk dagilimi (Westhoff-Maarel)</span></span>
 <span><span class="va">baskin_topluluk</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>  Quercus_coccifera   <span class="op">=</span> <span class="fl">80</span>, Quercus_infectoria  <span class="op">=</span> <span class="fl">5</span>,</span>
-<span>  Pinus_brutia        <span class="op">=</span> <span class="fl">3</span>,  Pinus_nigra         <span class="op">=</span> <span class="fl">2</span>,</span>
-<span>  Juniperus_excelsa   <span class="op">=</span> <span class="fl">2</span>,  Juniperus_oxycedrus <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  Cedrus_libani       <span class="op">=</span> <span class="fl">3</span>,  Abies_cilicica      <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  Fagus_orientalis    <span class="op">=</span> <span class="fl">2</span>,  Carpinus_betulus     <span class="op">=</span> <span class="fl">1</span></span>
+<span>  Quercus_coccifera   <span class="op">=</span> <span class="fl">9</span>,  Quercus_infectoria  <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  Pinus_brutia        <span class="op">=</span> <span class="fl">1</span>,  Pinus_nigra         <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  Juniperus_excelsa   <span class="op">=</span> <span class="fl">1</span>,  Juniperus_oxycedrus <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  Cedrus_libani       <span class="op">=</span> <span class="fl">1</span>,  Abies_cilicica      <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  Fagus_orientalis    <span class="op">=</span> <span class="fl">1</span>,  Carpinus_betulus     <span class="op">=</span> <span class="fl">1</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">topluluklar</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
@@ -708,12 +709,12 @@ her iki olcu turununun neden birlikte gerekli oldugunu gosterir.</p>
 <span><span class="co">#&gt;   Communities: 2 </span></span>
 <span><span class="co">#&gt;   Indices: Shannon, Simpson, Delta, Delta_star, AvTD, VarTD, uTO, TO, uTO_plus, TO_plus, uTO_max, TO_max, uTO_plus_max, TO_plus_max </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  Community N_Species  Shannon  Simpson    Delta Delta_star     AvTD   VarTD</span></span>
-<span><span class="co">#&gt;    Cesitli        10 2.169177 0.873067 3.824609   4.351456 4.311111 3.50321</span></span>
-<span><span class="co">#&gt;     Baskin        10 0.911571 0.354200 1.509495   4.219085 4.311111 3.50321</span></span>
+<span><span class="co">#&gt;  Community N_Species  Shannon Simpson    Delta Delta_star     AvTD   VarTD</span></span>
+<span><span class="co">#&gt;    Cesitli        10 2.201640 0.88074 3.892857   4.341057 4.311111 3.50321</span></span>
+<span><span class="co">#&gt;     Baskin        10 1.842189 0.75500 3.315789   4.172185 4.311111 3.50321</span></span>
 <span><span class="co">#&gt;       uTO       TO uTO_plus  TO_plus  uTO_max   TO_max uTO_plus_max TO_plus_max</span></span>
-<span><span class="co">#&gt;  8.680386 15.25963 8.901929 15.48118 8.680386 15.25963     8.901929    15.48118</span></span>
-<span><span class="co">#&gt;  6.162078 12.73918 8.901929 15.48118 6.162078 12.73918     8.901929    15.48118</span></span></code></pre></div>
+<span><span class="co">#&gt;  8.804283 15.38353 8.901929 15.48118 8.804283 15.38353     8.901929    15.48118</span></span>
+<span><span class="co">#&gt;  7.293489 13.87174 8.901929 15.48118 7.293489 13.87174     8.901929    15.48118</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="islem-2-iterasyon-grafigi">Islem 2 Iterasyon Grafigi<a class="anchor" aria-label="anchor" href="#islem-2-iterasyon-grafigi"></a>
@@ -818,7 +819,7 @@ formullere ihtiyaciniz olacaktir.</p>
 </h3>
 <p>Shannon (1948), bir sistemdeki <strong>belirsizligi</strong> olcmek
 icin su formulu onermistir:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mi>′</mi><mo>=</mo><mo>−</mo><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>S</mi></munderover><msub><mi>p</mi><mi>i</mi></msub><mo>ln</mo><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>p</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">H' = -\sum_{i=1}^{S} p_i \ln(p_i)</annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>H</mi><mo>′</mo></msup><mo>=</mo><mi>−</mi><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>S</mi></munderover><msub><mi>p</mi><mi>i</mi></msub><mrow><mi mathvariant="normal">ln</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>p</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">H' = -\sum_{i=1}^{S} p_i \ln(p_i)</annotation></semantics></math></p>
 <ul>
 <li>
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>S</mi><annotation encoding="application/x-tex">S</annotation></semantics></math>
@@ -853,12 +854,12 @@ daha fazla agirlik verir.</p>
 <p>Clarke &amp; Warwick (1998) taksonomik hiyerarsiyi hesaba katan dort
 indeks tanimlamistir:</p>
 <p><strong>Delta (Taksonomik cesitlilik, bolluk agirlikli):</strong></p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><mo>=</mo><mfrac><mrow><mo>∑</mo><munder><mo>∑</mo><mrow><mi>i</mi><mo>&lt;</mo><mi>j</mi></mrow></munder><msub><mi>ω</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>⋅</mo><msub><mi>n</mi><mi>i</mi></msub><mo>⋅</mo><msub><mi>n</mi><mi>j</mi></msub></mrow><mrow><mi>N</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>N</mi><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mi>/</mi><mn>2</mn></mrow></mfrac></mrow><annotation encoding="application/x-tex">\Delta = \frac{\sum \sum_{i&lt;j} \omega_{ij} \cdot n_i \cdot n_j}
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mo>=</mo><mfrac><mrow><mo>∑</mo><munder><mo>∑</mo><mrow><mi>i</mi><mo>&lt;</mo><mi>j</mi></mrow></munder><msub><mi>ω</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>⋅</mo><msub><mi>n</mi><mi>i</mi></msub><mo>⋅</mo><msub><mi>n</mi><mi>j</mi></msub></mrow><mrow><mi>N</mi><mo stretchy="false" form="prefix">(</mo><mi>N</mi><mo>−</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mi>/</mi><mn>2</mn></mrow></mfrac></mrow><annotation encoding="application/x-tex">\Delta = \frac{\sum \sum_{i&lt;j} \omega_{ij} \cdot n_i \cdot n_j}
 {N(N-1)/2}</annotation></semantics></math></p>
 <p><strong>Delta+ (AvTD, sadece tur listesi):</strong></p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>Δ</mi><mo>+</mo></msup><mo>=</mo><mfrac><mrow><mo>∑</mo><munder><mo>∑</mo><mrow><mi>i</mi><mo>&lt;</mo><mi>j</mi></mrow></munder><msub><mi>ω</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mrow><mrow><mi>S</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>S</mi><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mi>/</mi><mn>2</mn></mrow></mfrac></mrow><annotation encoding="application/x-tex">\Delta^+ = \frac{\sum \sum_{i&lt;j} \omega_{ij}}{S(S-1)/2}</annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi mathvariant="normal">Δ</mi><mo>+</mo></msup><mo>=</mo><mfrac><mrow><mo>∑</mo><munder><mo>∑</mo><mrow><mi>i</mi><mo>&lt;</mo><mi>j</mi></mrow></munder><msub><mi>ω</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mrow><mrow><mi>S</mi><mo stretchy="false" form="prefix">(</mo><mi>S</mi><mo>−</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mi>/</mi><mn>2</mn></mrow></mfrac></mrow><annotation encoding="application/x-tex">\Delta^+ = \frac{\sum \sum_{i&lt;j} \omega_{ij}}{S(S-1)/2}</annotation></semantics></math></p>
 <p><strong>Lambda+ (VarTD, varyasyon):</strong></p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>Λ</mi><mo>+</mo></msup><mo>=</mo><mfrac><mrow><mo>∑</mo><munder><mo>∑</mo><mrow><mi>i</mi><mo>&lt;</mo><mi>j</mi></mrow></munder><msup><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>ω</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>−</mo><msup><mi>Δ</mi><mo>+</mo></msup><mo stretchy="true" form="postfix">)</mo></mrow><mn>2</mn></msup></mrow><mrow><mi>S</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>S</mi><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mi>/</mi><mn>2</mn></mrow></mfrac></mrow><annotation encoding="application/x-tex">\Lambda^+ = \frac{\sum \sum_{i&lt;j} (\omega_{ij} - \Delta^+)^2}{S(S-1)/2}</annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi mathvariant="normal">Λ</mi><mo>+</mo></msup><mo>=</mo><mfrac><mrow><mo>∑</mo><munder><mo>∑</mo><mrow><mi>i</mi><mo>&lt;</mo><mi>j</mi></mrow></munder><mo stretchy="false" form="prefix">(</mo><msub><mi>ω</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>−</mo><msup><mi mathvariant="normal">Δ</mi><mo>+</mo></msup><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup></mrow><mrow><mi>S</mi><mo stretchy="false" form="prefix">(</mo><mi>S</mi><mo>−</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mi>/</mi><mn>2</mn></mrow></mfrac></mrow><annotation encoding="application/x-tex">\Lambda^+ = \frac{\sum \sum_{i&lt;j} (\omega_{ij} - \Delta^+)^2}{S(S-1)/2}</annotation></semantics></math></p>
 <p>Burada
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>ω</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><annotation encoding="application/x-tex">\omega_{ij}</annotation></semantics></math>,
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>
@@ -868,9 +869,9 @@ turleri arasindaki taksonomik mesafedir. Bu mesafe, iki turun taksonomik
 agacta ilk birlestigi seviyeye esittir (Cins = 1, Familya = 2, …, Alem =
 6).</p>
 <p><strong>Onemli:</strong>
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>Δ</mi><mo>+</mo></msup><annotation encoding="application/x-tex">\Delta^+</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi mathvariant="normal">Δ</mi><mo>+</mo></msup><annotation encoding="application/x-tex">\Delta^+</annotation></semantics></math>
 ve
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>Λ</mi><mo>+</mo></msup><annotation encoding="application/x-tex">\Lambda^+</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi mathvariant="normal">Λ</mi><mo>+</mo></msup><annotation encoding="application/x-tex">\Lambda^+</annotation></semantics></math>
 bolluk bilgisi kullanmaz. Bu sayede farkli orneklem buyuklugundeki
 alanlari dogrudan karsilastirabilirsiniz (Clarke &amp; Warwick, 1998,
 2001).</p>
@@ -883,29 +884,29 @@ alanlari dogrudan karsilastirabilirsiniz (Clarke &amp; Warwick, 1998,
 fark: Shannon’da her olay (tur) atomiktir. Deng entropisinde olaylar
 <strong>kume yapisi</strong> icerebilir.</p>
 <p>Bir taksonomik seviyedeki Deng entropisi:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>E</mi><mi>d</mi></msub><mo>=</mo><mo>−</mo><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>K</mi></munderover><mi>m</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>F</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>⋅</mo><mo>ln</mo><mfrac><mrow><mi>m</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>F</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><mrow><msup><mn>2</mn><mrow><mo stretchy="true" form="prefix">|</mo><msub><mi>F</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">|</mo></mrow></msup><mo>−</mo><mn>1</mn></mrow></mfrac></mrow><annotation encoding="application/x-tex">E_d = -\sum_{i=1}^{K} m(F_i) \cdot \ln\frac{m(F_i)}{2^{|F_i|} - 1}</annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>E</mi><mi>d</mi></msub><mo>=</mo><mi>−</mi><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>K</mi></munderover><mi>m</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>F</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo><mo>⋅</mo><mrow><mi mathvariant="normal">ln</mi><mo>⁡</mo></mrow><mfrac><mrow><mi>m</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>F</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow><mrow><msup><mn>2</mn><mrow><mo stretchy="false" form="prefix">|</mo><msub><mi>F</mi><mi>i</mi></msub><mo stretchy="false" form="prefix">|</mo></mrow></msup><mo>−</mo><mn>1</mn></mrow></mfrac></mrow><annotation encoding="application/x-tex">E_d = -\sum_{i=1}^{K} m(F_i) \cdot \ln\frac{m(F_i)}{2^{|F_i|} - 1}</annotation></semantics></math></p>
 <ul>
 <li>
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>K</mi><annotation encoding="application/x-tex">K</annotation></semantics></math>
 = o seviyedeki grup sayisi (ornegin familya sayisi)</li>
 <li>
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>F</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">m(F_i)</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>F</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">m(F_i)</annotation></semantics></math>
 =
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>.
 gruptaki turlerin oransal agirligi</li>
 <li>
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="true" form="prefix">|</mo><msub><mi>F</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">|</mo></mrow><annotation encoding="application/x-tex">|F_i|</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">|</mo><msub><mi>F</mi><mi>i</mi></msub><mo stretchy="false" form="prefix">|</mo></mrow><annotation encoding="application/x-tex">|F_i|</annotation></semantics></math>
 =
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>.
 gruptaki tur sayisi (fokal eleman boyutu)</li>
 </ul>
 <p><strong>Shannon ile karsilastirma:</strong></p>
 <p>Shannon entropisinde
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo stretchy="true" form="prefix">|</mo><msub><mi>F</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">|</mo></mrow><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">|F_i| = 1</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">|</mo><msub><mi>F</mi><mi>i</mi></msub><mo stretchy="false" form="prefix">|</mo><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">|F_i| = 1</annotation></semantics></math>
 kabul edilir (her tur tek basina bir olay). Bu durumda
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>2</mn><mrow><mo stretchy="true" form="prefix">|</mo><msub><mi>F</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">|</mo></mrow></msup><mo>−</mo><mn>1</mn><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">2^{|F_i|} - 1 = 1</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>2</mn><mrow><mo stretchy="false" form="prefix">|</mo><msub><mi>F</mi><mi>i</mi></msub><mo stretchy="false" form="prefix">|</mo></mrow></msup><mo>−</mo><mn>1</mn><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">2^{|F_i|} - 1 = 1</annotation></semantics></math>
 olur ve Deng entropisi Shannon’a indirgenir:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>E</mi><mi>d</mi></msub><mo>=</mo><mo>−</mo><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>K</mi></munderover><mi>m</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>F</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>⋅</mo><mo>ln</mo><mrow><mo stretchy="true" form="prefix">(</mo><mi>m</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>F</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>H</mi><mi>′</mi></mrow><annotation encoding="application/x-tex">E_d = -\sum_{i=1}^{K} m(F_i) \cdot \ln(m(F_i)) = H'</annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>E</mi><mi>d</mi></msub><mo>=</mo><mi>−</mi><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>K</mi></munderover><mi>m</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>F</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo><mo>⋅</mo><mrow><mi mathvariant="normal">ln</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>m</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>F</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">)</mo><mo>=</mo><msup><mi>H</mi><mo>′</mo></msup></mrow><annotation encoding="application/x-tex">E_d = -\sum_{i=1}^{K} m(F_i) \cdot \ln(m(F_i)) = H'</annotation></semantics></math></p>
 <p>Yani Deng entropisi Shannon’in <strong>genellestirilmis
 hali</strong>dir. Eger taksonomik gruplar 1’er turden olusuyorsa ikisi
 ayni sonucu verir.</p>
@@ -916,7 +917,7 @@ ayni sonucu verir.</p>
 <p>Ozkan (2018), Deng entropisini kullanarak dort bilesenden olusan bir
 taksonomik cesitlilik olcusu tanimlar.</p>
 <p><strong>Temel carpim (bir dilim icin):</strong></p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><munderover><mo>∏</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>L</mi></munderover><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>w</mi><mi>i</mi></msub><mo>⋅</mo><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><msup><mrow><mo stretchy="true" form="prefix">(</mo><msup><mi>e</mi><msubsup><mi>E</mi><mi>d</mi><mi>S</mi></msubsup></msup><mo stretchy="true" form="postfix">)</mo></mrow><mn>2</mn></msup><msup><mi>e</mi><msubsup><mi>E</mi><mi>d</mi><mi>i</mi></msubsup></msup></mfrac><mo>+</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\prod_{i=1}^{L} \left( w_i \cdot \left( \frac{(e^{E_d^S})^2}{e^{E_d^i}} + 1 \right) \right)</annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><munderover><mo>∏</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>L</mi></munderover><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>w</mi><mi>i</mi></msub><mo>⋅</mo><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mrow><mo stretchy="false" form="prefix">(</mo><msup><mi>e</mi><msubsup><mi>E</mi><mi>d</mi><mi>S</mi></msubsup></msup><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup></mrow><msup><mi>e</mi><msubsup><mi>E</mi><mi>d</mi><mi>i</mi></msubsup></msup></mfrac><mo>+</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\prod_{i=1}^{L} \left( w_i \cdot \left( \frac{(e^{E_d^S})^2}{e^{E_d^i}} + 1 \right) \right)</annotation></semantics></math></p>
 <ul>
 <li>
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>L</mi><annotation encoding="application/x-tex">L</annotation></semantics></math>
@@ -937,12 +938,12 @@ agirlikli icin
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>w</mi><mi>i</mi></msub><mo>=</mo><mi>i</mi></mrow><annotation encoding="application/x-tex">w_i = i</annotation></semantics></math>)</li>
 </ul>
 <p><strong>pTO+ (Taksonomik mesafe, sadece Islem 1):</strong></p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><msubsup><mi>T</mi><mi>O</mi><mo>+</mo></msubsup><mo>=</mo><mo>ln</mo><munderover><mo>∏</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>L</mi></munderover><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>w</mi><mi>i</mi></msub><mo>⋅</mo><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><msup><mrow><mo stretchy="true" form="prefix">(</mo><msup><mi>e</mi><msubsup><mi>E</mi><mi>d</mi><mi>S</mi></msubsup></msup><mo stretchy="true" form="postfix">)</mo></mrow><mn>2</mn></msup><msup><mi>e</mi><msubsup><mi>E</mi><mi>d</mi><mi>i</mi></msubsup></msup></mfrac><mo>+</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">pT_O^+ = \ln \prod_{i=1}^{L} \left( w_i \cdot \left(
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><msubsup><mi>T</mi><mi>O</mi><mo>+</mo></msubsup><mo>=</mo><mrow><mi mathvariant="normal">ln</mi><mo>⁡</mo></mrow><munderover><mo>∏</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>L</mi></munderover><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>w</mi><mi>i</mi></msub><mo>⋅</mo><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mrow><mo stretchy="false" form="prefix">(</mo><msup><mi>e</mi><msubsup><mi>E</mi><mi>d</mi><mi>S</mi></msubsup></msup><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup></mrow><msup><mi>e</mi><msubsup><mi>E</mi><mi>d</mi><mi>i</mi></msubsup></msup></mfrac><mo>+</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">pT_O^+ = \ln \prod_{i=1}^{L} \left( w_i \cdot \left(
 \frac{(e^{E_d^S})^2}{e^{E_d^i}} + 1 \right) \right)</annotation></semantics></math></p>
 <p>Sadece nk = 0 dilimini (tum turler dahil) kullanir. Bolluk bilgisine
 ihtiyac duymaz cunku tur listesiyle calisir.</p>
 <p><strong>pTO (Taksonomik cesitlilik, Islem 1 + 2 + 3):</strong></p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><msub><mi>T</mi><mi>O</mi></msub><mo>=</mo><mo>ln</mo><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mrow><munderover><mo>∑</mo><mrow><mi>k</mi><mo>=</mo><mn>0</mn></mrow><msub><mi>n</mi><mi>s</mi></msub></munderover><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>n</mi><mi>s</mi></msub><mo>−</mo><msub><mi>n</mi><mi>k</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><munderover><mo>∏</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>L</mi></munderover><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>w</mi><mi>i</mi></msub><mo>⋅</mo><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><msup><mrow><mo stretchy="true" form="prefix">(</mo><msup><mi>e</mi><msubsup><mi>E</mi><mi>d</mi><mi>S</mi></msubsup></msup><mo stretchy="true" form="postfix">)</mo></mrow><mn>2</mn></msup><msup><mi>e</mi><msubsup><mi>E</mi><mi>d</mi><mi>i</mi></msubsup></msup></mfrac><mo>+</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mrow><mrow><msub><mi>n</mi><mi>s</mi></msub><mo>+</mo><mo>∑</mo><msub><mi>n</mi><mi>k</mi></msub></mrow></mfrac><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">pT_O = \ln \left( \frac{\sum_{k=0}^{n_s} (n_s - n_k)
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><msub><mi>T</mi><mi>O</mi></msub><mo>=</mo><mrow><mi mathvariant="normal">ln</mi><mo>⁡</mo></mrow><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mrow><munderover><mo>∑</mo><mrow><mi>k</mi><mo>=</mo><mn>0</mn></mrow><msub><mi>n</mi><mi>s</mi></msub></munderover><mo stretchy="false" form="prefix">(</mo><msub><mi>n</mi><mi>s</mi></msub><mo>−</mo><msub><mi>n</mi><mi>k</mi></msub><mo stretchy="false" form="postfix">)</mo><munderover><mo>∏</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>L</mi></munderover><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>w</mi><mi>i</mi></msub><mo>⋅</mo><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mrow><mo stretchy="false" form="prefix">(</mo><msup><mi>e</mi><msubsup><mi>E</mi><mi>d</mi><mi>S</mi></msubsup></msup><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup></mrow><msup><mi>e</mi><msubsup><mi>E</mi><mi>d</mi><mi>i</mi></msubsup></msup></mfrac><mo>+</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mrow><mrow><msub><mi>n</mi><mi>s</mi></msub><mo>+</mo><mo>∑</mo><msub><mi>n</mi><mi>k</mi></msub></mrow></mfrac><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">pT_O = \ln \left( \frac{\sum_{k=0}^{n_s} (n_s - n_k)
 \prod_{i=1}^{L} \left( w_i \cdot \left( \frac{(e^{E_d^S})^2}
 {e^{E_d^i}} + 1 \right) \right)}{n_s + \sum n_k} \right)</annotation></semantics></math></p>
 <p>Dilim proseduru (slicing): nk = 0, 1, …, n_s icin bollugu

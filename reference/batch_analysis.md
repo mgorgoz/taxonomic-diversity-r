@@ -1,16 +1,17 @@
 # Batch Analysis from a Single Data Frame
 
-Computes all diversity indices for one or more sample sites from a
+Computes selected diversity indices for one or more sample sites from a
 single data frame (e.g., imported from Excel). The function
 automatically detects the site column, taxonomic columns, and abundance
 column, splits the data by site, and returns a summary data frame with
-species count and 14 diversity indices per site.
+species count and diversity indices per site.
 
 ## Usage
 
 ``` r
 batch_analysis(
   data,
+  indices = c("classical", "clarke_warwick", "ozkan_pto"),
   site_column = NULL,
   tax_columns = NULL,
   abundance_column = "Abundance",
@@ -20,7 +21,8 @@ batch_analysis(
   seed = 42L,
   parallel = FALSE,
   n_cores = NULL,
-  progress = TRUE
+  progress = TRUE,
+  progress_fn = NULL
 )
 ```
 
@@ -33,12 +35,22 @@ batch_analysis(
   column. Optionally includes a site/plot column for multi-site
   analysis.
 
+- indices:
+
+  Character vector specifying which index groups to compute. One or more
+  of `"classical"` (Shannon, Simpson), `"clarke_warwick"` (Delta,
+  Delta\*, AvTD, VarTD), and `"ozkan_pto"` (uTO, TO, uTO+, TO+ with
+  optional Run 2+3). Default is all three groups. Unambiguous
+  abbreviations are allowed (e.g., `"clas"` for classical, `"clark"` for
+  clarke_warwick, `"oz"` for ozkan_pto). Note that `"cl"` and `"cla"`
+  are ambiguous and will produce an error.
+
 - site_column:
 
   Character string specifying the name of the site column. If `NULL`
   (default), the function searches for columns named `"Site"`, `"site"`,
-  `"Alan"`, `"alan"`, `"Plot"`, or `"plot"`. If no such column is found,
-  all data is treated as a single site.
+  `"Plot"`, or `"plot"`. If no such column is found, all data is treated
+  as a single site.
 
 - tax_columns:
 
@@ -59,7 +71,7 @@ batch_analysis(
   [`shannon()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/shannon.md).
   See
   [`shannon()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/shannon.md)
-  for details.
+  for details. Ignored when `"classical"` is not in `indices`.
 
 - full:
 
@@ -70,17 +82,19 @@ batch_analysis(
   [`pto_components()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/pto_components.md).
   This produces max values across all three runs, matching the Excel
   macro output. Set to `FALSE` for deterministic Run 1 only (faster but
-  incomplete).
+  incomplete). Ignored when `"ozkan_pto"` is not in `indices`.
 
 - n_iter:
 
   Number of stochastic iterations for Run 2 and Run 3 when
-  `full = TRUE`. Default `101`. Ignored when `full = FALSE`.
+  `full = TRUE`. Default `101`. Ignored when `full = FALSE` or when
+  `"ozkan_pto"` is not in `indices`.
 
 - seed:
 
   Random seed for reproducibility when `full = TRUE`. Default `42`. Set
-  to `NULL` for non-deterministic results. Ignored when `full = FALSE`.
+  to `NULL` for non-deterministic results. Ignored when `full = FALSE`
+  or when `"ozkan_pto"` is not in `indices`.
 
 - parallel:
 
@@ -98,55 +112,50 @@ batch_analysis(
   computation. Ignored when `parallel = TRUE`. Set to `FALSE` to
   suppress progress output.
 
+- progress_fn:
+
+  Optional callback function for custom progress reporting (e.g. Shiny).
+  When provided, it is called after each site completes with named
+  arguments `i` (current site index), `n` (total sites), and `site`
+  (site name). Useful for integrating with
+  [`shiny::withProgress()`](https://rdrr.io/pkg/shiny/man/withProgress.html).
+
 ## Value
 
-A data frame with one row per site and columns: `Site`, `N_Species`,
-`Shannon`, `Simpson`, `Delta`, `Delta_star`, `AvTD`, `VarTD`, `uTO`,
-`TO`, `uTO_plus`, `TO_plus`, `uTO_max`, `TO_max`, `uTO_plus_max`,
-`TO_plus_max`. When `full = TRUE`, the max columns reflect the maximum
-across Run 1, 2, and 3.
+A data frame with one row per site. Columns always include `Site` and
+`N_Species`. Additional columns depend on the `indices` parameter:
+
+- `"classical"`: `Shannon`, `Simpson`
+
+- `"clarke_warwick"`: `Delta`, `Delta_star`, `AvTD`, `VarTD`
+
+- `"ozkan_pto"`: `uTO`, `TO`, `uTO_plus`, `TO_plus`, `uTO_max`,
+  `TO_max`, `uTO_plus_max`, `TO_plus_max`
 
 ## Details
 
 When no site column is present (or all values are identical), the entire
 data set is treated as a single community.
 
-The function calculates the following indices per site:
+Three groups of indices are available via the `indices` parameter:
 
-- **Shannon**: Shannon-Wiener entropy
-  ([`shannon`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/shannon.md))
+- `"classical"`:
 
-- **Simpson**: Gini-Simpson index
-  ([`simpson`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/simpson.md))
+  Shannon-Wiener entropy and Gini-Simpson index. These are species-level
+  diversity measures that do not use taxonomic hierarchy.
 
-- **Delta**: Clarke & Warwick taxonomic diversity
-  ([`delta`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/delta.md))
+- `"clarke_warwick"`:
 
-- **Delta_star**: Clarke & Warwick taxonomic distinctness
-  ([`delta_star`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/delta_star.md))
+  Delta, Delta\*, AvTD, and VarTD. Taxonomy-aware distinctness measures
+  from Clarke & Warwick (1998).
 
-- **AvTD**: Average taxonomic distinctness
-  ([`avtd`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/avtd.md))
+- `"ozkan_pto"`:
 
-- **VarTD**: Variation in taxonomic distinctness
-  ([`vartd`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/vartd.md))
-
-- **uTO**: Unweighted taxonomic diversity (Ozkan pTO, all levels)
-
-- **TO**: Weighted taxonomic diversity (Ozkan pTO, all levels)
-
-- **uTO_plus**: Unweighted taxonomic distance (Ozkan pTO, all levels)
-
-- **TO_plus**: Weighted taxonomic distance (Ozkan pTO, all levels)
-
-- **uTO_max**: Unweighted taxonomic diversity (informative levels only)
-
-- **TO_max**: Weighted taxonomic diversity (informative levels only)
-
-- **uTO_plus_max**: Unweighted taxonomic distance (informative levels
-  only)
-
-- **TO_plus_max**: Weighted taxonomic distance (informative levels only)
+  Deng entropy-based taxonomic diversity and distance (uTO, TO, uTO+,
+  TO+) from Ozkan (2018). When `full = TRUE`, also computes max values
+  across Run 1+2+3. The Westhoff-Maarel cover-abundance scale (integer
+  values 1-9) is recommended for compatibility with the original paper,
+  but any positive numeric abundance values are accepted.
 
 ## See also
 
@@ -160,14 +169,14 @@ for the full 3-run pipeline on a single community.
 ## Examples
 
 ``` r
-# Single-site data (no Site column) — full pipeline by default
+# All indices (default)
 # \donttest{
 df <- data.frame(
   Species   = c("sp1", "sp2", "sp3", "sp4"),
   Genus     = c("G1", "G1", "G2", "G2"),
   Family    = c("F1", "F1", "F1", "F2"),
   Order     = c("O1", "O1", "O1", "O1"),
-  Abundance = c(10, 20, 15, 5),
+  Abundance = c(4, 2, 3, 1),
   stringsAsFactors = FALSE
 )
 batch_analysis(df)
@@ -176,41 +185,37 @@ batch_analysis(df)
 #>   Indices: 14 
 #> 
 #>  Site N_Species  Shannon Simpson    Delta Delta_star AvTD    VarTD      uTO
-#>   All         4 1.279854     0.7 1.326531   1.857143    2 0.666667 3.413215
+#>   All         4 1.279854     0.7 1.444444   1.857143    2 0.666667 3.357526
 #>        TO uTO_plus  TO_plus  uTO_max   TO_max uTO_plus_max TO_plus_max
-#>  5.066836  4.04615 5.837909 3.413215 5.066836      4.04615    5.837909
+#>  5.002732  4.04615 5.837909 3.357526 5.002732      4.04615    5.837909
 
-# Multi-site data (with Site column)
-df2 <- data.frame(
-  Site      = c("A", "A", "A", "B", "B", "B"),
-  Species   = c("sp1", "sp2", "sp3", "sp1", "sp3", "sp4"),
-  Genus     = c("G1", "G1", "G2", "G1", "G2", "G2"),
-  Family    = c("F1", "F1", "F1", "F1", "F1", "F2"),
-  Order     = c("O1", "O1", "O1", "O1", "O1", "O1"),
-  Abundance = c(10, 20, 15, 5, 25, 10),
-  stringsAsFactors = FALSE
-)
-batch_analysis(df2)
-#> taxdiv -- Batch Analysis
-#>   Sites: 2 
-#>   Indices: 14 
-#> 
-#>  Site N_Species  Shannon  Simpson    Delta Delta_star     AvTD    VarTD
-#>     A         3 1.060857 0.641975 1.111111   1.692308 1.666667 0.222222
-#>     B         3 0.900256 0.531250 0.833333   1.529412 2.000000 0.666667
-#>       uTO       TO uTO_plus  TO_plus  uTO_max   TO_max uTO_plus_max TO_plus_max
-#>  2.442117 3.132154 2.577008 3.270155 2.442117 3.132154     2.577008    3.270155
-#>  2.804266 4.533563 3.767722 5.559482 2.991176 4.771455     3.767722    5.559482
-
-# Fast mode: deterministic Run 1 only (no stochastic runs)
-batch_analysis(df, full = FALSE)
+# Only classical indices (fast)
+batch_analysis(df, indices = "classical")
 #> taxdiv -- Batch Analysis
 #>   Sites: 1 
-#>   Indices: 14 
+#>   Indices: 2 
 #> 
-#>  Site N_Species  Shannon Simpson    Delta Delta_star AvTD    VarTD      uTO
-#>   All         4 1.279854     0.7 1.326531   1.857143    2 0.666667 3.413215
-#>        TO uTO_plus  TO_plus  uTO_max   TO_max uTO_plus_max TO_plus_max
-#>  5.066836  4.04615 5.837909 3.413215 5.066836      4.04615    5.837909
+#>  Site N_Species  Shannon Simpson
+#>   All         4 1.279854     0.7
+
+# Classical + Clarke & Warwick (no pTO)
+batch_analysis(df, indices = c("classical", "clarke_warwick"))
+#> taxdiv -- Batch Analysis
+#>   Sites: 1 
+#>   Indices: 6 
+#> 
+#>  Site N_Species  Shannon Simpson    Delta Delta_star AvTD    VarTD
+#>   All         4 1.279854     0.7 1.444444   1.857143    2 0.666667
+
+# Only Ozkan pTO, deterministic Run 1
+batch_analysis(df, indices = "ozkan_pto", full = FALSE)
+#> taxdiv -- Batch Analysis
+#>   Sites: 1 
+#>   Indices: 8 
+#> 
+#>  Site N_Species      uTO       TO uTO_plus  TO_plus  uTO_max   TO_max
+#>   All         4 3.357526 5.002732  4.04615 5.837909 3.357526 5.002732
+#>  uTO_plus_max TO_plus_max
+#>       4.04615    5.837909
 # }
 ```

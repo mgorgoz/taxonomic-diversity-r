@@ -11,6 +11,15 @@ data.
 - [`compare_indices()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/compare_indices.md)
   : Compare All Diversity Indices Side by Side
 
+## Interactive Dashboard
+
+Launch the taxdiv Explorer — a Shiny dashboard for loading data,
+computing every index, and producing publication-ready graphs without
+writing code.
+
+- [`taxdiv_explorer()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/taxdiv_explorer.md)
+  : Launch the taxdiv Explorer Shiny Application
+
 ## Classical Diversity Indices
 
 Shannon-Wiener (H’) and Gini-Simpson indices — the most widely used

@@ -26,8 +26,13 @@ ozkan_pto_resample(community, tax_tree, n_iter = 101L, seed = NULL)
 
 - n_iter:
 
-  Number of stochastic iterations to run (default: 101). Must be \>=
-  101.
+  Number of stochastic iterations to run (default: 101). Must be a
+  positive integer (\>= 1). With `n_iter = 1`, only the deterministic
+  first iteration runs, so the result equals
+  [`ozkan_pto()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/ozkan_pto.md)
+  (Run 1). Because the procedure returns the maximum across iterations,
+  the result is non-decreasing in `n_iter`; use a fixed `n_iter` when
+  comparing sites, and a high value (e.g. 500-1000) for final estimates.
 
 - seed:
 

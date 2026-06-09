@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>taxdiv — Taxonomic Diversity Indices for R • taxdiv</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="taxdiv — Taxonomic Diversity Indices for R">
 <meta name="description" content="An R package for computing taxonomic diversity indices from ecological community data using Deng entropy and Clarke &amp; Warwick frameworks.
@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="index.html">taxdiv</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -95,56 +95,56 @@
 <col width="17%">
 <col width="27%">
 </colgroup>
-<thead><tr class="header">
+<thead><tr>
 <th>Feature</th>
 <th align="center">vegan</th>
 <th align="center">ape</th>
 <th align="center">taxdiv</th>
 </tr></thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Shannon / Simpson</td>
 <td align="center">yes</td>
 <td align="center">–</td>
 <td align="center">yes</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Clarke &amp; Warwick full suite (Delta, Delta*, AvTD, VarTD)</td>
 <td align="center">–</td>
 <td align="center">partial</td>
 <td align="center"><strong>yes</strong></td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Ozkan pTO (8 indices, Run 1+2+3)</td>
 <td align="center">–</td>
 <td align="center">–</td>
 <td align="center"><strong>yes</strong></td>
 </tr>
-<tr class="even">
+<tr>
 <td>Simulation-based significance testing (funnel plots)</td>
 <td align="center">–</td>
 <td align="center">–</td>
 <td align="center"><strong>yes</strong></td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Taxonomic rarefaction with bootstrap CI</td>
 <td align="center">–</td>
 <td align="center">–</td>
 <td align="center"><strong>yes</strong></td>
 </tr>
-<tr class="even">
+<tr>
 <td>Stochastic resampling + sensitivity analysis</td>
 <td align="center">–</td>
 <td align="center">–</td>
 <td align="center"><strong>yes</strong></td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Excel-to-results in one command</td>
 <td align="center">–</td>
 <td align="center">–</td>
 <td align="center"><strong>yes</strong></td>
 </tr>
-<tr class="even">
+<tr>
 <td>Bias-corrected Shannon (Miller-Madow, Grassberger, Chao-Shen)</td>
 <td align="center">–</td>
 <td align="center">–</td>
@@ -201,7 +201,7 @@
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://readxl.tidyverse.org" class="external-link">readxl</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Read your Excel file</span></span>
-<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu">read_excel</span><span class="op">(</span><span class="st">"my_data.xlsx"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html" class="external-link">read_excel</a></span><span class="op">(</span><span class="st">"my_data.xlsx"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Compute all indices for all sites — automatic column detection</span></span>
 <span><span class="fu"><a href="reference/batch_analysis.html">batch_analysis</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span></code></pre></div>
@@ -209,7 +209,7 @@
 <pre><code>  Site  N_Species Shannon Simpson  Delta Delta_star  AvTD  VarTD   uTO    TO uTO_plus TO_plus uTO_max TO_max uTO_plus_max TO_plus_max
   A1        6    1.494   0.757  1.622      2.138 2.333  0.667  2.14  3.49    3.891   5.244    2.14   3.49        3.891       5.244
   A2        5    1.577   0.784  1.719      2.243 2.500  0.500  1.98  3.21    3.456   4.872    1.98   3.21        3.456       4.872</code></pre>
-<p>A ready-to-use Excel template is included: <a href="inst/templates/taxdiv_template.xlsx"><code>inst/templates/taxdiv_template.xlsx</code></a></p>
+<p>A ready-to-use Excel template is included: <a href="inst/templates/taxdiv_data_template.xlsx"><code>inst/templates/taxdiv_data_template.xlsx</code></a></p>
 </div>
 </div>
 <div class="section level2">
@@ -224,58 +224,58 @@
 <col width="32%">
 <col width="38%">
 </colgroup>
-<thead><tr class="header">
+<thead><tr>
 <th>Category</th>
 <th>Functions</th>
 <th>Description</th>
 </tr></thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><strong>Classical</strong></td>
 <td>
 <code><a href="reference/shannon.html">shannon()</a></code>, <code><a href="reference/simpson.html">simpson()</a></code>
 </td>
 <td>Shannon-Wiener H’ (with 3 bias corrections), Gini-Simpson</td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>Clarke &amp; Warwick</strong></td>
 <td>
 <code><a href="reference/delta.html">delta()</a></code>, <code><a href="reference/delta_star.html">delta_star()</a></code>, <code><a href="reference/avtd.html">avtd()</a></code>, <code><a href="reference/vartd.html">vartd()</a></code>
 </td>
 <td>Taxonomic diversity (Delta), taxonomic distinctness (Delta*), average taxonomic distinctness (AvTD), variation in taxonomic distinctness (VarTD)</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>Ozkan pTO</strong></td>
 <td>
 <code><a href="reference/ozkan_pto.html">ozkan_pto()</a></code>, <code><a href="reference/pto_components.html">pto_components()</a></code>
 </td>
 <td>8 Deng entropy-based indices: uTO, TO, uTO+, TO+ (all levels) and their max-informative-level variants</td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>Ozkan Pipeline</strong></td>
 <td>
 <code><a href="reference/ozkan_pto_resample.html">ozkan_pto_resample()</a></code>, <code><a href="reference/ozkan_pto_sensitivity.html">ozkan_pto_sensitivity()</a></code>, <code><a href="reference/ozkan_pto_jackknife.html">ozkan_pto_jackknife()</a></code>, <code><a href="reference/ozkan_pto_full.html">ozkan_pto_full()</a></code>
 </td>
 <td>Stochastic resampling (Run 2), sensitivity analysis (Run 3), jackknife leave-one-out, full pipeline</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>Batch</strong></td>
 <td>
 <code><a href="reference/batch_analysis.html">batch_analysis()</a></code>, <code><a href="reference/compare_indices.html">compare_indices()</a></code>
 </td>
 <td>Multi-site analysis from data frame, multi-community comparison</td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>Simulation</strong></td>
 <td><code><a href="reference/simulate_td.html">simulate_td()</a></code></td>
 <td>Random subsampling from species pool for significance testing</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>Rarefaction</strong></td>
 <td><code><a href="reference/rarefaction_taxonomic.html">rarefaction_taxonomic()</a></code></td>
 <td>Bootstrap rarefaction curves for 8 different indices</td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>Distance</strong></td>
 <td>
 <code><a href="reference/tax_distance_matrix.html">tax_distance_matrix()</a></code>, <code><a href="reference/build_tax_tree.html">build_tax_tree()</a></code>, <code><a href="reference/deng_entropy_level.html">deng_entropy_level()</a></code>
@@ -293,36 +293,36 @@
 <col width="47%">
 <col width="52%">
 </colgroup>
-<thead><tr class="header">
+<thead><tr>
 <th>Function</th>
 <th>Plot Type</th>
 </tr></thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><code><a href="reference/plot_funnel.html">plot_funnel()</a></code></td>
 <td>Funnel plot for AvTD/VarTD significance testing</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code><a href="reference/plot_rarefaction.html">plot_rarefaction()</a></code></td>
 <td>Rarefaction curves with bootstrap confidence intervals</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><code><a href="reference/plot_iteration.html">plot_iteration()</a></code></td>
 <td>Stochastic resampling iteration trajectories</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code><a href="reference/plot_radar.html">plot_radar()</a></code></td>
 <td>Radar/spider chart for multi-community comparison</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><code><a href="reference/plot_heatmap.html">plot_heatmap()</a></code></td>
 <td>Taxonomic similarity heatmap</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code><a href="reference/plot_bubble.html">plot_bubble()</a></code></td>
 <td>Bubble plot of community composition</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><code><a href="reference/plot_taxonomic_tree.html">plot_taxonomic_tree()</a></code></td>
 <td>Dendrogram of taxonomic hierarchy</td>
 </tr>
@@ -349,20 +349,20 @@
 <col width="40%">
 <col width="59%">
 </colgroup>
-<thead><tr class="header">
+<thead><tr>
 <th>Dataset</th>
 <th>Description</th>
 </tr></thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><code>anatolian_trees</code></td>
 <td>Anatolian tree species with full taxonomic hierarchy</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>gazi_comm</code></td>
 <td>Community abundance data from Gazi University campus</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><code>gazi_gytk</code></td>
 <td>Taxonomic classification for Gazi campus species</td>
 </tr>
@@ -472,40 +472,40 @@ Run 3:  uT0+max        -&gt;  uTO_plus_max
 <h2 id="package-status">Package Status<a class="anchor" aria-label="anchor" href="#package-status"></a>
 </h2>
 <table class="table">
-<thead><tr class="header">
+<thead><tr>
 <th>Metric</th>
 <th>Value</th>
 </tr></thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>R CMD check</td>
 <td>0 errors, 0 warnings, 0 notes</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Unit tests</td>
-<td>610 passing</td>
+<td>668 passing</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Exported functions</td>
 <td>26</td>
 </tr>
-<tr class="even">
+<tr>
 <td>S3 methods</td>
 <td>13 (print, summary, plot)</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>R source files</td>
 <td>19</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Test files</td>
 <td>12</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Example datasets</td>
 <td>3</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Vignettes</td>
 <td>7 (6 English + 1 Turkish)</td>
 </tr>

@@ -23,20 +23,21 @@ complementary frameworks:
 
 ### Why taxdiv?
 
-| Feature                                                       | vegan |   ape   | taxdiv  |
-|---------------------------------------------------------------|:-----:|:-------:|:-------:|
-| Shannon / Simpson                                             |  yes  |    –    |   yes   |
-| Clarke & Warwick full suite (Delta, Delta\*, AvTD, VarTD)     |   –   | partial | **yes** |
-| Ozkan pTO (8 indices, Run 1+2+3)                              |   –   |    –    | **yes** |
-| Simulation-based significance testing (funnel plots)          |   –   |    –    | **yes** |
-| Taxonomic rarefaction with bootstrap CI                       |   –   |    –    | **yes** |
-| Stochastic resampling + sensitivity analysis                  |   –   |    –    | **yes** |
-| Excel-to-results in one command                               |   –   |    –    | **yes** |
-| Bias-corrected Shannon (Miller-Madow, Grassberger, Chao-Shen) |   –   |    –    | **yes** |
+| Feature | vegan | ape | taxdiv |
+|----|:--:|:--:|:--:|
+| Shannon / Simpson | yes | – | yes |
+| Clarke & Warwick full suite (Delta, Delta\*, AvTD, VarTD) | – | partial | **yes** |
+| Ozkan pTO (8 indices, Run 1+2+3) | – | – | **yes** |
+| Simulation-based significance testing (funnel plots) | – | – | **yes** |
+| Taxonomic rarefaction with bootstrap CI | – | – | **yes** |
+| Stochastic resampling + sensitivity analysis | – | – | **yes** |
+| Excel-to-results in one command | – | – | **yes** |
+| Bias-corrected Shannon (Miller-Madow, Grassberger, Chao-Shen) | – | – | **yes** |
 
 ## Installation
 
 ``` r
+
 # install.packages("devtools")
 devtools::install_github("mgorgoz/taxonomic-diversity-r")
 ```
@@ -46,6 +47,7 @@ devtools::install_github("mgorgoz/taxonomic-diversity-r")
 ### 1. From R vectors
 
 ``` r
+
 library(taxdiv)
 
 # Species abundances
@@ -75,6 +77,7 @@ ozkan_pto(community, tax_tree)
 ### 2. From Excel — one command
 
 ``` r
+
 library(taxdiv)
 library(readxl)
 
@@ -92,34 +95,34 @@ Output (16 columns):
       A2        5    1.577   0.784  1.719      2.243 2.500  0.500  1.98  3.21    3.456   4.872    1.98   3.21        3.456       4.872
 
 A ready-to-use Excel template is included:
-[`inst/templates/taxdiv_template.xlsx`](https://mgorgoz.github.io/taxonomic-diversity-r/inst/templates/taxdiv_template.xlsx)
+[`inst/templates/taxdiv_data_template.xlsx`](https://mgorgoz.github.io/taxonomic-diversity-r/inst/templates/taxdiv_data_template.xlsx)
 
 ## Features
 
 ### Diversity Indices (26 exported functions)
 
-| Category             | Functions                                                                                                                                                                                                                                                                                                                                                                                                                                  | Description                                                                                                                                       |
-|----------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Classical**        | [`shannon()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/shannon.md), [`simpson()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/simpson.md)                                                                                                                                                                                                                                                                   | Shannon-Wiener H’ (with 3 bias corrections), Gini-Simpson                                                                                         |
-| **Clarke & Warwick** | [`delta()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/delta.md), [`delta_star()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/delta_star.md), [`avtd()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/avtd.md), [`vartd()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/vartd.md)                                                                                                 | Taxonomic diversity (Delta), taxonomic distinctness (Delta\*), average taxonomic distinctness (AvTD), variation in taxonomic distinctness (VarTD) |
-| **Ozkan pTO**        | [`ozkan_pto()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/ozkan_pto.md), [`pto_components()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/pto_components.md)                                                                                                                                                                                                                                                 | 8 Deng entropy-based indices: uTO, TO, uTO+, TO+ (all levels) and their max-informative-level variants                                            |
-| **Ozkan Pipeline**   | [`ozkan_pto_resample()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/ozkan_pto_resample.md), [`ozkan_pto_sensitivity()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/ozkan_pto_sensitivity.md), [`ozkan_pto_jackknife()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/ozkan_pto_jackknife.md), [`ozkan_pto_full()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/ozkan_pto_full.md) | Stochastic resampling (Run 2), sensitivity analysis (Run 3), jackknife leave-one-out, full pipeline                                               |
-| **Batch**            | [`batch_analysis()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/batch_analysis.md), [`compare_indices()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/compare_indices.md)                                                                                                                                                                                                                                     | Multi-site analysis from data frame, multi-community comparison                                                                                   |
-| **Simulation**       | [`simulate_td()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/simulate_td.md)                                                                                                                                                                                                                                                                                                                                                | Random subsampling from species pool for significance testing                                                                                     |
-| **Rarefaction**      | [`rarefaction_taxonomic()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/rarefaction_taxonomic.md)                                                                                                                                                                                                                                                                                                                            | Bootstrap rarefaction curves for 8 different indices                                                                                              |
-| **Distance**         | [`tax_distance_matrix()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/tax_distance_matrix.md), [`build_tax_tree()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/build_tax_tree.md), [`deng_entropy_level()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/deng_entropy_level.md)                                                                                                                  | Taxonomic distance matrices, tree construction, per-level Deng entropy                                                                            |
+| Category | Functions | Description |
+|----|----|----|
+| **Classical** | [`shannon()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/shannon.md), [`simpson()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/simpson.md) | Shannon-Wiener H’ (with 3 bias corrections), Gini-Simpson |
+| **Clarke & Warwick** | [`delta()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/delta.md), [`delta_star()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/delta_star.md), [`avtd()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/avtd.md), [`vartd()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/vartd.md) | Taxonomic diversity (Delta), taxonomic distinctness (Delta\*), average taxonomic distinctness (AvTD), variation in taxonomic distinctness (VarTD) |
+| **Ozkan pTO** | [`ozkan_pto()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/ozkan_pto.md), [`pto_components()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/pto_components.md) | 8 Deng entropy-based indices: uTO, TO, uTO+, TO+ (all levels) and their max-informative-level variants |
+| **Ozkan Pipeline** | [`ozkan_pto_resample()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/ozkan_pto_resample.md), [`ozkan_pto_sensitivity()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/ozkan_pto_sensitivity.md), [`ozkan_pto_jackknife()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/ozkan_pto_jackknife.md), [`ozkan_pto_full()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/ozkan_pto_full.md) | Stochastic resampling (Run 2), sensitivity analysis (Run 3), jackknife leave-one-out, full pipeline |
+| **Batch** | [`batch_analysis()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/batch_analysis.md), [`compare_indices()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/compare_indices.md) | Multi-site analysis from data frame, multi-community comparison |
+| **Simulation** | [`simulate_td()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/simulate_td.md) | Random subsampling from species pool for significance testing |
+| **Rarefaction** | [`rarefaction_taxonomic()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/rarefaction_taxonomic.md) | Bootstrap rarefaction curves for 8 different indices |
+| **Distance** | [`tax_distance_matrix()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/tax_distance_matrix.md), [`build_tax_tree()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/build_tax_tree.md), [`deng_entropy_level()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/deng_entropy_level.md) | Taxonomic distance matrices, tree construction, per-level Deng entropy |
 
 ### Visualization (7 plot types)
 
-| Function                                                                                                    | Plot Type                                              |
-|-------------------------------------------------------------------------------------------------------------|--------------------------------------------------------|
-| [`plot_funnel()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/plot_funnel.md)                 | Funnel plot for AvTD/VarTD significance testing        |
-| [`plot_rarefaction()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/plot_rarefaction.md)       | Rarefaction curves with bootstrap confidence intervals |
-| [`plot_iteration()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/plot_iteration.md)           | Stochastic resampling iteration trajectories           |
-| [`plot_radar()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/plot_radar.md)                   | Radar/spider chart for multi-community comparison      |
-| [`plot_heatmap()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/plot_heatmap.md)               | Taxonomic similarity heatmap                           |
-| [`plot_bubble()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/plot_bubble.md)                 | Bubble plot of community composition                   |
-| [`plot_taxonomic_tree()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/plot_taxonomic_tree.md) | Dendrogram of taxonomic hierarchy                      |
+| Function | Plot Type |
+|----|----|
+| [`plot_funnel()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/plot_funnel.md) | Funnel plot for AvTD/VarTD significance testing |
+| [`plot_rarefaction()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/plot_rarefaction.md) | Rarefaction curves with bootstrap confidence intervals |
+| [`plot_iteration()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/plot_iteration.md) | Stochastic resampling iteration trajectories |
+| [`plot_radar()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/plot_radar.md) | Radar/spider chart for multi-community comparison |
+| [`plot_heatmap()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/plot_heatmap.md) | Taxonomic similarity heatmap |
+| [`plot_bubble()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/plot_bubble.md) | Bubble plot of community composition |
+| [`plot_taxonomic_tree()`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/plot_taxonomic_tree.md) | Dendrogram of taxonomic hierarchy |
 
 ### S3 Class System
 
@@ -128,6 +131,7 @@ All main output objects have dedicated
 [`summary()`](https://rdrr.io/r/base/summary.html) methods:
 
 ``` r
+
 result <- batch_analysis(data)
 print(result)    # Clean formatted output
 summary(result)  # Min/max/mean/SD per index across sites
@@ -310,7 +314,7 @@ expected by chance.
 | Metric             | Value                         |
 |--------------------|-------------------------------|
 | R CMD check        | 0 errors, 0 warnings, 0 notes |
-| Unit tests         | 610 passing                   |
+| Unit tests         | 668 passing                   |
 | Exported functions | 26                            |
 | S3 methods         | 13 (print, summary, plot)     |
 | R source files     | 19                            |
@@ -346,6 +350,7 @@ or open a blank issue.
 ## Citation
 
 ``` r
+
 citation("taxdiv")
 ```
 
