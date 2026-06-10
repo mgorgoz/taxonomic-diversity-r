@@ -34,6 +34,7 @@ Broadleaf
 Burada
 Buyuk
 CMD
+Calibri
 Carpinus
 Cedrus
 Cesitlilige
@@ -96,7 +97,6 @@ Ise
 Isi
 Islem
 Iterasyon
-JOSS
 Juniperus
 Kanit
 Karsilastirma
@@ -107,7 +107,6 @@ Klasik
 Kosegen
 Koyu
 Kullanim
-Lifecycle
 Listesi
 Maarel
 Madow
@@ -142,9 +141,10 @@ Pinus
 Pseudocode
 Quercus
 RStudio
+Rehber
 Rehberi
 Renkler
-Roadmap
+Roxygen
 Sadece
 Seti
 Setleri
@@ -173,6 +173,8 @@ Tur
 Turkce
 Turler
 Turlerin
+Türkçe
+UI
 UPGMA
 Universitesi
 Uzun
@@ -305,8 +307,8 @@ cizgi
 cizginin
 clarke
 coccifera
-codecov
 cok
+cran
 cunku
 customizations
 da
@@ -551,6 +553,7 @@ olasilikla
 olasiliklari
 olay
 olaylar
+olcegi
 olcer
 olcmek
 olcu
@@ -586,6 +589,7 @@ orneklemeniz
 orneklenen
 ortak
 ortalama
+ortu
 orumcek
 otomatik
 ozel
@@ -694,6 +698,7 @@ turlu
 turu
 turun
 turununun
+uT
 uTO
 uc
 uretir
@@ -716,6 +721,7 @@ visualisation
 visualising
 walkthrough
 warwick
+wordlist
 xlsm
 yakalayabilir
 yakin
@@ -740,5 +746,4 @@ yuksege
 yuksek
 yuksekse
 zaman
-Δ
-Λ
+️

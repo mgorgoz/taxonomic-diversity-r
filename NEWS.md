@@ -48,7 +48,7 @@
 * **Download buttons fixed**: the Excel/CSV download buttons on the
   Results card now sit in a `card_footer()` so they remain visible
   regardless of how tall the results table grows (previously the
-  table's fill behaviour could push the buttons out of view).
+  table's fill behavior could push the buttons out of view).
 * **`n_iter` default raised to 500** and its minimum lowered to 1,
   matching the relaxed function-level limit.
 
