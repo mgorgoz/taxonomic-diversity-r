@@ -132,7 +132,7 @@ on the bundled `anatolian_trees` data:
 
 ## 🧰 Features
 
-**26 exported functions** across the full workflow:
+**27 exported functions** across the full workflow:
 
 | Category | Functions |
 |----|----|
@@ -164,7 +164,7 @@ with full reproducibility via a `seed` argument:
 | Run 3 — uT0+max, T0+max, uT0max, T0max | `uTO_plus_max`, `TO_plus_max`, `uTO_max`, `TO_max` |
 
 The `_max` variants use only informative taxonomic levels (where Deng
-entropy \> 0), matching the macro’s Run 3 behaviour.
+entropy \> 0), matching the macro’s Run 3 behavior.
 
 ## 📚 Learn more
 
@@ -192,7 +192,7 @@ website:
 |--------------------|-------------------------------|
 | R CMD check        | 0 errors, 0 warnings, 0 notes |
 | Unit tests         | 668 passing                   |
-| Exported functions | 26                            |
+| Exported functions | 27                            |
 | S3 methods         | 13                            |
 | Example datasets   | 3                             |
 | Vignettes          | 7 (6 English + 1 Turkish)     |
