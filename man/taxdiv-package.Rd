@@ -18,12 +18,12 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Muhammet Murat Gorgoz \email{muratgorgoz350@gmail.com} (\href{https://orcid.org/0000-0002-6398-0005}{ORCID})
+\strong{Maintainer}: Muhammet Murat Gorgoz \email{muratgorgoz350@gmail.com} (\href{https://orcid.org/0000-0002-6398-0005}{ORCID}) [copyright holder]
 
 Authors:
 \itemize{
   \item Kursad Ozkan (\href{https://orcid.org/0000-0002-8526-7243}{ORCID})
-  \item Mehmet Guvenc Negiz (\href{https://orcid.org/0009-0008-1507-8712}{ORCID})
+  \item Mehmet Guvenc Negiz (\href{https://orcid.org/0009-0008-1507-8712}{ORCID}) [thesis advisor]
   \item Ahmet Mert (\href{https://orcid.org/0000-0001-6859-0308}{ORCID})
   \item Serkan Ozdemir (\href{https://orcid.org/0000-0002-9425-3724}{ORCID})
 }
