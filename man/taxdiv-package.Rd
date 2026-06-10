@@ -25,6 +25,7 @@ Authors:
   \item Kursad Ozkan (\href{https://orcid.org/0000-0002-8526-7243}{ORCID})
   \item Mehmet Guvenc Negiz (\href{https://orcid.org/0009-0008-1507-8712}{ORCID})
   \item Ahmet Mert (\href{https://orcid.org/0000-0001-6859-0308}{ORCID})
+  \item Serkan Ozdemir (\href{https://orcid.org/0000-0002-9425-3724}{ORCID})
 }
 
 }

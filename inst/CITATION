@@ -5,10 +5,11 @@ bibentry(
     person("Muhammet Murat", "Gorgoz"),
     person("Kursad", "Ozkan"),
     person("Mehmet Guvenc", "Negiz"),
-    person("Ahmet", "Mert")
+    person("Ahmet", "Mert"),
+    person("Serkan", "Ozdemir")
   ),
   year     = "2026",
-  note     = "R package version 0.1.0",
+  note     = "R package version 1.0.0",
   url      = "https://github.com/mgorgoz/taxonomic-diversity-r"
 )
 

@@ -9,7 +9,9 @@ Authors@R: c(
     person("Mehmet Guvenc", "Negiz", role = "aut",
            comment = c(ORCID = "0009-0008-1507-8712")),
     person("Ahmet", "Mert", role = "aut",
-           comment = c(ORCID = "0000-0001-6859-0308"))
+           comment = c(ORCID = "0000-0001-6859-0308")),
+    person("Serkan", "Ozdemir", role = "aut",
+           comment = c(ORCID = "0000-0002-9425-3724"))
     )
 Description: Calculates taxonomic diversity indices for ecological community
     data using Deng entropy framework and classical approaches (Shannon,
