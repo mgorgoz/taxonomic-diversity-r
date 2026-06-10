@@ -69,114 +69,51 @@
   </div>
 </nav><div class="container template-home">
 <div class="row">
-  <main id="main" class="col-md-9"><div class="section level1">
-<div class="page-header"><h1 id="taxdiv">taxdiv<a class="anchor" aria-label="anchor" href="#taxdiv"></a>
+  <main id="main" class="col-md-9"><div class="page-header"><h1 align="center">
+taxdiv
 </h1></div>
-<!-- badges: start -->
-
+<p align="center">
+<b>Taxonomic diversity indices for ecological community data — in one place.</b><br> Classical measures, Clarke &amp; Warwick distinctness, and the Deng entropy-based Ozkan (2018) method, with an interactive dashboard and publication-ready graphics.
+</p>
+<p align="center">
+<a href="https://CRAN.R-project.org/package=taxdiv" class="external-link"><img src="https://www.r-pkg.org/badges/version/taxdiv" alt="CRAN status"></a> <a href="https://CRAN.R-project.org/package=taxdiv" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/grand-total/taxdiv" alt="CRAN downloads"></a> <a href="https://github.com/mgorgoz/taxonomic-diversity-r/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/mgorgoz/taxonomic-diversity-r/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a> <a href="https://app.codecov.io/gh/mgorgoz/taxonomic-diversity-r" class="external-link"><img src="https://codecov.io/gh/mgorgoz/taxonomic-diversity-r/graph/badge.svg?token=43b8b7e2-349a-41ad-b4f9-29b9d4862d19" alt="codecov"></a> <a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="https://img.shields.io/badge/lifecycle-stable-brightgreen.svg" alt="Lifecycle: stable"></a> <img src="https://img.shields.io/badge/tests-668%20passing-brightgreen.svg" alt="Tests"><a href="https://opensource.org/licenses/MIT" class="external-link"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT"></a>
+</p>
+<hr>
+<p>Traditional indices such as Shannon and Simpson treat every species as equally distinct. But 10 species from 10 different families are taxonomically more diverse than 10 species from a single genus. <strong>taxdiv</strong> captures this by folding the taxonomic hierarchy into the calculation — through two complementary frameworks (<strong>Clarke &amp; Warwick</strong> distinctness and <strong>Ozkan pTO</strong> based on Deng entropy) — and ships everything from raw Excel data to finished figures.</p>
 <div class="section level2">
-<h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
+<h2 id="desktop_computer-interactive-dashboard">🖥️ Interactive Dashboard<a class="anchor" aria-label="anchor" href="#desktop_computer-interactive-dashboard"></a>
 </h2>
-<p><strong>taxdiv</strong> is an R package for computing taxonomic diversity indices from ecological community data. It provides a unified framework that brings together classical diversity measures, Clarke &amp; Warwick’s taxonomic distinctness family, and the Deng entropy-based approach of Ozkan (2018) — all in a single package.</p>
-<p>Traditional diversity indices such as Shannon and Simpson treat all species as equally distinct. However, a community of 10 species from 10 different families is taxonomically more diverse than 10 species from the same genus. taxdiv accounts for this taxonomic structure using two complementary frameworks:</p>
-<ul>
-<li>
-<strong>Clarke &amp; Warwick (1995, 1998, 2001)</strong> — path-length-based taxonomic distinctness measures (Delta, Delta*, AvTD, VarTD) with simulation-based significance testing</li>
-<li>
-<strong>Ozkan (2018)</strong> — Deng entropy-based taxonomic diversity (pTO) using Dempster-Shafer evidence theory and a slicing procedure, producing 8 complementary indices</li>
-</ul>
-<div class="section level3">
-<h3 id="why-taxdiv">Why taxdiv?<a class="anchor" aria-label="anchor" href="#why-taxdiv"></a>
-</h3>
-<table class="table">
-<colgroup>
-<col width="31%">
-<col width="24%">
-<col width="17%">
-<col width="27%">
-</colgroup>
-<thead><tr>
-<th>Feature</th>
-<th align="center">vegan</th>
-<th align="center">ape</th>
-<th align="center">taxdiv</th>
-</tr></thead>
-<tbody>
-<tr>
-<td>Shannon / Simpson</td>
-<td align="center">yes</td>
-<td align="center">–</td>
-<td align="center">yes</td>
-</tr>
-<tr>
-<td>Clarke &amp; Warwick full suite (Delta, Delta*, AvTD, VarTD)</td>
-<td align="center">–</td>
-<td align="center">partial</td>
-<td align="center"><strong>yes</strong></td>
-</tr>
-<tr>
-<td>Ozkan pTO (8 indices, Run 1+2+3)</td>
-<td align="center">–</td>
-<td align="center">–</td>
-<td align="center"><strong>yes</strong></td>
-</tr>
-<tr>
-<td>Simulation-based significance testing (funnel plots)</td>
-<td align="center">–</td>
-<td align="center">–</td>
-<td align="center"><strong>yes</strong></td>
-</tr>
-<tr>
-<td>Taxonomic rarefaction with bootstrap CI</td>
-<td align="center">–</td>
-<td align="center">–</td>
-<td align="center"><strong>yes</strong></td>
-</tr>
-<tr>
-<td>Stochastic resampling + sensitivity analysis</td>
-<td align="center">–</td>
-<td align="center">–</td>
-<td align="center"><strong>yes</strong></td>
-</tr>
-<tr>
-<td>Excel-to-results in one command</td>
-<td align="center">–</td>
-<td align="center">–</td>
-<td align="center"><strong>yes</strong></td>
-</tr>
-<tr>
-<td>Bias-corrected Shannon (Miller-Madow, Grassberger, Chao-Shen)</td>
-<td align="center">–</td>
-<td align="center">–</td>
-<td align="center"><strong>yes</strong></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="section level2">
-<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
-</h2>
+<p>No code required. <code><a href="reference/taxdiv_explorer.html">taxdiv_explorer()</a></code> launches a point-and-click Shiny app: load an Excel/CSV file, pick which index families to compute, run the analysis with a live progress bar, explore five graph types, and download results and figures.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/mgorgoz/taxonomic-diversity-r" class="external-link">taxdiv</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/taxdiv_explorer.html">taxdiv_explorer</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p align="center">
+<img src="reference/figures/README-dashboard.gif" alt="taxdiv Explorer dashboard" width="90%"></p>
+</div>
+<div class="section level2">
+<h2 id="zap-installation">⚡ Installation<a class="anchor" aria-label="anchor" href="#zap-installation"></a>
+</h2>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># From CRAN</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"taxdiv"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Development version from GitHub</span></span>
+<span><span class="co"># install.packages("devtools")</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"mgorgoz/taxonomic-diversity-r"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="quick-start">Quick Start<a class="anchor" aria-label="anchor" href="#quick-start"></a>
+<h2 id="rocket-quick-start">🚀 Quick Start<a class="anchor" aria-label="anchor" href="#rocket-quick-start"></a>
 </h2>
-<div class="section level3">
-<h3 id="id_1-from-r-vectors">1. From R vectors<a class="anchor" aria-label="anchor" href="#id_1-from-r-vectors"></a>
-</h3>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/mgorgoz/taxonomic-diversity-r" class="external-link">taxdiv</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Species abundances</span></span>
 <span><span class="va">community</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>  Quercus_robur       <span class="op">=</span> <span class="fl">15</span>,</span>
-<span>  Pinus_nigra         <span class="op">=</span> <span class="fl">8</span>,</span>
-<span>  Fagus_orientalis    <span class="op">=</span> <span class="fl">12</span>,</span>
-<span>  Abies_nordmanniana  <span class="op">=</span> <span class="fl">5</span>,</span>
-<span>  Juniperus_excelsa   <span class="op">=</span> <span class="fl">3</span></span>
+<span>  Quercus_robur      <span class="op">=</span> <span class="fl">15</span>,</span>
+<span>  Pinus_nigra        <span class="op">=</span> <span class="fl">8</span>,</span>
+<span>  Fagus_orientalis   <span class="op">=</span> <span class="fl">12</span>,</span>
+<span>  Abies_nordmanniana <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>  Juniperus_excelsa  <span class="op">=</span> <span class="fl">3</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Taxonomic hierarchy</span></span>
@@ -187,289 +124,269 @@
 <span>  Order   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Fagales"</span>, <span class="st">"Pinales"</span>, <span class="st">"Fagales"</span>, <span class="st">"Pinales"</span>, <span class="st">"Pinales"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># All 14 indices at once</span></span>
-<span><span class="fu"><a href="reference/compare_indices.html">compare_indices</a></span><span class="op">(</span><span class="va">community</span>, <span class="va">tax_tree</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Ozkan pTO — 8 values matching Excel macro output (Run 1+2+3)</span></span>
-<span><span class="fu"><a href="reference/ozkan_pto.html">ozkan_pto</a></span><span class="op">(</span><span class="va">community</span>, <span class="va">tax_tree</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="id_2-from-excel--one-command">2. From Excel — one command<a class="anchor" aria-label="anchor" href="#id_2-from-excel--one-command"></a>
-</h3>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/mgorgoz/taxonomic-diversity-r" class="external-link">taxdiv</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://readxl.tidyverse.org" class="external-link">readxl</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Read your Excel file</span></span>
-<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html" class="external-link">read_excel</a></span><span class="op">(</span><span class="st">"my_data.xlsx"</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Compute all indices for all sites — automatic column detection</span></span>
-<span><span class="fu"><a href="reference/batch_analysis.html">batch_analysis</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span></code></pre></div>
-<p>Output (16 columns):</p>
-<pre><code>  Site  N_Species Shannon Simpson  Delta Delta_star  AvTD  VarTD   uTO    TO uTO_plus TO_plus uTO_max TO_max uTO_plus_max TO_plus_max
-  A1        6    1.494   0.757  1.622      2.138 2.333  0.667  2.14  3.49    3.891   5.244    2.14   3.49        3.891       5.244
-  A2        5    1.577   0.784  1.719      2.243 2.500  0.500  1.98  3.21    3.456   4.872    1.98   3.21        3.456       4.872</code></pre>
-<p>A ready-to-use Excel template is included: <a href="inst/templates/taxdiv_data_template.xlsx"><code>inst/templates/taxdiv_data_template.xlsx</code></a></p>
-</div>
+<span><span class="fu"><a href="reference/compare_indices.html">compare_indices</a></span><span class="op">(</span><span class="va">community</span>, <span class="va">tax_tree</span><span class="op">)</span>  <span class="co"># all 14 indices at once</span></span>
+<span><span class="fu"><a href="reference/ozkan_pto.html">ozkan_pto</a></span><span class="op">(</span><span class="va">community</span>, <span class="va">tax_tree</span><span class="op">)</span>        <span class="co"># the 8 Ozkan pTO values</span></span></code></pre></div>
+<p><strong>From Excel — one command, all sites, automatic column detection:</strong></p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu">readxl</span><span class="fu">::</span><span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html" class="external-link">read_excel</a></span><span class="op">(</span><span class="st">"my_data.xlsx"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/batch_analysis.html">batch_analysis</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   Site N_Species Shannon Simpson Delta Delta_star  AvTD VarTD  uTO   TO ...</span></span>
+<span><span class="co">#&gt;   A1           6   1.494   0.757 1.622      2.138 2.333 0.667 2.14 3.49 ...</span></span>
+<span><span class="co">#&gt;   A2           5   1.577   0.784 1.719      2.243 2.500 0.500 1.98 3.21 ...</span></span></code></pre></div>
+<p>A ready-to-use Excel template ships with the package: <a href="inst/templates/taxdiv_data_template.xlsx"><code>taxdiv_data_template.xlsx</code></a>.</p>
 </div>
 <div class="section level2">
-<h2 id="features">Features<a class="anchor" aria-label="anchor" href="#features"></a>
+<h2 id="bar_chart-gallery">📊 Gallery<a class="anchor" aria-label="anchor" href="#bar_chart-gallery"></a>
 </h2>
-<div class="section level3">
-<h3 id="diversity-indices-26-exported-functions">Diversity Indices (26 exported functions)<a class="anchor" aria-label="anchor" href="#diversity-indices-26-exported-functions"></a>
-</h3>
+<p>Seven ggplot2-based plot types. A few examples on the bundled <code>anatolian_trees</code> data:</p>
+<table class="table">
+<tr>
+<td width="50%">
+<img src="reference/figures/README-radar.png" alt="Multi-site radar chart" width="100%">
+</td>
+<td width="50%">
+<img src="reference/figures/README-heatmap.png" alt="Taxonomic distance heatmap" width="100%">
+</td>
+</tr>
+<tr>
+<td align="center">
+<b>Radar</b> — compare every index across sites
+</td>
+<td align="center">
+<b>Heatmap</b> — pairwise taxonomic distance
+</td>
+</tr>
+<tr>
+<td width="50%">
+<img src="reference/figures/README-rarefaction.png" alt="Rarefaction curve" width="100%">
+</td>
+<td width="50%">
+<img src="reference/figures/README-funnel.png" alt="Funnel plot" width="100%">
+</td>
+</tr>
+<tr>
+<td align="center">
+<b>Rarefaction</b> — bootstrap curves for 8 indices
+</td>
+<td align="center">
+<b>Funnel</b> — 95% significance envelope (AvTD/VarTD)
+</td>
+</tr>
+<tr>
+<td width="50%">
+<img src="reference/figures/README-tree.png" alt="Taxonomic dendrogram" width="100%">
+</td>
+<td width="50%">
+<img src="reference/figures/README-bubble.png" alt="Composition bubble plot" width="100%">
+</td>
+</tr>
+<tr>
+<td align="center">
+<b>Dendrogram</b> — taxonomic hierarchy
+</td>
+<td align="center">
+<b>Bubble</b> — species contributions
+</td>
+</tr>
+</table>
+</div>
+<div class="section level2">
+<h2 id="sparkles-why-taxdiv">✨ Why taxdiv?<a class="anchor" aria-label="anchor" href="#sparkles-why-taxdiv"></a>
+</h2>
 <table class="table">
 <colgroup>
-<col width="29%">
-<col width="32%">
-<col width="38%">
+<col width="27%">
+<col width="21%">
+<col width="15%">
+<col width="36%">
 </colgroup>
 <thead><tr>
-<th>Category</th>
-<th>Functions</th>
-<th>Description</th>
+<th>Feature</th>
+<th align="center">vegan</th>
+<th align="center">ape</th>
+<th align="center"><strong>taxdiv</strong></th>
 </tr></thead>
 <tbody>
 <tr>
-<td><strong>Classical</strong></td>
-<td>
-<code><a href="reference/shannon.html">shannon()</a></code>, <code><a href="reference/simpson.html">simpson()</a></code>
-</td>
-<td>Shannon-Wiener H’ (with 3 bias corrections), Gini-Simpson</td>
+<td>Shannon / Simpson</td>
+<td align="center">yes</td>
+<td align="center">—</td>
+<td align="center">yes</td>
 </tr>
 <tr>
-<td><strong>Clarke &amp; Warwick</strong></td>
-<td>
-<code><a href="reference/delta.html">delta()</a></code>, <code><a href="reference/delta_star.html">delta_star()</a></code>, <code><a href="reference/avtd.html">avtd()</a></code>, <code><a href="reference/vartd.html">vartd()</a></code>
-</td>
-<td>Taxonomic diversity (Delta), taxonomic distinctness (Delta*), average taxonomic distinctness (AvTD), variation in taxonomic distinctness (VarTD)</td>
+<td>Clarke &amp; Warwick suite (Delta, Delta*, AvTD, VarTD)</td>
+<td align="center">—</td>
+<td align="center">partial</td>
+<td align="center"><strong>yes</strong></td>
 </tr>
 <tr>
-<td><strong>Ozkan pTO</strong></td>
-<td>
-<code><a href="reference/ozkan_pto.html">ozkan_pto()</a></code>, <code><a href="reference/pto_components.html">pto_components()</a></code>
-</td>
-<td>8 Deng entropy-based indices: uTO, TO, uTO+, TO+ (all levels) and their max-informative-level variants</td>
+<td>Ozkan pTO — 8 indices (Run 1+2+3)</td>
+<td align="center">—</td>
+<td align="center">—</td>
+<td align="center"><strong>yes</strong></td>
 </tr>
 <tr>
-<td><strong>Ozkan Pipeline</strong></td>
-<td>
-<code><a href="reference/ozkan_pto_resample.html">ozkan_pto_resample()</a></code>, <code><a href="reference/ozkan_pto_sensitivity.html">ozkan_pto_sensitivity()</a></code>, <code><a href="reference/ozkan_pto_jackknife.html">ozkan_pto_jackknife()</a></code>, <code><a href="reference/ozkan_pto_full.html">ozkan_pto_full()</a></code>
-</td>
-<td>Stochastic resampling (Run 2), sensitivity analysis (Run 3), jackknife leave-one-out, full pipeline</td>
+<td>Simulation-based significance (funnel plots)</td>
+<td align="center">—</td>
+<td align="center">—</td>
+<td align="center"><strong>yes</strong></td>
 </tr>
 <tr>
-<td><strong>Batch</strong></td>
-<td>
-<code><a href="reference/batch_analysis.html">batch_analysis()</a></code>, <code><a href="reference/compare_indices.html">compare_indices()</a></code>
-</td>
-<td>Multi-site analysis from data frame, multi-community comparison</td>
+<td>Taxonomic rarefaction with bootstrap CI</td>
+<td align="center">—</td>
+<td align="center">—</td>
+<td align="center"><strong>yes</strong></td>
 </tr>
 <tr>
-<td><strong>Simulation</strong></td>
-<td><code><a href="reference/simulate_td.html">simulate_td()</a></code></td>
-<td>Random subsampling from species pool for significance testing</td>
+<td>Stochastic resampling + sensitivity analysis</td>
+<td align="center">—</td>
+<td align="center">—</td>
+<td align="center"><strong>yes</strong></td>
 </tr>
 <tr>
-<td><strong>Rarefaction</strong></td>
-<td><code><a href="reference/rarefaction_taxonomic.html">rarefaction_taxonomic()</a></code></td>
-<td>Bootstrap rarefaction curves for 8 different indices</td>
+<td>Bias-corrected Shannon (Miller-Madow, Grassberger, Chao-Shen)</td>
+<td align="center">—</td>
+<td align="center">—</td>
+<td align="center"><strong>yes</strong></td>
 </tr>
 <tr>
-<td><strong>Distance</strong></td>
-<td>
-<code><a href="reference/tax_distance_matrix.html">tax_distance_matrix()</a></code>, <code><a href="reference/build_tax_tree.html">build_tax_tree()</a></code>, <code><a href="reference/deng_entropy_level.html">deng_entropy_level()</a></code>
-</td>
-<td>Taxonomic distance matrices, tree construction, per-level Deng entropy</td>
+<td>Excel → results in one command</td>
+<td align="center">—</td>
+<td align="center">—</td>
+<td align="center"><strong>yes</strong></td>
+</tr>
+<tr>
+<td>Interactive Shiny dashboard</td>
+<td align="center">—</td>
+<td align="center">—</td>
+<td align="center"><strong>yes</strong></td>
 </tr>
 </tbody>
 </table>
 </div>
-<div class="section level3">
-<h3 id="visualization-7-plot-types">Visualization (7 plot types)<a class="anchor" aria-label="anchor" href="#visualization-7-plot-types"></a>
-</h3>
+<div class="section level2">
+<h2 id="toolbox-features">🧰 Features<a class="anchor" aria-label="anchor" href="#toolbox-features"></a>
+</h2>
+<p><strong>26 exported functions</strong> across the full workflow:</p>
 <table class="table">
 <colgroup>
 <col width="47%">
 <col width="52%">
 </colgroup>
 <thead><tr>
-<th>Function</th>
-<th>Plot Type</th>
+<th>Category</th>
+<th>Functions</th>
 </tr></thead>
 <tbody>
 <tr>
-<td><code><a href="reference/plot_funnel.html">plot_funnel()</a></code></td>
-<td>Funnel plot for AvTD/VarTD significance testing</td>
+<td><strong>Classical</strong></td>
+<td>
+<code><a href="reference/shannon.html">shannon()</a></code> (3 bias corrections), <code><a href="reference/simpson.html">simpson()</a></code>
+</td>
 </tr>
 <tr>
-<td><code><a href="reference/plot_rarefaction.html">plot_rarefaction()</a></code></td>
-<td>Rarefaction curves with bootstrap confidence intervals</td>
+<td><strong>Clarke &amp; Warwick</strong></td>
+<td>
+<code><a href="reference/delta.html">delta()</a></code>, <code><a href="reference/delta_star.html">delta_star()</a></code>, <code><a href="reference/avtd.html">avtd()</a></code>, <code><a href="reference/vartd.html">vartd()</a></code>
+</td>
 </tr>
 <tr>
-<td><code><a href="reference/plot_iteration.html">plot_iteration()</a></code></td>
-<td>Stochastic resampling iteration trajectories</td>
+<td><strong>Ozkan pTO</strong></td>
+<td>
+<code><a href="reference/ozkan_pto.html">ozkan_pto()</a></code>, <code><a href="reference/pto_components.html">pto_components()</a></code>, <code><a href="reference/deng_entropy_level.html">deng_entropy_level()</a></code>
+</td>
 </tr>
 <tr>
-<td><code><a href="reference/plot_radar.html">plot_radar()</a></code></td>
-<td>Radar/spider chart for multi-community comparison</td>
+<td><strong>Ozkan pipeline</strong></td>
+<td>
+<code><a href="reference/ozkan_pto_full.html">ozkan_pto_full()</a></code>, <code><a href="reference/ozkan_pto_resample.html">ozkan_pto_resample()</a></code>, <code><a href="reference/ozkan_pto_sensitivity.html">ozkan_pto_sensitivity()</a></code>, <code><a href="reference/ozkan_pto_jackknife.html">ozkan_pto_jackknife()</a></code>
+</td>
 </tr>
 <tr>
-<td><code><a href="reference/plot_heatmap.html">plot_heatmap()</a></code></td>
-<td>Taxonomic similarity heatmap</td>
+<td><strong>Batch / compare</strong></td>
+<td>
+<code><a href="reference/batch_analysis.html">batch_analysis()</a></code>, <code><a href="reference/compare_indices.html">compare_indices()</a></code>
+</td>
 </tr>
 <tr>
-<td><code><a href="reference/plot_bubble.html">plot_bubble()</a></code></td>
-<td>Bubble plot of community composition</td>
+<td><strong>Simulation / rarefaction</strong></td>
+<td>
+<code><a href="reference/simulate_td.html">simulate_td()</a></code>, <code><a href="reference/rarefaction_taxonomic.html">rarefaction_taxonomic()</a></code>
+</td>
 </tr>
 <tr>
-<td><code><a href="reference/plot_taxonomic_tree.html">plot_taxonomic_tree()</a></code></td>
-<td>Dendrogram of taxonomic hierarchy</td>
+<td><strong>Structure</strong></td>
+<td>
+<code><a href="reference/build_tax_tree.html">build_tax_tree()</a></code>, <code><a href="reference/tax_distance_matrix.html">tax_distance_matrix()</a></code>
+</td>
+</tr>
+<tr>
+<td><strong>Visualization</strong></td>
+<td>
+<code><a href="reference/plot_funnel.html">plot_funnel()</a></code>, <code><a href="reference/plot_rarefaction.html">plot_rarefaction()</a></code>, <code><a href="reference/plot_iteration.html">plot_iteration()</a></code>, <code><a href="reference/plot_radar.html">plot_radar()</a></code>, <code><a href="reference/plot_heatmap.html">plot_heatmap()</a></code>, <code><a href="reference/plot_bubble.html">plot_bubble()</a></code>, <code><a href="reference/plot_taxonomic_tree.html">plot_taxonomic_tree()</a></code>
+</td>
+</tr>
+<tr>
+<td><strong>Dashboard</strong></td>
+<td><code><a href="reference/taxdiv_explorer.html">taxdiv_explorer()</a></code></td>
 </tr>
 </tbody>
 </table>
+<p>Every main result object has tidy <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> and <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> methods (13 S3 methods total), and the three example datasets (<code>anatolian_trees</code>, <code>gazi_comm</code>, <code>gazi_gytk</code>) let you try everything immediately.</p>
 </div>
-<div class="section level3">
-<h3 id="s3-class-system">S3 Class System<a class="anchor" aria-label="anchor" href="#s3-class-system"></a>
-</h3>
-<p>All main output objects have dedicated <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> and <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> methods:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/batch_analysis.html">batch_analysis</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span>    <span class="co"># Clean formatted output</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span>  <span class="co"># Min/max/mean/SD per index across sites</span></span>
-<span></span>
-<span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/ozkan_pto.html">ozkan_pto</a></span><span class="op">(</span><span class="va">community</span>, <span class="va">tax_tree</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span>    <span class="co"># All 8 pTO values + Deng entropy by level</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="example-datasets">Example Datasets<a class="anchor" aria-label="anchor" href="#example-datasets"></a>
-</h3>
+<div class="section level2">
+<h2 id="repeat-excel-macro-equivalence">🔁 Excel macro equivalence<a class="anchor" aria-label="anchor" href="#repeat-excel-macro-equivalence"></a>
+</h2>
+<p>taxdiv reproduces the 8 Ozkan pTO values from the original Excel macro, with full reproducibility via a <code>seed</code> argument:</p>
 <table class="table">
 <colgroup>
-<col width="40%">
-<col width="59%">
+<col width="61%">
+<col width="38%">
 </colgroup>
 <thead><tr>
-<th>Dataset</th>
-<th>Description</th>
+<th>Excel macro</th>
+<th>taxdiv</th>
 </tr></thead>
 <tbody>
 <tr>
-<td><code>anatolian_trees</code></td>
-<td>Anatolian tree species with full taxonomic hierarchy</td>
+<td>Run 1 — uT0+, T0+</td>
+<td>
+<code>uTO_plus</code>, <code>TO_plus</code>
+</td>
 </tr>
 <tr>
-<td><code>gazi_comm</code></td>
-<td>Community abundance data from Gazi University campus</td>
+<td>Run 2 — uT0, T0</td>
+<td>
+<code>uTO</code>, <code>TO</code>
+</td>
 </tr>
 <tr>
-<td><code>gazi_gytk</code></td>
-<td>Taxonomic classification for Gazi campus species</td>
+<td>Run 3 — uT0+max, T0+max, uT0max, T0max</td>
+<td>
+<code>uTO_plus_max</code>, <code>TO_plus_max</code>, <code>uTO_max</code>, <code>TO_max</code>
+</td>
 </tr>
 </tbody>
 </table>
-</div>
+<p>The <code>_max</code> variants use only informative taxonomic levels (where Deng entropy &gt; 0), matching the macro’s Run 3 behaviour.</p>
 </div>
 <div class="section level2">
-<h2 id="excel-macro-equivalence">Excel Macro Equivalence<a class="anchor" aria-label="anchor" href="#excel-macro-equivalence"></a>
+<h2 id="books-learn-more">📚 Learn more<a class="anchor" aria-label="anchor" href="#books-learn-more"></a>
 </h2>
-<p>taxdiv produces the same 8 Ozkan pTO values as the TD_OMD Excel macro:</p>
-<pre><code>Excel Macro (TD_OMD)       R function output
-────────────────────────────────────────────
-Run 1:  uT0+           -&gt;  uTO_plus
-        T0+            -&gt;  TO_plus
-Run 2:  uT0            -&gt;  uTO
-        T0             -&gt;  TO
-Run 3:  uT0+max        -&gt;  uTO_plus_max
-        T0+max         -&gt;  TO_plus_max
-        uT0max         -&gt;  uTO_max
-        T0max          -&gt;  TO_max</code></pre>
-<p>The “max” variants use only informative taxonomic levels where Deng entropy &gt; 0, matching the Excel macro’s Run 3 behavior.</p>
+<p>Full documentation, tutorials, and the method theory live on the package website:</p>
+<ul>
+<li>
+<strong><a href="https://mgorgoz.github.io/taxonomic-diversity-r/articles/introduction.html">Get Started</a></strong> — a guided tour</li>
+<li><strong><a href="https://mgorgoz.github.io/taxonomic-diversity-r/articles/workflow.html">Complete Workflow</a></strong></li>
+<li>
+<strong><a href="https://mgorgoz.github.io/taxonomic-diversity-r/articles/ozkan-pto.html">Ozkan pTO Method</a></strong> — Deng entropy, the slicing procedure, and the 8 indices</li>
+<li><strong><a href="https://mgorgoz.github.io/taxonomic-diversity-r/articles/clarke-warwick.html">Clarke &amp; Warwick Distinctness</a></strong></li>
+<li><strong><a href="https://mgorgoz.github.io/taxonomic-diversity-r/articles/visualization.html">Visualization Guide</a></strong></li>
+<li><strong><a href="https://mgorgoz.github.io/taxonomic-diversity-r/articles/giris_rehberi.html">Türkçe Rehber</a></strong></li>
+</ul>
 </div>
 <div class="section level2">
-<h2 id="theoretical-background">Theoretical Background<a class="anchor" aria-label="anchor" href="#theoretical-background"></a>
-</h2>
-<div class="section level3">
-<h3 id="the-problem-why-species-counts-are-not-enough">The Problem: Why Species Counts Are Not Enough<a class="anchor" aria-label="anchor" href="#the-problem-why-species-counts-are-not-enough"></a>
-</h3>
-<p>Consider two forest plots, each containing 10 species. In the first plot, all 10 species belong to the same genus. In the second, they span 5 families across 3 orders. Standard indices like Shannon and Simpson would assign identical diversity scores to both — yet the second community is clearly more diverse in an evolutionary and functional sense. <strong>Taxonomic diversity indices solve this problem by incorporating the hierarchical relationships among species.</strong></p>
-</div>
-<div class="section level3">
-<h3 id="ozkan-pto-method">Ozkan pTO Method<a class="anchor" aria-label="anchor" href="#ozkan-pto-method"></a>
-</h3>
-<p>Ozkan (2018) introduced a method that uses <strong>Deng entropy</strong> — a generalization of Shannon entropy rooted in Dempster-Shafer evidence theory — to measure how species are distributed across a taxonomic hierarchy.</p>
-<p>The method works in three stages:</p>
-<p><strong>Run 1 — Deterministic calculation:</strong> At each taxonomic level (genus, family, order, etc.), Deng entropy measures how evenly species are grouped. A level where all species fall into one group contributes zero entropy (no diversity), while a level where species are spread evenly across many groups contributes high entropy. The product of these level-wise entropies gives <strong>pTO</strong> (taxonomic diversity). When species-level Shannon entropy is also included in the product, the result is <strong>pTO+</strong> (taxonomic distance), which captures both taxonomic structure and within-community evenness.</p>
-<p><strong>Run 2 — Stochastic resampling (slicing):</strong> Species are removed one at a time, starting with the least abundant. After each removal, all indices are recalculated. This reveals each species’ contribution to overall diversity: removing a “happy” species decreases diversity (it was contributing positively), while removing an “unhappy” species increases diversity (it was redundant in the taxonomic structure). The maximum pTO value across all slicing steps represents the community’s optimal taxonomic organization.</p>
-<p><strong>Run 3 — Max-informative level variants:</strong> Some taxonomic levels may carry no information (e.g., when all species share the same order, Deng entropy at that level is zero). Run 3 repeats the calculations using only the levels where Deng entropy is greater than zero, producing the <code>_max</code> variants of each index.</p>
-<p>This three-stage pipeline yields <strong>8 complementary indices</strong>: <code>uTO</code>, <code>TO</code>, <code>uTO_plus</code>, <code>TO_plus</code>, and their <code>_max</code> counterparts.</p>
-</div>
-<div class="section level3">
-<h3 id="clarke--warwick-taxonomic-distinctness">Clarke &amp; Warwick Taxonomic Distinctness<a class="anchor" aria-label="anchor" href="#clarke--warwick-taxonomic-distinctness"></a>
-</h3>
-<p>Clarke &amp; Warwick (1995, 1998, 2001) proposed a family of indices based on the <strong>pairwise taxonomic path length</strong> between species in a classification tree.</p>
-<ul>
-<li>
-<strong>Delta (Δ)</strong> — average taxonomic distance between two randomly chosen individuals, weighted by abundance</li>
-<li>
-<strong>Delta* (Δ*)</strong> — same as Delta but excluding same-species pairs, isolating the pure taxonomic component</li>
-<li>
-<strong>AvTD (Δ+)</strong> — average taxonomic distinctness based on presence/absence only. Because it does not depend on abundance, AvTD is <strong>independent of sample size</strong>, making it ideal for comparing datasets collected with different sampling efforts</li>
-<li>
-<strong>VarTD (Λ+)</strong> — the variance in taxonomic path lengths. High VarTD indicates an uneven taxonomic tree (some branches are deep, others shallow)</li>
-</ul>
-<p>To assess whether an observed AvTD or VarTD value is statistically significant, <code><a href="reference/simulate_td.html">simulate_td()</a></code> draws random subsets of species from a master species pool and computes expected distributions. <code><a href="reference/plot_funnel.html">plot_funnel()</a></code> then plots these as <strong>95% confidence funnels</strong> — if a community falls below the funnel, its taxonomic diversity is significantly lower than expected by chance.</p>
-</div>
-</div>
-<div class="section level2">
-<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
-</h2>
-<div class="section level3">
-<h3 id="primary-methods">Primary Methods<a class="anchor" aria-label="anchor" href="#primary-methods"></a>
-</h3>
-<ul>
-<li><p>Ozkan, K. (2018). A new proposed measure for estimating taxonomic diversity. <em>Turkish Journal of Forestry</em>, 19(4), 336-346. doi: <a href="https://doi.org/10.18182/tjf.441061" class="external-link">10.18182/tjf.441061</a></p></li>
-<li><p>Ozkan, K. &amp; Mert, A. (2022). Comparisons of Deng entropy-based taxonomic diversity measures with the other diversity measures and introduction to the new proposed (reinforced) estimators. <em>FORESTIST</em>, 72(2). doi: <a href="https://doi.org/10.5152/forestist.2021.21025" class="external-link">10.5152/forestist.2021.21025</a></p></li>
-<li><p>Deng, Y. (2016). Deng entropy. <em>Chaos, Solitons &amp; Fractals</em>, 91, 549-553. doi: <a href="https://doi.org/10.1016/j.chaos.2016.08.011" class="external-link">10.1016/j.chaos.2016.08.011</a></p></li>
-</ul>
-</div>
-<div class="section level3">
-<h3 id="taxonomic-distinctness">Taxonomic Distinctness<a class="anchor" aria-label="anchor" href="#taxonomic-distinctness"></a>
-</h3>
-<ul>
-<li><p>Warwick, R.M. &amp; Clarke, K.R. (1995). New ‘biodiversity’ measures reveal a decrease in taxonomic distinctness with increasing stress. <em>Marine Ecology Progress Series</em>, 129, 301-305. doi: <a href="https://doi.org/10.3354/meps129301" class="external-link">10.3354/meps129301</a></p></li>
-<li><p>Clarke, K.R. &amp; Warwick, R.M. (1998). A taxonomic distinctness index and its statistical properties. <em>Journal of Applied Ecology</em>, 35(4), 523-531. doi: <a href="https://doi.org/10.1046/j.1365-2664.1998.3540523.x" class="external-link">10.1046/j.1365-2664.1998.3540523.x</a></p></li>
-<li><p>Clarke, K.R. &amp; Warwick, R.M. (1999). The taxonomic distinctness measure of biodiversity: weighting of step lengths between hierarchical levels. <em>Marine Ecology Progress Series</em>, 184, 21-29. doi: <a href="https://doi.org/10.3354/meps184021" class="external-link">10.3354/meps184021</a></p></li>
-<li><p>Clarke, K.R. &amp; Warwick, R.M. (2001). A further biodiversity index applicable to species lists: variation in taxonomic distinctness. <em>Marine Ecology Progress Series</em>, 216, 265-278. doi: <a href="https://doi.org/10.3354/meps216265" class="external-link">10.3354/meps216265</a></p></li>
-</ul>
-</div>
-<div class="section level3">
-<h3 id="classical-diversity">Classical Diversity<a class="anchor" aria-label="anchor" href="#classical-diversity"></a>
-</h3>
-<ul>
-<li><p>Shannon, C.E. (1948). A mathematical theory of communication. <em>Bell System Technical Journal</em>, 27(3), 379-423. doi: <a href="https://doi.org/10.1002/j.1538-7305.1948.tb01338.x" class="external-link">10.1002/j.1538-7305.1948.tb01338.x</a></p></li>
-<li><p>Simpson, E.H. (1949). Measurement of diversity. <em>Nature</em>, 163, 688. doi: <a href="https://doi.org/10.1038/163688a0" class="external-link">10.1038/163688a0</a></p></li>
-</ul>
-</div>
-<div class="section level3">
-<h3 id="evidence-theory">Evidence Theory<a class="anchor" aria-label="anchor" href="#evidence-theory"></a>
-</h3>
-<ul>
-<li><p>Dempster, A.P. (1967). Upper and lower probabilities induced by a multivalued mapping. <em>The Annals of Mathematical Statistics</em>, 38(2), 325-339. doi: <a href="https://doi.org/10.1214/aoms/1177698950" class="external-link">10.1214/aoms/1177698950</a></p></li>
-<li><p>Shafer, G. (1976). <em>A Mathematical Theory of Evidence</em>. Princeton University Press, Princeton, NJ.</p></li>
-</ul>
-</div>
-<div class="section level3">
-<h3 id="bias-correction">Bias Correction<a class="anchor" aria-label="anchor" href="#bias-correction"></a>
-</h3>
-<ul>
-<li>Chao, A. &amp; Shen, T.-J. (2003). Nonparametric estimation of Shannon’s index of diversity when there are unseen species in sample. <em>Environmental and Ecological Statistics</em>, 10, 429-443. doi: <a href="https://doi.org/10.1023/A:1026096204727" class="external-link">10.1023/A:1026096204727</a>
-</li>
-</ul>
-</div>
-</div>
-<div class="section level2">
-<h2 id="package-status">Package Status<a class="anchor" aria-label="anchor" href="#package-status"></a>
+<h2 id="package-package-status">📦 Package status<a class="anchor" aria-label="anchor" href="#package-package-status"></a>
 </h2>
 <table class="table">
 <thead><tr>
@@ -491,15 +408,7 @@ Run 3:  uT0+max        -&gt;  uTO_plus_max
 </tr>
 <tr>
 <td>S3 methods</td>
-<td>13 (print, summary, plot)</td>
-</tr>
-<tr>
-<td>R source files</td>
-<td>19</td>
-</tr>
-<tr>
-<td>Test files</td>
-<td>12</td>
+<td>13</td>
 </tr>
 <tr>
 <td>Example datasets</td>
@@ -513,44 +422,67 @@ Run 3:  uT0+max        -&gt;  uTO_plus_max
 </table>
 </div>
 <div class="section level2">
-<h2 id="roadmap">Roadmap<a class="anchor" aria-label="anchor" href="#roadmap"></a>
+<h2 id="open_book-citation">📖 Citation<a class="anchor" aria-label="anchor" href="#open_book-citation"></a>
 </h2>
-<ul class="task-list">
-<li><label><input type="checkbox" checked>pkgdown documentation website</label></li>
-<li><label><input type="checkbox" checked>CRAN publication</label></li>
-<li><label><input type="checkbox">JOSS paper submission</label></li>
-</ul>
-</div>
-<div class="section level2">
-<h2 id="contributing">Contributing<a class="anchor" aria-label="anchor" href="#contributing"></a>
-</h2>
-<p>Contributions are welcome! If you encounter a bug or have an idea for a new feature, please open an issue using our templates:</p>
-<ul>
-<li>
-<a href="https://github.com/mgorgoz/taxonomic-diversity-r/issues/new?template=bug_report.md" class="external-link">Bug Report</a> — for errors, unexpected behavior, or incorrect results</li>
-<li>
-<a href="https://github.com/mgorgoz/taxonomic-diversity-r/issues/new?template=feature_request.md" class="external-link">Feature Request</a> — for new indices, visualizations, or enhancements</li>
-</ul>
-<p>For general questions about the package or taxonomic diversity methods, feel free to start a <a href="https://github.com/mgorgoz/taxonomic-diversity-r/discussions" class="external-link">GitHub Discussion</a> or open a blank issue.</p>
-</div>
-<div class="section level2">
-<h2 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
-</h2>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/citation.html" class="external-link">citation</a></span><span class="op">(</span><span class="st">"taxdiv"</span><span class="op">)</span></span></code></pre></div>
-<pre><code>Gorgoz MM, Ozkan K, Negiz MG (2026). taxdiv: Taxonomic Diversity Indices
-Using Deng Entropy. R package version 0.1.0.
-https://github.com/mgorgoz/taxonomic-diversity-r
-
-Ozkan K (2018). "A new proposed measure for estimating taxonomic diversity."
-Turkish Journal of Forestry, 19(4), 336-346. doi:10.18182/tjf.441061.</code></pre>
+<blockquote>
+<p>Gorgoz MM, Ozkan K, Negiz MG (2026). <em>taxdiv: Taxonomic Diversity Indices Using Deng Entropy</em>. R package version 1.0.0. <a href="https://github.com/mgorgoz/taxonomic-diversity-r" class="external-link uri">https://github.com/mgorgoz/taxonomic-diversity-r</a></p>
+<p>Ozkan K (2018). “A new proposed measure for estimating taxonomic diversity.” <em>Turkish Journal of Forestry</em>, 19(4), 336–346. <a href="doi:10.18182/tjf.441061" class="uri">doi:10.18182/tjf.441061</a>.</p>
+</blockquote>
+<details><summary><b>Full reference list</b>
+</summary><p><strong>Primary methods</strong></p>
+<ul>
+<li>Ozkan, K. (2018). A new proposed measure for estimating taxonomic diversity. <em>Turkish Journal of Forestry</em>, 19(4), 336–346. doi: <a href="https://doi.org/10.18182/tjf.441061" class="external-link">10.18182/tjf.441061</a>
+</li>
+<li>Ozkan, K. &amp; Mert, A. (2022). Comparisons of Deng entropy-based taxonomic diversity measures with the other diversity measures and introduction to the new proposed (reinforced) estimators. <em>FORESTIST</em>, 72(2). doi: <a href="https://doi.org/10.5152/forestist.2021.21025" class="external-link">10.5152/forestist.2021.21025</a>
+</li>
+<li>Deng, Y. (2016). Deng entropy. <em>Chaos, Solitons &amp; Fractals</em>, 91, 549–553. doi: <a href="https://doi.org/10.1016/j.chaos.2016.08.011" class="external-link">10.1016/j.chaos.2016.08.011</a>
+</li>
+</ul>
+<p><strong>Taxonomic distinctness</strong></p>
+<ul>
+<li>Warwick, R.M. &amp; Clarke, K.R. (1995). New ‘biodiversity’ measures reveal a decrease in taxonomic distinctness with increasing stress. <em>Marine Ecology Progress Series</em>, 129, 301–305. doi: <a href="https://doi.org/10.3354/meps129301" class="external-link">10.3354/meps129301</a>
+</li>
+<li>Clarke, K.R. &amp; Warwick, R.M. (1998). A taxonomic distinctness index and its statistical properties. <em>Journal of Applied Ecology</em>, 35(4), 523–531. doi: <a href="https://doi.org/10.1046/j.1365-2664.1998.3540523.x" class="external-link">10.1046/j.1365-2664.1998.3540523.x</a>
+</li>
+<li>Clarke, K.R. &amp; Warwick, R.M. (1999). The taxonomic distinctness measure of biodiversity: weighting of step lengths between hierarchical levels. <em>Marine Ecology Progress Series</em>, 184, 21–29. doi: <a href="https://doi.org/10.3354/meps184021" class="external-link">10.3354/meps184021</a>
+</li>
+<li>Clarke, K.R. &amp; Warwick, R.M. (2001). A further biodiversity index applicable to species lists: variation in taxonomic distinctness. <em>Marine Ecology Progress Series</em>, 216, 265–278. doi: <a href="https://doi.org/10.3354/meps216265" class="external-link">10.3354/meps216265</a>
+</li>
+</ul>
+<p><strong>Classical diversity</strong></p>
+<ul>
+<li>Shannon, C.E. (1948). A mathematical theory of communication. <em>Bell System Technical Journal</em>, 27(3), 379–423. doi: <a href="https://doi.org/10.1002/j.1538-7305.1948.tb01338.x" class="external-link">10.1002/j.1538-7305.1948.tb01338.x</a>
+</li>
+<li>Simpson, E.H. (1949). Measurement of diversity. <em>Nature</em>, 163, 688. doi: <a href="https://doi.org/10.1038/163688a0" class="external-link">10.1038/163688a0</a>
+</li>
+</ul>
+<p><strong>Evidence theory &amp; bias correction</strong></p>
+<ul>
+<li>Dempster, A.P. (1967). Upper and lower probabilities induced by a multivalued mapping. <em>The Annals of Mathematical Statistics</em>, 38(2), 325–339. doi: <a href="https://doi.org/10.1214/aoms/1177698950" class="external-link">10.1214/aoms/1177698950</a>
+</li>
+<li>Shafer, G. (1976). <em>A Mathematical Theory of Evidence</em>. Princeton University Press.</li>
+<li>Chao, A. &amp; Shen, T.-J. (2003). Nonparametric estimation of Shannon’s index of diversity when there are unseen species in sample. <em>Environmental and Ecological Statistics</em>, 10, 429–443. doi: <a href="https://doi.org/10.1023/A:1026096204727" class="external-link">10.1023/A:1026096204727</a>
+</li>
+</ul></details>
 </div>
 <div class="section level2">
-<h2 id="license">License<a class="anchor" aria-label="anchor" href="#license"></a>
+<h2 id="handshake-contributing">🤝 Contributing<a class="anchor" aria-label="anchor" href="#handshake-contributing"></a>
 </h2>
-<p>MIT</p>
+<p>Contributions are welcome:</p>
+<ul>
+<li><a href="https://github.com/mgorgoz/taxonomic-diversity-r/issues/new?template=bug_report.md" class="external-link">Report a bug</a></li>
+<li><a href="https://github.com/mgorgoz/taxonomic-diversity-r/issues/new?template=feature_request.md" class="external-link">Request a feature</a></li>
+<li><a href="https://github.com/mgorgoz/taxonomic-diversity-r/discussions" class="external-link">Ask a question</a></li>
+</ul>
 </div>
+<div class="section level2">
+<h2 id="page_facing_up-license">📄 License<a class="anchor" aria-label="anchor" href="#page_facing_up-license"></a>
+</h2>
+<p>MIT © Gorgoz MM, Ozkan K, Negiz MG, Mert A</p>
 </div>
+
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
