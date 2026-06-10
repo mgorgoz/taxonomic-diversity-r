@@ -98,8 +98,12 @@ A ready-to-use Excel template ships with the package:
 
 ## 📊 Gallery
 
-Seven ggplot2-based plot types. A few examples on the bundled
-`anatolian_trees` data:
+Publication-ready graphics for every analysis — a few examples on the
+bundled `anatolian_trees` data:
+
+![Site by index bar chart](reference/figures/README-bar.png)
+
+**Bar chart** — compare any index across sites at a glance
 
 |  |  |
 |----|----|
