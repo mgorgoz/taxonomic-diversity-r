@@ -41,3 +41,5 @@ Authors:
 - Mehmet Guvenc Negiz ([ORCID](https://orcid.org/0009-0008-1507-8712))
 
 - Ahmet Mert ([ORCID](https://orcid.org/0000-0001-6859-0308))
+
+- Serkan Ozdemir ([ORCID](https://orcid.org/0000-0002-9425-3724))
