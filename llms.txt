@@ -98,8 +98,8 @@ A ready-to-use Excel template ships with the package:
 
 ## 📊 Gallery
 
-Publication-ready graphics for every analysis — a few examples on the
-bundled `anatolian_trees` data:
+All **seven plot functions** plus the dashboard’s bar chart — examples
+on the bundled `anatolian_trees` data:
 
 ![Site by index bar chart](reference/figures/README-bar.png)
 
@@ -113,6 +113,8 @@ bundled `anatolian_trees` data:
 | **Rarefaction** — bootstrap curves for 8 indices | **Funnel** — 95% significance envelope (AvTD/VarTD) |
 | ![Taxonomic dendrogram](reference/figures/README-tree.png) | ![Composition bubble plot](reference/figures/README-bubble.png) |
 | **Dendrogram** — taxonomic hierarchy | **Bubble** — species contributions |
+| ![Stochastic resampling trajectory](reference/figures/README-iteration.png) |  |
+| **Iteration** — stochastic resampling trajectory (Run 2) |  |
 
 ## ✨ Why taxdiv?
 
