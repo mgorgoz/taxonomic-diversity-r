@@ -14,5 +14,6 @@
 ^cran-comments\.md$
 ^CLAUDE\.md$
 ^AGENTS\.md$
+^man/figures/README-dashboard\.gif$
 ^CONTRIBUTING\.md$
 ^CODE_OF_CONDUCT\.md$

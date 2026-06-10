@@ -1,69 +1,68 @@
-# taxdiv
+<h1 align="center">taxdiv</h1>
 
-<!-- badges: start -->
-[![CRAN status](https://www.r-pkg.org/badges/version/taxdiv)](https://CRAN.R-project.org/package=taxdiv)
-[![CRAN downloads](https://cranlogs.r-pkg.org/badges/grand-total/taxdiv)](https://CRAN.R-project.org/package=taxdiv)
-[![R-CMD-check](https://github.com/mgorgoz/taxonomic-diversity-r/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/mgorgoz/taxonomic-diversity-r/actions/workflows/R-CMD-check.yaml)
-[![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-![Tests](https://img.shields.io/badge/tests-668%20passing-brightgreen.svg)
-![R Version](https://img.shields.io/badge/R%20%E2%89%A5%204.1.0-blue.svg)
-[![codecov](https://codecov.io/gh/mgorgoz/taxonomic-diversity-r/graph/badge.svg?token=43b8b7e2-349a-41ad-b4f9-29b9d4862d19)](https://app.codecov.io/gh/mgorgoz/taxonomic-diversity-r)
-<!-- badges: end -->
+<p align="center">
+  <b>Taxonomic diversity indices for ecological community data — in one place.</b><br>
+  Classical measures, Clarke &amp; Warwick distinctness, and the Deng entropy-based
+  Ozkan (2018) method, with an interactive dashboard and publication-ready graphics.
+</p>
 
-## Overview
+<p align="center">
+  <a href="https://CRAN.R-project.org/package=taxdiv"><img src="https://www.r-pkg.org/badges/version/taxdiv" alt="CRAN status"></a>
+  <a href="https://CRAN.R-project.org/package=taxdiv"><img src="https://cranlogs.r-pkg.org/badges/grand-total/taxdiv" alt="CRAN downloads"></a>
+  <a href="https://github.com/mgorgoz/taxonomic-diversity-r/actions/workflows/R-CMD-check.yaml"><img src="https://github.com/mgorgoz/taxonomic-diversity-r/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a>
+  <a href="https://app.codecov.io/gh/mgorgoz/taxonomic-diversity-r"><img src="https://codecov.io/gh/mgorgoz/taxonomic-diversity-r/graph/badge.svg?token=43b8b7e2-349a-41ad-b4f9-29b9d4862d19" alt="codecov"></a>
+  <a href="https://lifecycle.r-lib.org/articles/stages.html#stable"><img src="https://img.shields.io/badge/lifecycle-stable-brightgreen.svg" alt="Lifecycle: stable"></a>
+  <img src="https://img.shields.io/badge/tests-668%20passing-brightgreen.svg" alt="Tests">
+  <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT"></a>
+</p>
 
-**taxdiv** is an R package for computing taxonomic diversity indices from
-ecological community data. It provides a unified framework that brings together
-classical diversity measures, Clarke & Warwick's taxonomic distinctness family,
-and the Deng entropy-based approach of Ozkan (2018) — all in a single package.
+---
 
-Traditional diversity indices such as Shannon and Simpson treat all species as
-equally distinct. However, a community of 10 species from 10 different families
-is taxonomically more diverse than 10 species from the same genus. taxdiv
-accounts for this taxonomic structure using two complementary frameworks:
+Traditional indices such as Shannon and Simpson treat every species as equally
+distinct. But 10 species from 10 different families are taxonomically more diverse
+than 10 species from a single genus. **taxdiv** captures this by folding the
+taxonomic hierarchy into the calculation — through two complementary frameworks
+(**Clarke &amp; Warwick** distinctness and **Ozkan pTO** based on Deng entropy) — and
+ships everything from raw Excel data to finished figures.
 
-- **Clarke & Warwick (1995, 1998, 2001)** — path-length-based taxonomic
-  distinctness measures (Delta, Delta\*, AvTD, VarTD) with simulation-based
-  significance testing
-- **Ozkan (2018)** — Deng entropy-based taxonomic diversity (pTO) using
-  Dempster-Shafer evidence theory and a slicing procedure, producing 8
-  complementary indices
+## 🖥️ Interactive Dashboard
 
-### Why taxdiv?
-
-| Feature | vegan | ape | taxdiv |
-|---------|:-----:|:---:|:------:|
-| Shannon / Simpson | yes | -- | yes |
-| Clarke & Warwick full suite (Delta, Delta\*, AvTD, VarTD) | -- | partial | **yes** |
-| Ozkan pTO (8 indices, Run 1+2+3) | -- | -- | **yes** |
-| Simulation-based significance testing (funnel plots) | -- | -- | **yes** |
-| Taxonomic rarefaction with bootstrap CI | -- | -- | **yes** |
-| Stochastic resampling + sensitivity analysis | -- | -- | **yes** |
-| Excel-to-results in one command | -- | -- | **yes** |
-| Bias-corrected Shannon (Miller-Madow, Grassberger, Chao-Shen) | -- | -- | **yes** |
-
-## Installation
+No code required. `taxdiv_explorer()` launches a point-and-click Shiny app: load an
+Excel/CSV file, pick which index families to compute, run the analysis with a live
+progress bar, explore five graph types, and download results and figures.
 
 ```r
+library(taxdiv)
+taxdiv_explorer()
+```
+
+<p align="center">
+  <img src="man/figures/README-dashboard.gif" alt="taxdiv Explorer dashboard" width="90%">
+</p>
+
+## ⚡ Installation
+
+```r
+# From CRAN
+install.packages("taxdiv")
+
+# Development version from GitHub
 # install.packages("devtools")
 devtools::install_github("mgorgoz/taxonomic-diversity-r")
 ```
 
-## Quick Start
-
-### 1. From R vectors
+## 🚀 Quick Start
 
 ```r
 library(taxdiv)
 
 # Species abundances
 community <- c(
-  Quercus_robur       = 15,
-  Pinus_nigra         = 8,
-  Fagus_orientalis    = 12,
-  Abies_nordmanniana  = 5,
-  Juniperus_excelsa   = 3
+  Quercus_robur      = 15,
+  Pinus_nigra        = 8,
+  Fagus_orientalis   = 12,
+  Abies_nordmanniana = 5,
+  Juniperus_excelsa  = 3
 )
 
 # Taxonomic hierarchy
@@ -74,277 +73,196 @@ tax_tree <- build_tax_tree(
   Order   = c("Fagales", "Pinales", "Fagales", "Pinales", "Pinales")
 )
 
-# All 14 indices at once
-compare_indices(community, tax_tree)
-
-# Ozkan pTO — 8 values matching Excel macro output (Run 1+2+3)
-ozkan_pto(community, tax_tree)
+compare_indices(community, tax_tree)  # all 14 indices at once
+ozkan_pto(community, tax_tree)        # the 8 Ozkan pTO values
 ```
 
-### 2. From Excel — one command
+**From Excel — one command, all sites, automatic column detection:**
 
 ```r
-library(taxdiv)
-library(readxl)
-
-# Read your Excel file
-data <- as.data.frame(read_excel("my_data.xlsx"))
-
-# Compute all indices for all sites — automatic column detection
+data <- as.data.frame(readxl::read_excel("my_data.xlsx"))
 batch_analysis(data)
+#>   Site N_Species Shannon Simpson Delta Delta_star  AvTD VarTD  uTO   TO ...
+#>   A1           6   1.494   0.757 1.622      2.138 2.333 0.667 2.14 3.49 ...
+#>   A2           5   1.577   0.784 1.719      2.243 2.500 0.500 1.98 3.21 ...
 ```
 
-Output (16 columns):
+A ready-to-use Excel template ships with the package:
+[`taxdiv_data_template.xlsx`](inst/templates/taxdiv_data_template.xlsx).
 
-```
-  Site  N_Species Shannon Simpson  Delta Delta_star  AvTD  VarTD   uTO    TO uTO_plus TO_plus uTO_max TO_max uTO_plus_max TO_plus_max
-  A1        6    1.494   0.757  1.622      2.138 2.333  0.667  2.14  3.49    3.891   5.244    2.14   3.49        3.891       5.244
-  A2        5    1.577   0.784  1.719      2.243 2.500  0.500  1.98  3.21    3.456   4.872    1.98   3.21        3.456       4.872
-```
+## 📊 Gallery
 
-A ready-to-use Excel template is included: [`inst/templates/taxdiv_data_template.xlsx`](inst/templates/taxdiv_data_template.xlsx)
+Seven ggplot2-based plot types. A few examples on the bundled `anatolian_trees` data:
 
-## Features
+<table>
+  <tr>
+    <td width="50%"><img src="man/figures/README-radar.png" alt="Multi-site radar chart" width="100%"></td>
+    <td width="50%"><img src="man/figures/README-heatmap.png" alt="Taxonomic distance heatmap" width="100%"></td>
+  </tr>
+  <tr>
+    <td align="center"><b>Radar</b> — compare every index across sites</td>
+    <td align="center"><b>Heatmap</b> — pairwise taxonomic distance</td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="man/figures/README-rarefaction.png" alt="Rarefaction curve" width="100%"></td>
+    <td width="50%"><img src="man/figures/README-funnel.png" alt="Funnel plot" width="100%"></td>
+  </tr>
+  <tr>
+    <td align="center"><b>Rarefaction</b> — bootstrap curves for 8 indices</td>
+    <td align="center"><b>Funnel</b> — 95% significance envelope (AvTD/VarTD)</td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="man/figures/README-tree.png" alt="Taxonomic dendrogram" width="100%"></td>
+    <td width="50%"><img src="man/figures/README-bubble.png" alt="Composition bubble plot" width="100%"></td>
+  </tr>
+  <tr>
+    <td align="center"><b>Dendrogram</b> — taxonomic hierarchy</td>
+    <td align="center"><b>Bubble</b> — species contributions</td>
+  </tr>
+</table>
 
-### Diversity Indices (26 exported functions)
+## ✨ Why taxdiv?
 
-| Category | Functions | Description |
-|----------|-----------|-------------|
-| **Classical** | `shannon()`, `simpson()` | Shannon-Wiener H' (with 3 bias corrections), Gini-Simpson |
-| **Clarke & Warwick** | `delta()`, `delta_star()`, `avtd()`, `vartd()` | Taxonomic diversity (Delta), taxonomic distinctness (Delta\*), average taxonomic distinctness (AvTD), variation in taxonomic distinctness (VarTD) |
-| **Ozkan pTO** | `ozkan_pto()`, `pto_components()` | 8 Deng entropy-based indices: uTO, TO, uTO+, TO+ (all levels) and their max-informative-level variants |
-| **Ozkan Pipeline** | `ozkan_pto_resample()`, `ozkan_pto_sensitivity()`, `ozkan_pto_jackknife()`, `ozkan_pto_full()` | Stochastic resampling (Run 2), sensitivity analysis (Run 3), jackknife leave-one-out, full pipeline |
-| **Batch** | `batch_analysis()`, `compare_indices()` | Multi-site analysis from data frame, multi-community comparison |
-| **Simulation** | `simulate_td()` | Random subsampling from species pool for significance testing |
-| **Rarefaction** | `rarefaction_taxonomic()` | Bootstrap rarefaction curves for 8 different indices |
-| **Distance** | `tax_distance_matrix()`, `build_tax_tree()`, `deng_entropy_level()` | Taxonomic distance matrices, tree construction, per-level Deng entropy |
+| Feature | vegan | ape | **taxdiv** |
+|---------|:-----:|:---:|:----------:|
+| Shannon / Simpson | yes | — | yes |
+| Clarke &amp; Warwick suite (Delta, Delta\*, AvTD, VarTD) | — | partial | **yes** |
+| Ozkan pTO — 8 indices (Run 1+2+3) | — | — | **yes** |
+| Simulation-based significance (funnel plots) | — | — | **yes** |
+| Taxonomic rarefaction with bootstrap CI | — | — | **yes** |
+| Stochastic resampling + sensitivity analysis | — | — | **yes** |
+| Bias-corrected Shannon (Miller-Madow, Grassberger, Chao-Shen) | — | — | **yes** |
+| Excel → results in one command | — | — | **yes** |
+| Interactive Shiny dashboard | — | — | **yes** |
 
-### Visualization (7 plot types)
+## 🧰 Features
 
-| Function | Plot Type |
+**26 exported functions** across the full workflow:
+
+| Category | Functions |
 |----------|-----------|
-| `plot_funnel()` | Funnel plot for AvTD/VarTD significance testing |
-| `plot_rarefaction()` | Rarefaction curves with bootstrap confidence intervals |
-| `plot_iteration()` | Stochastic resampling iteration trajectories |
-| `plot_radar()` | Radar/spider chart for multi-community comparison |
-| `plot_heatmap()` | Taxonomic similarity heatmap |
-| `plot_bubble()` | Bubble plot of community composition |
-| `plot_taxonomic_tree()` | Dendrogram of taxonomic hierarchy |
+| **Classical** | `shannon()` (3 bias corrections), `simpson()` |
+| **Clarke &amp; Warwick** | `delta()`, `delta_star()`, `avtd()`, `vartd()` |
+| **Ozkan pTO** | `ozkan_pto()`, `pto_components()`, `deng_entropy_level()` |
+| **Ozkan pipeline** | `ozkan_pto_full()`, `ozkan_pto_resample()`, `ozkan_pto_sensitivity()`, `ozkan_pto_jackknife()` |
+| **Batch / compare** | `batch_analysis()`, `compare_indices()` |
+| **Simulation / rarefaction** | `simulate_td()`, `rarefaction_taxonomic()` |
+| **Structure** | `build_tax_tree()`, `tax_distance_matrix()` |
+| **Visualization** | `plot_funnel()`, `plot_rarefaction()`, `plot_iteration()`, `plot_radar()`, `plot_heatmap()`, `plot_bubble()`, `plot_taxonomic_tree()` |
+| **Dashboard** | `taxdiv_explorer()` |
 
-### S3 Class System
+Every main result object has tidy `print()` and `summary()` methods (13 S3 methods
+total), and the three example datasets (`anatolian_trees`, `gazi_comm`, `gazi_gytk`)
+let you try everything immediately.
 
-All main output objects have dedicated `print()` and `summary()` methods:
+## 🔁 Excel macro equivalence
 
-```r
-result <- batch_analysis(data)
-print(result)    # Clean formatted output
-summary(result)  # Min/max/mean/SD per index across sites
+taxdiv reproduces the 8 Ozkan pTO values from the original Excel macro, with full
+reproducibility via a `seed` argument:
 
-result <- ozkan_pto(community, tax_tree)
-print(result)    # All 8 pTO values + Deng entropy by level
-```
+| Excel macro | taxdiv |
+|-------------|--------|
+| Run 1 — uT0+, T0+ | `uTO_plus`, `TO_plus` |
+| Run 2 — uT0, T0 | `uTO`, `TO` |
+| Run 3 — uT0+max, T0+max, uT0max, T0max | `uTO_plus_max`, `TO_plus_max`, `uTO_max`, `TO_max` |
 
-### Example Datasets
+The `_max` variants use only informative taxonomic levels (where Deng entropy > 0),
+matching the macro's Run 3 behaviour.
 
-| Dataset | Description |
-|---------|-------------|
-| `anatolian_trees` | Anatolian tree species with full taxonomic hierarchy |
-| `gazi_comm` | Community abundance data from Gazi University campus |
-| `gazi_gytk` | Taxonomic classification for Gazi campus species |
+## 📚 Learn more
 
-## Excel Macro Equivalence
+Full documentation, tutorials, and the method theory live on the package website:
 
-taxdiv produces the same 8 Ozkan pTO values as the TD_OMD Excel macro:
+- **[Get Started](https://mgorgoz.github.io/taxonomic-diversity-r/articles/introduction.html)** — a guided tour
+- **[Complete Workflow](https://mgorgoz.github.io/taxonomic-diversity-r/articles/workflow.html)**
+- **[Ozkan pTO Method](https://mgorgoz.github.io/taxonomic-diversity-r/articles/ozkan-pto.html)** — Deng entropy, the slicing procedure, and the 8 indices
+- **[Clarke &amp; Warwick Distinctness](https://mgorgoz.github.io/taxonomic-diversity-r/articles/clarke-warwick.html)**
+- **[Visualization Guide](https://mgorgoz.github.io/taxonomic-diversity-r/articles/visualization.html)**
+- **[Türkçe Rehber](https://mgorgoz.github.io/taxonomic-diversity-r/articles/giris_rehberi.html)**
 
-```
-Excel Macro (TD_OMD)       R function output
-────────────────────────────────────────────
-Run 1:  uT0+           ->  uTO_plus
-        T0+            ->  TO_plus
-Run 2:  uT0            ->  uTO
-        T0             ->  TO
-Run 3:  uT0+max        ->  uTO_plus_max
-        T0+max         ->  TO_plus_max
-        uT0max         ->  uTO_max
-        T0max          ->  TO_max
-```
-
-The "max" variants use only informative taxonomic levels where Deng entropy > 0,
-matching the Excel macro's Run 3 behavior.
-
-## Theoretical Background
-
-### The Problem: Why Species Counts Are Not Enough
-
-Consider two forest plots, each containing 10 species. In the first plot, all 10
-species belong to the same genus. In the second, they span 5 families across 3
-orders. Standard indices like Shannon and Simpson would assign identical diversity
-scores to both — yet the second community is clearly more diverse in an
-evolutionary and functional sense. **Taxonomic diversity indices solve this problem
-by incorporating the hierarchical relationships among species.**
-
-### Ozkan pTO Method
-
-Ozkan (2018) introduced a method that uses **Deng entropy** — a generalization of
-Shannon entropy rooted in Dempster-Shafer evidence theory — to measure how species
-are distributed across a taxonomic hierarchy.
-
-The method works in three stages:
-
-**Run 1 — Deterministic calculation:** At each taxonomic level (genus, family,
-order, etc.), Deng entropy measures how evenly species are grouped. A level where
-all species fall into one group contributes zero entropy (no diversity), while a
-level where species are spread evenly across many groups contributes high entropy.
-The product of these level-wise entropies gives **pTO** (taxonomic diversity). When
-species-level Shannon entropy is also included in the product, the result is
-**pTO+** (taxonomic distance), which captures both taxonomic structure and
-within-community evenness.
-
-**Run 2 — Stochastic resampling (slicing):** Species are removed one at a time,
-starting with the least abundant. After each removal, all indices are recalculated.
-This reveals each species' contribution to overall diversity: removing a "happy"
-species decreases diversity (it was contributing positively), while removing an
-"unhappy" species increases diversity (it was redundant in the taxonomic structure).
-The maximum pTO value across all slicing steps represents the community's optimal
-taxonomic organization.
-
-**Run 3 — Max-informative level variants:** Some taxonomic levels may carry no
-information (e.g., when all species share the same order, Deng entropy at that
-level is zero). Run 3 repeats the calculations using only the levels where Deng
-entropy is greater than zero, producing the `_max` variants of each index.
-
-This three-stage pipeline yields **8 complementary indices**: `uTO`, `TO`,
-`uTO_plus`, `TO_plus`, and their `_max` counterparts.
-
-### Clarke & Warwick Taxonomic Distinctness
-
-Clarke & Warwick (1995, 1998, 2001) proposed a family of indices based on the
-**pairwise taxonomic path length** between species in a classification tree.
-
-- **Delta (Δ)** — average taxonomic distance between two randomly chosen
-  individuals, weighted by abundance
-- **Delta\* (Δ\*)** — same as Delta but excluding same-species pairs, isolating
-  the pure taxonomic component
-- **AvTD (Δ+)** — average taxonomic distinctness based on presence/absence only.
-  Because it does not depend on abundance, AvTD is **independent of sample size**,
-  making it ideal for comparing datasets collected with different sampling efforts
-- **VarTD (Λ+)** — the variance in taxonomic path lengths. High VarTD indicates
-  an uneven taxonomic tree (some branches are deep, others shallow)
-
-To assess whether an observed AvTD or VarTD value is statistically significant,
-`simulate_td()` draws random subsets of species from a master species pool and
-computes expected distributions. `plot_funnel()` then plots these as **95%
-confidence funnels** — if a community falls below the funnel, its taxonomic
-diversity is significantly lower than expected by chance.
-
-## References
-
-### Primary Methods
-
-- Ozkan, K. (2018). A new proposed measure for estimating taxonomic diversity.
-  *Turkish Journal of Forestry*, 19(4), 336-346.
-  doi: [10.18182/tjf.441061](https://doi.org/10.18182/tjf.441061)
-
-- Ozkan, K. & Mert, A. (2022). Comparisons of Deng entropy-based taxonomic
-  diversity measures with the other diversity measures and introduction to
-  the new proposed (reinforced) estimators. *FORESTIST*, 72(2).
-  doi: [10.5152/forestist.2021.21025](https://doi.org/10.5152/forestist.2021.21025)
-
-- Deng, Y. (2016). Deng entropy. *Chaos, Solitons & Fractals*, 91, 549-553.
-  doi: [10.1016/j.chaos.2016.08.011](https://doi.org/10.1016/j.chaos.2016.08.011)
-
-### Taxonomic Distinctness
-
-- Warwick, R.M. & Clarke, K.R. (1995). New 'biodiversity' measures reveal a
-  decrease in taxonomic distinctness with increasing stress. *Marine Ecology
-  Progress Series*, 129, 301-305.
-  doi: [10.3354/meps129301](https://doi.org/10.3354/meps129301)
-
-- Clarke, K.R. & Warwick, R.M. (1998). A taxonomic distinctness index and its
-  statistical properties. *Journal of Applied Ecology*, 35(4), 523-531.
-  doi: [10.1046/j.1365-2664.1998.3540523.x](https://doi.org/10.1046/j.1365-2664.1998.3540523.x)
-
-- Clarke, K.R. & Warwick, R.M. (1999). The taxonomic distinctness measure of
-  biodiversity: weighting of step lengths between hierarchical levels. *Marine
-  Ecology Progress Series*, 184, 21-29.
-  doi: [10.3354/meps184021](https://doi.org/10.3354/meps184021)
-
-- Clarke, K.R. & Warwick, R.M. (2001). A further biodiversity index applicable
-  to species lists: variation in taxonomic distinctness. *Marine Ecology Progress
-  Series*, 216, 265-278.
-  doi: [10.3354/meps216265](https://doi.org/10.3354/meps216265)
-
-### Classical Diversity
-
-- Shannon, C.E. (1948). A mathematical theory of communication. *Bell System
-  Technical Journal*, 27(3), 379-423.
-  doi: [10.1002/j.1538-7305.1948.tb01338.x](https://doi.org/10.1002/j.1538-7305.1948.tb01338.x)
-
-- Simpson, E.H. (1949). Measurement of diversity. *Nature*, 163, 688.
-  doi: [10.1038/163688a0](https://doi.org/10.1038/163688a0)
-
-### Evidence Theory
-
-- Dempster, A.P. (1967). Upper and lower probabilities induced by a multivalued
-  mapping. *The Annals of Mathematical Statistics*, 38(2), 325-339.
-  doi: [10.1214/aoms/1177698950](https://doi.org/10.1214/aoms/1177698950)
-
-- Shafer, G. (1976). *A Mathematical Theory of Evidence*. Princeton University
-  Press, Princeton, NJ.
-
-### Bias Correction
-
-- Chao, A. & Shen, T.-J. (2003). Nonparametric estimation of Shannon's index of
-  diversity when there are unseen species in sample. *Environmental and Ecological
-  Statistics*, 10, 429-443.
-  doi: [10.1023/A:1026096204727](https://doi.org/10.1023/A:1026096204727)
-
-## Package Status
+## 📦 Package status
 
 | Metric | Value |
 |--------|-------|
 | R CMD check | 0 errors, 0 warnings, 0 notes |
 | Unit tests | 668 passing |
 | Exported functions | 26 |
-| S3 methods | 13 (print, summary, plot) |
-| R source files | 19 |
-| Test files | 12 |
+| S3 methods | 13 |
 | Example datasets | 3 |
 | Vignettes | 7 (6 English + 1 Turkish) |
 
-## Roadmap
-
-- [x] pkgdown documentation website
-- [x] CRAN publication
-- [ ] JOSS paper submission
-
-## Contributing
-
-Contributions are welcome! If you encounter a bug or have an idea for a new
-feature, please open an issue using our templates:
-
-- [Bug Report](https://github.com/mgorgoz/taxonomic-diversity-r/issues/new?template=bug_report.md) — for errors, unexpected behavior, or incorrect results
-- [Feature Request](https://github.com/mgorgoz/taxonomic-diversity-r/issues/new?template=feature_request.md) — for new indices, visualizations, or enhancements
-
-For general questions about the package or taxonomic diversity methods, feel free
-to start a [GitHub Discussion](https://github.com/mgorgoz/taxonomic-diversity-r/discussions)
-or open a blank issue.
-
-## Citation
+## 📖 Citation
 
 ```r
 citation("taxdiv")
 ```
 
-```
-Gorgoz MM, Ozkan K, Negiz MG (2026). taxdiv: Taxonomic Diversity Indices
-Using Deng Entropy. R package version 0.1.0.
-https://github.com/mgorgoz/taxonomic-diversity-r
+> Gorgoz MM, Ozkan K, Negiz MG (2026). *taxdiv: Taxonomic Diversity Indices Using
+> Deng Entropy*. R package version 1.0.0.
+> <https://github.com/mgorgoz/taxonomic-diversity-r>
+>
+> Ozkan K (2018). "A new proposed measure for estimating taxonomic diversity."
+> *Turkish Journal of Forestry*, 19(4), 336–346. doi:10.18182/tjf.441061.
 
-Ozkan K (2018). "A new proposed measure for estimating taxonomic diversity."
-Turkish Journal of Forestry, 19(4), 336-346. doi:10.18182/tjf.441061.
-```
+<details>
+<summary><b>Full reference list</b></summary>
 
-## License
+**Primary methods**
 
-MIT
+- Ozkan, K. (2018). A new proposed measure for estimating taxonomic diversity.
+  *Turkish Journal of Forestry*, 19(4), 336–346.
+  doi: [10.18182/tjf.441061](https://doi.org/10.18182/tjf.441061)
+- Ozkan, K. &amp; Mert, A. (2022). Comparisons of Deng entropy-based taxonomic
+  diversity measures with the other diversity measures and introduction to the new
+  proposed (reinforced) estimators. *FORESTIST*, 72(2).
+  doi: [10.5152/forestist.2021.21025](https://doi.org/10.5152/forestist.2021.21025)
+- Deng, Y. (2016). Deng entropy. *Chaos, Solitons &amp; Fractals*, 91, 549–553.
+  doi: [10.1016/j.chaos.2016.08.011](https://doi.org/10.1016/j.chaos.2016.08.011)
+
+**Taxonomic distinctness**
+
+- Warwick, R.M. &amp; Clarke, K.R. (1995). New 'biodiversity' measures reveal a
+  decrease in taxonomic distinctness with increasing stress. *Marine Ecology Progress
+  Series*, 129, 301–305. doi: [10.3354/meps129301](https://doi.org/10.3354/meps129301)
+- Clarke, K.R. &amp; Warwick, R.M. (1998). A taxonomic distinctness index and its
+  statistical properties. *Journal of Applied Ecology*, 35(4), 523–531.
+  doi: [10.1046/j.1365-2664.1998.3540523.x](https://doi.org/10.1046/j.1365-2664.1998.3540523.x)
+- Clarke, K.R. &amp; Warwick, R.M. (1999). The taxonomic distinctness measure of
+  biodiversity: weighting of step lengths between hierarchical levels. *Marine Ecology
+  Progress Series*, 184, 21–29. doi: [10.3354/meps184021](https://doi.org/10.3354/meps184021)
+- Clarke, K.R. &amp; Warwick, R.M. (2001). A further biodiversity index applicable to
+  species lists: variation in taxonomic distinctness. *Marine Ecology Progress Series*,
+  216, 265–278. doi: [10.3354/meps216265](https://doi.org/10.3354/meps216265)
+
+**Classical diversity**
+
+- Shannon, C.E. (1948). A mathematical theory of communication. *Bell System Technical
+  Journal*, 27(3), 379–423.
+  doi: [10.1002/j.1538-7305.1948.tb01338.x](https://doi.org/10.1002/j.1538-7305.1948.tb01338.x)
+- Simpson, E.H. (1949). Measurement of diversity. *Nature*, 163, 688.
+  doi: [10.1038/163688a0](https://doi.org/10.1038/163688a0)
+
+**Evidence theory &amp; bias correction**
+
+- Dempster, A.P. (1967). Upper and lower probabilities induced by a multivalued
+  mapping. *The Annals of Mathematical Statistics*, 38(2), 325–339.
+  doi: [10.1214/aoms/1177698950](https://doi.org/10.1214/aoms/1177698950)
+- Shafer, G. (1976). *A Mathematical Theory of Evidence*. Princeton University Press.
+- Chao, A. &amp; Shen, T.-J. (2003). Nonparametric estimation of Shannon's index of
+  diversity when there are unseen species in sample. *Environmental and Ecological
+  Statistics*, 10, 429–443.
+  doi: [10.1023/A:1026096204727](https://doi.org/10.1023/A:1026096204727)
+
+</details>
+
+## 🤝 Contributing
+
+Contributions are welcome:
+
+- [Report a bug](https://github.com/mgorgoz/taxonomic-diversity-r/issues/new?template=bug_report.md)
+- [Request a feature](https://github.com/mgorgoz/taxonomic-diversity-r/issues/new?template=feature_request.md)
+- [Ask a question](https://github.com/mgorgoz/taxonomic-diversity-r/discussions)
+
+## 📄 License
+
+MIT © Gorgoz MM, Ozkan K, Negiz MG, Mert A
