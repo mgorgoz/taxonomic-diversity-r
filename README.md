@@ -92,8 +92,8 @@ A ready-to-use Excel template ships with the package:
 
 ## 📊 Gallery
 
-Publication-ready graphics for every analysis — a few examples on the bundled
-`anatolian_trees` data:
+All **seven plot functions** plus the dashboard's bar chart — examples on the
+bundled `anatolian_trees` data:
 
 <p align="center">
   <img src="man/figures/README-bar.png" alt="Site by index bar chart" width="82%">
@@ -124,6 +124,12 @@ Publication-ready graphics for every analysis — a few examples on the bundled
   <tr>
     <td align="center"><b>Dendrogram</b> — taxonomic hierarchy</td>
     <td align="center"><b>Bubble</b> — species contributions</td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center"><img src="man/figures/README-iteration.png" alt="Stochastic resampling trajectory" width="52%"></td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center"><b>Iteration</b> — stochastic resampling trajectory (Run 2)</td>
   </tr>
 </table>
 
