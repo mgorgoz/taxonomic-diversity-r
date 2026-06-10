@@ -1,4 +1,4 @@
 # License
 
     YEAR: 2026
-    COPYRIGHT HOLDER: taxdiv authors
+    COPYRIGHT HOLDER: Muhammet Murat Gorgoz

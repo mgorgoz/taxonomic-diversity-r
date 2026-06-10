@@ -32,13 +32,14 @@ Useful links:
 ## Author
 
 **Maintainer**: Muhammet Murat Gorgoz <muratgorgoz350@gmail.com>
-([ORCID](https://orcid.org/0000-0002-6398-0005))
+([ORCID](https://orcid.org/0000-0002-6398-0005)) \[copyright holder\]
 
 Authors:
 
 - Kursad Ozkan ([ORCID](https://orcid.org/0000-0002-8526-7243))
 
 - Mehmet Guvenc Negiz ([ORCID](https://orcid.org/0009-0008-1507-8712))
+  \[thesis advisor\]
 
 - Ahmet Mert ([ORCID](https://orcid.org/0000-0001-6859-0308))
 

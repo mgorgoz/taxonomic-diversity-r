@@ -2,12 +2,12 @@
 
 ## Authors
 
-- **Muhammet Murat Gorgoz**. Author, maintainer.
+- **Muhammet Murat Gorgoz**. Author, maintainer, copyright holder.
   [](https://orcid.org/0000-0002-6398-0005)
 
 - **Kursad Ozkan**. Author. [](https://orcid.org/0000-0002-8526-7243)
 
-- **Mehmet Guvenc Negiz**. Author.
+- **Mehmet Guvenc Negiz**. Author, thesis advisor.
   [](https://orcid.org/0009-0008-1507-8712)
 
 - **Ahmet Mert**. Author. [](https://orcid.org/0000-0001-6859-0308)
