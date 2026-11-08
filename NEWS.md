@@ -144,8 +144,11 @@ Initial release of taxdiv — taxonomic diversity indices using Deng entropy.
 ## Example Datasets
 
 * `anatolian_trees` — Anatolian tree species with full taxonomic hierarchy
-* `gazi_comm` — Community abundance data from Gazi University campus
-* `gazi_gytk` — Taxonomic classification for Gazi campus species
+* `campus_comm` — Example community abundance data (demo campus forest)
+* `campus_gytk` — Taxonomic classification for the campus_comm species
+* `med_forest` — Multi-site Mediterranean forest / maquis vegetation:
+  92 sample plots, 72 species, seven taxonomic ranks, cover-abundance
+  scale (1-9); ready for `batch_analysis()`
 
 ## Documentation
 

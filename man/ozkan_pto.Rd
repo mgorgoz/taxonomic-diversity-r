@@ -69,10 +69,13 @@ pTO+ (taxonomic distance) uses only the nk=0 slice:
 \deqn{pT_O^+ = \ln \prod_{i=1}^{L} \left( w_i \left(
   \frac{(e^{E_d^S})^2}{e^{E_d^i}} + 1 \right) \right)}
 
-pTO (taxonomic diversity) aggregates across all slices:
-\deqn{pT_O = \ln \left( \frac{\sum_{k=0}^{n_s} (n_s - n_k)
+pTO (taxonomic diversity) aggregates across the informative slices —
+those retaining at least two species. Single-species slices carry no
+taxonomic information and are excluded; the slice weighting restarts from
+the number of informative slices \eqn{n_a}:
+\deqn{pT_O = \ln \left( \frac{\sum_{k=0}^{n_a - 1} (n_a - k)
   \prod_{i=1}^{L} \left( w_i \left( \frac{(e^{E_d^S})^2}
-  {e^{E_d^i}} + 1 \right) \right)}{n_s + \sum n_k} \right)}
+  {e^{E_d^i}} + 1 \right) \right)}{\sum_{k=1}^{n_a} k} \right)}
 }
 \examples{
 # Simple example with 5 species

@@ -205,13 +205,13 @@ cat("  Sites:", paste(unique(anatolian_trees$Site), collapse = ", "), "\n")
 cat("  Total unique species:", length(unique(anatolian_trees$Species)), "\n\n")
 
 
-# --- 2. gazi_comm / gazi_gytk: single-site quick demo ------------
+# --- 2. campus_comm / campus_gytk: single-site quick demo ------------
 #
 # A single community vector + taxonomy table.
 # 8 species, 3 taxonomic levels.
 # Close in structure to the example in Ozkan (2018).
 
-gazi_comm <- c(
+campus_comm <- c(
   Pinus_nigra       = 4,
   Pinus_brutia      = 2,
   Cedrus_libani     = 3,
@@ -222,7 +222,7 @@ gazi_comm <- c(
   Carpinus_betulus  = 2
 )
 
-gazi_gytk <- data.frame(
+campus_gytk <- data.frame(
   Species = c("Pinus_nigra", "Pinus_brutia", "Cedrus_libani",
               "Quercus_cerris", "Quercus_robur", "Fagus_orientalis",
               "Juniperus_excelsa", "Carpinus_betulus"),
@@ -238,15 +238,46 @@ gazi_gytk <- data.frame(
   stringsAsFactors = FALSE
 )
 
-save(gazi_comm, file = "data/gazi_comm.rda", compress = "xz")
-save(gazi_gytk, file = "data/gazi_gytk.rda", compress = "xz")
+save(campus_comm, file = "data/campus_comm.rda", compress = "xz")
+save(campus_gytk, file = "data/campus_gytk.rda", compress = "xz")
 
-cat("gazi_comm created:\n")
-cat("  Species count:", length(gazi_comm), "\n")
-cat("  Abundances:", paste(gazi_comm, collapse = ", "), "\n\n")
+cat("campus_comm created:\n")
+cat("  Species count:", length(campus_comm), "\n")
+cat("  Abundances:", paste(campus_comm, collapse = ", "), "\n\n")
 
-cat("gazi_gytk created:\n")
-cat("  Size:", nrow(gazi_gytk), "rows,", ncol(gazi_gytk), "columns\n")
-cat("  Levels:", paste(names(gazi_gytk)[-1], collapse = ", "), "\n")
+cat("campus_gytk created:\n")
+cat("  Size:", nrow(campus_gytk), "rows,", ncol(campus_gytk), "columns\n")
+cat("  Levels:", paste(names(campus_gytk)[-1], collapse = ", "), "\n")
+
+# --- 3. med_forest: multi-site Mediterranean vegetation ----------
+#
+# 92 sample plots, 72 woody/herbaceous species from a Mediterranean
+# forest / maquis ecosystem. Cover-abundance scale (1-9), seven
+# taxonomic ranks (species to kingdom).
+#
+# Derived from the plot-based survey in data-raw/Med_Dat_source.xlsx
+# (wide species-by-plot matrix). The derivation applied to that source:
+#   * trimmed stray non-breaking spaces from all taxonomy cells;
+#   * built Species as the Genus_epithet binomial from the full name;
+#   * corrected one source error: the genus of Thymbra spicata, which
+#     was mislabelled "Thymus", was set to "Thymbra" (Lamiaceae);
+#   * pivoted wide -> long, keeping only present species (Abundance > 0);
+#   * relabelled the 92 plots plot_01 .. plot_92.
+# The resulting long table is stored in data-raw/med_forest.csv, which
+# this script reads so the .rda can be rebuilt reproducibly.
+
+med_forest <- read.csv("data-raw/med_forest.csv", stringsAsFactors = FALSE)
+med_forest$Abundance <- as.integer(med_forest$Abundance)
+rownames(med_forest) <- NULL
+
+save(med_forest, file = "data/med_forest.rda", compress = "xz")
+
+cat("med_forest created:\n")
+cat("  Size:", nrow(med_forest), "rows,", ncol(med_forest), "columns\n")
+cat("  Sites:", length(unique(med_forest$Site)), "plots\n")
+cat("  Unique species:", length(unique(med_forest$Species)), "\n")
+cat("  Families:", length(unique(med_forest$Family)),
+    "| Orders:", length(unique(med_forest$Order)), "\n\n")
+
 
 cat("\nAll datasets saved under data/.\n")

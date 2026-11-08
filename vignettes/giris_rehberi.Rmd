@@ -863,8 +863,8 @@ for (i in seq_along(pto_sonuc$Ed_levels)) {
 | Veri Seti | Aciklama |
 |-----------|----------|
 | `anatolian_trees` | Anadolu agac turleri taksonomik hiyerarsisi |
-| `gazi_comm` | Gazi Universitesi kampus ormani topluluk verisi |
-| `gazi_gytk` | Gazi Universitesi kampus ormani taksonomik agac |
+| `campus_comm` | Ornek kampus ormani (demo) topluluk verisi |
+| `campus_gytk` | Ornek kampus ormani (demo) taksonomik agac |
 
 ## Kaynaklar
 

@@ -58,10 +58,13 @@
 #' \deqn{pT_O^+ = \ln \prod_{i=1}^{L} \left( w_i \left(
 #'   \frac{(e^{E_d^S})^2}{e^{E_d^i}} + 1 \right) \right)}
 #'
-#' pTO (taxonomic diversity) aggregates across all slices:
-#' \deqn{pT_O = \ln \left( \frac{\sum_{k=0}^{n_s} (n_s - n_k)
+#' pTO (taxonomic diversity) aggregates across the informative slices —
+#' those retaining at least two species. Single-species slices carry no
+#' taxonomic information and are excluded; the slice weighting restarts from
+#' the number of informative slices \eqn{n_a}:
+#' \deqn{pT_O = \ln \left( \frac{\sum_{k=0}^{n_a - 1} (n_a - k)
 #'   \prod_{i=1}^{L} \left( w_i \left( \frac{(e^{E_d^S})^2}
-#'   {e^{E_d^i}} + 1 \right) \right)}{n_s + \sum n_k} \right)}
+#'   {e^{E_d^i}} + 1 \right) \right)}{\sum_{k=1}^{n_a} k} \right)}
 #'
 #' @references
 #' Ozkan, K. (2018). A new proposed measure for estimating taxonomic
@@ -277,52 +280,53 @@ ozkan_pto <- function(community, tax_tree, max_level = NULL) {
   sum_u_max <- 0
   sum_w_max <- 0
 
+  # Number of informative slices (those with >= 2 surviving species).
+  # Single-species slices carry no taxonomic information; they are excluded
+  # and the slice weighting restarts from this count.
+  n_active <- sum(vapply(seq_len(n_s),
+                         function(s) sum(abundances > (s - 1L)) >= 2L,
+                         logical(1)))
+
   for (step in seq_len(n_s)) {
     nk <- step - 1  # Amount subtracted (0-indexed: step 1 = nk 0)
-    factor_val <- n_s - nk
 
     # Species survive if abundance > nk
     present_mask <- abundances > nk
 
     if (sum(present_mask) == 0) break
 
-    # Compute Deng entropy for this slice using presence-based weights
     tax_step <- tax_sub[present_mask, , drop = FALSE]
     n_present <- sum(present_mask)
 
-    if (n_present <= 1) {
-      # Single species: Ed = 0 at all levels, no active levels
-      # Product = 1 (empty product, computation terminated per Ozkan 2018)
-      core_u_full <- 1
-      core_w_full <- 1
-      core_u_max <- 1
-      core_w_max <- 1
+    # Single-species slices carry no information -> excluded from the sum
+    if (n_present <= 1) next
+
+    factor_val <- n_active - nk
+
+    # Compute full Deng entropy at all levels for this slice
+    result_step <- compute_deng_all_levels(
+      rep(TRUE, n_present), tax_step, n_levels)
+    Ed_step <- result_step$Ed
+    active_step <- result_step$active
+
+    # Determine max-active levels for this slice
+    if (use_auto_max) {
+      max_active_step <- active_step
+    } else if (is.integer(max_level)) {
+      max_active_step <- active_step[active_step <= (max_level + 1L)]
     } else {
-      # Compute full Deng entropy at all levels for this slice
-      result_step <- compute_deng_all_levels(
-        rep(TRUE, n_present), tax_step, n_levels)
-      Ed_step <- result_step$Ed
-      active_step <- result_step$active
-
-      # Determine max-active levels for this slice
-      if (use_auto_max) {
-        max_active_step <- active_step
-      } else if (is.integer(max_level)) {
-        max_active_step <- active_step[active_step <= (max_level + 1L)]
-      } else {
-        max_active_step <- active_step
-      }
-
-      # Full product (all active levels)
-      prod_step_full <- compute_product(Ed_step, active_step)
-      core_u_full <- prod_step_full$unweighted
-      core_w_full <- prod_step_full$weighted
-
-      # Max product (informative levels only)
-      prod_step_max <- compute_product(Ed_step, max_active_step)
-      core_u_max <- prod_step_max$unweighted
-      core_w_max <- prod_step_max$weighted
+      max_active_step <- active_step
     }
+
+    # Full product (all active levels)
+    prod_step_full <- compute_product(Ed_step, active_step)
+    core_u_full <- prod_step_full$unweighted
+    core_w_full <- prod_step_full$weighted
+
+    # Max product (informative levels only)
+    prod_step_max <- compute_product(Ed_step, max_active_step)
+    core_u_max <- prod_step_max$unweighted
+    core_w_max <- prod_step_max$weighted
 
     sum_u_full <- sum_u_full + factor_val * core_u_full
     sum_w_full <- sum_w_full + factor_val * core_w_full
@@ -330,8 +334,8 @@ ozkan_pto <- function(community, tax_tree, max_level = NULL) {
     sum_w_max <- sum_w_max + factor_val * core_w_max
   }
 
-  # Denominator: ns + sum(nk) = ns + sum(0:(ns-1)) = ns + ns*(ns-1)/2
-  denom <- n_s + sum(0:(n_s - 1))
+  # Denominator: sum of slice weights = n_active + (n_active-1) + ... + 1
+  denom <- n_active * (n_active + 1) / 2
 
   # pTO = ln(numerator / denominator)
   uTO <- unname(log(sum_u_full / denom))

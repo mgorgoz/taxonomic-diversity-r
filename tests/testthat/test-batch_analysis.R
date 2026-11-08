@@ -84,7 +84,11 @@ test_that("multi-site data returns correct results", {
 # ---- Test 3: Consistency with compare_indices ----
 # batch_analysis results should match compare_indices results for the same data
 test_that("single site results match compare_indices", {
-  batch_result <- batch_analysis(df_single)
+  # Deterministic comparison: compare_indices uses pto_components() (Run 1),
+  # so batch_analysis must run deterministically too (full = FALSE) for an
+  # apples-to-apples match. With full = TRUE the *_max fields are stochastic
+  # maxima across runs and are not expected to equal the deterministic ones.
+  batch_result <- batch_analysis(df_single, full = FALSE)
 
   # Run compare_indices with the same data
   comm <- c(sp1 = 7, sp2 = 3, sp3 = 5, sp4 = 2)

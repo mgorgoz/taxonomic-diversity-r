@@ -49,7 +49,7 @@
 #' of communities. Handbook of Vegetation Science 5, 617--726.
 #'
 #' @seealso \code{\link{batch_analysis}} for multi-site analysis,
-#'   \code{\link{gazi_comm}} and \code{\link{gazi_gytk}} for a
+#'   \code{\link{campus_comm}} and \code{\link{campus_gytk}} for a
 #'   single-community example.
 #'
 #' @examples
@@ -69,6 +69,78 @@
 "anatolian_trees"
 
 
+#' Mediterranean Forest: Multi-Site Vegetation Data
+#'
+#' A data frame of 72 woody and herbaceous plant species recorded across
+#' 92 sample plots in a Mediterranean forest / maquis ecosystem. Species
+#' abundances follow a cover-abundance scale (1--9). Taxonomic
+#' classification includes seven ranks from species to kingdom.
+#'
+#' The data originate from a plot-based vegetation survey. Each of the
+#' 92 plots (\code{plot_01}--\code{plot_92}) records the cover-abundance
+#' of the species present, yielding 1545 species-by-plot observations.
+#' Per-plot richness ranges from 7 to 30 species (mean approximately 17).
+#'
+#' @format A data frame with 1545 rows and 9 columns:
+#' \describe{
+#'   \item{Site}{Sample plot identifier, \code{plot_01}--\code{plot_92} (character)}
+#'   \item{Species}{Binomial species name with underscore separator (character)}
+#'   \item{Genus}{Genus (character)}
+#'   \item{Family}{Family (character)}
+#'   \item{Order}{Order (character)}
+#'   \item{Class}{Class (character)}
+#'   \item{Phylum}{Phylum / Division (character)}
+#'   \item{Kingdom}{Kingdom (character)}
+#'   \item{Abundance}{Cover-abundance value, integer 1--9 (numeric)}
+#' }
+#'
+#' @details
+#' Taxonomic coverage: 92 plots, 72 species, 66 genera, 32 families,
+#' 20 orders, 4 classes (Magnoliopsida, Liliopsida, Pinopsida,
+#' Polypodiopsida), all within Tracheophyta (Plantae).
+#'
+#' This dataset can be used directly with \code{\link{batch_analysis}}
+#' for multi-site analysis:
+#'
+#' \preformatted{batch_analysis(med_forest)}
+#'
+#' To extract a single plot for use with \code{\link{ozkan_pto}} or
+#' \code{\link{compare_indices}}:
+#'
+#' \preformatted{
+#' plot1     <- med_forest[med_forest$Site == "plot_01", ]
+#' community <- setNames(plot1$Abundance, plot1$Species)
+#' tax_tree  <- plot1[, c("Species", "Genus", "Family", "Order",
+#'                        "Class", "Phylum", "Kingdom")]
+#' ozkan_pto(community, tax_tree)
+#' }
+#'
+#' @seealso \code{\link{batch_analysis}} for multi-site analysis,
+#'   \code{\link{anatolian_trees}} for a smaller multi-site example,
+#'   \code{\link{campus_comm}} and \code{\link{campus_gytk}} for a
+#'   single-community example.
+#'
+#' @examples
+#' data(med_forest)
+#' head(med_forest)
+#' length(unique(med_forest$Site))    # 92 plots
+#' length(unique(med_forest$Species)) # 72 species
+#'
+#' # Single plot extraction
+#' plot1 <- med_forest[med_forest$Site == "plot_01", ]
+#' comm  <- setNames(plot1$Abundance, plot1$Species)
+#' tax   <- plot1[, c("Species", "Genus", "Family", "Order",
+#'                     "Class", "Phylum", "Kingdom")]
+#' ozkan_pto(comm, tax)
+#'
+#' \donttest{
+#' # Multi-site analysis (reduce n_iter for a quick run)
+#' batch_analysis(med_forest, n_iter = 100)
+#' }
+#'
+"med_forest"
+
+
 #' Example Community Vector: 8 Anatolian Tree Species
 #'
 #' A named numeric vector of species abundances for a single forest
@@ -85,11 +157,11 @@
 #' 1 each from Cupressaceae and Betulaceae, spanning 2 orders
 #' (Pinales, Fagales).
 #'
-#' Pair with \code{\link{gazi_gytk}} for analysis:
+#' Pair with \code{\link{campus_gytk}} for analysis:
 #'
 #' \preformatted{
-#' ozkan_pto(gazi_comm, gazi_gytk)
-#' compare_indices(gazi_comm, gazi_gytk)
+#' ozkan_pto(campus_comm, campus_gytk)
+#' compare_indices(campus_comm, campus_gytk)
 #' }
 #'
 #' @references
@@ -101,26 +173,26 @@
 #' introduction to the new proposed (reinforced) estimators. FORESTIST,
 #' 72(2). DOI: 10.5152/forestist.2021.21025
 #'
-#' @seealso \code{\link{gazi_gytk}} for the matching taxonomy,
+#' @seealso \code{\link{campus_gytk}} for the matching taxonomy,
 #'   \code{\link{anatolian_trees}} for a multi-site dataset.
 #'
 #' @examples
-#' data(gazi_comm)
-#' data(gazi_gytk)
+#' data(campus_comm)
+#' data(campus_gytk)
 #'
 #' # Ozkan pTO
-#' ozkan_pto(gazi_comm, gazi_gytk)
+#' ozkan_pto(campus_comm, campus_gytk)
 #'
 #' # All indices at once
-#' compare_indices(gazi_comm, gazi_gytk)
+#' compare_indices(campus_comm, campus_gytk)
 #'
-"gazi_comm"
+"campus_comm"
 
 
 #' Example Taxonomy: 8 Anatolian Tree Species
 #'
 #' A data frame containing the taxonomic hierarchy for the 8 species
-#' in \code{\link{gazi_comm}}, with 3 taxonomic ranks (Genus, Family,
+#' in \code{\link{campus_comm}}, with 3 taxonomic ranks (Genus, Family,
 #' Order). This compact taxonomy table is designed for quick
 #' demonstrations and unit testing.
 #'
@@ -149,14 +221,14 @@
 #' introduction to the new proposed (reinforced) estimators. FORESTIST,
 #' 72(2). DOI: 10.5152/forestist.2021.21025
 #'
-#' @seealso \code{\link{gazi_comm}} for the matching community vector,
+#' @seealso \code{\link{campus_comm}} for the matching community vector,
 #'   \code{\link{build_tax_tree}} for building custom taxonomies.
 #'
 #' @examples
-#' data(gazi_gytk)
-#' gazi_gytk
+#' data(campus_gytk)
+#' campus_gytk
 #'
 #' # Compute taxonomic distance matrix
-#' tax_distance_matrix(gazi_gytk)
+#' tax_distance_matrix(campus_gytk)
 #'
-"gazi_gytk"
+"campus_gytk"
