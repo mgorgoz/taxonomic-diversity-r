@@ -863,6 +863,7 @@ for (i in seq_along(pto_sonuc$Ed_levels)) {
 | Veri Seti | Aciklama |
 |-----------|----------|
 | `anatolian_trees` | Anadolu agac turleri taksonomik hiyerarsisi |
+| `med_forest` | Akdeniz ormani/makisi, 92 ornekleme alani (cok-sahali) |
 | `campus_comm` | Ornek kampus ormani (demo) topluluk verisi |
 | `campus_gytk` | Ornek kampus ormani (demo) taksonomik agac |
 

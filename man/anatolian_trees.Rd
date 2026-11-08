@@ -74,6 +74,7 @@ of communities. Handbook of Vegetation Science 5, 617--726.
 }
 \seealso{
 \code{\link{batch_analysis}} for multi-site analysis,
+\code{\link{med_forest}} for a larger multi-site dataset,
 \code{\link{campus_comm}} and \code{\link{campus_gytk}} for a
 single-community example.
 }

@@ -49,6 +49,8 @@ introduction to the new proposed (reinforced) estimators. FORESTIST,
 }
 \seealso{
 \code{\link{campus_comm}} for the matching community vector,
+\code{\link{anatolian_trees}} and \code{\link{med_forest}} for
+multi-site datasets,
 \code{\link{build_tax_tree}} for building custom taxonomies.
 }
 \keyword{datasets}

@@ -52,6 +52,7 @@ introduction to the new proposed (reinforced) estimators. FORESTIST,
 }
 \seealso{
 \code{\link{campus_gytk}} for the matching taxonomy,
-\code{\link{anatolian_trees}} for a multi-site dataset.
+\code{\link{anatolian_trees}} and \code{\link{med_forest}} for
+multi-site datasets.
 }
 \keyword{datasets}

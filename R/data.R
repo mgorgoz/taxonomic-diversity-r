@@ -49,6 +49,7 @@
 #' of communities. Handbook of Vegetation Science 5, 617--726.
 #'
 #' @seealso \code{\link{batch_analysis}} for multi-site analysis,
+#'   \code{\link{med_forest}} for a larger multi-site dataset,
 #'   \code{\link{campus_comm}} and \code{\link{campus_gytk}} for a
 #'   single-community example.
 #'
@@ -174,7 +175,8 @@
 #' 72(2). DOI: 10.5152/forestist.2021.21025
 #'
 #' @seealso \code{\link{campus_gytk}} for the matching taxonomy,
-#'   \code{\link{anatolian_trees}} for a multi-site dataset.
+#'   \code{\link{anatolian_trees}} and \code{\link{med_forest}} for
+#'   multi-site datasets.
 #'
 #' @examples
 #' data(campus_comm)
@@ -222,6 +224,8 @@
 #' 72(2). DOI: 10.5152/forestist.2021.21025
 #'
 #' @seealso \code{\link{campus_comm}} for the matching community vector,
+#'   \code{\link{anatolian_trees}} and \code{\link{med_forest}} for
+#'   multi-site datasets,
 #'   \code{\link{build_tax_tree}} for building custom taxonomies.
 #'
 #' @examples

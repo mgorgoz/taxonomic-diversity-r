@@ -187,8 +187,9 @@ reference:
       taxonomic classifications.
     contents:
       - anatolian_trees
-      - gazi_comm
-      - gazi_gytk
+      - med_forest
+      - campus_comm
+      - campus_gytk
 
 articles:
   - title: "Getting Started"

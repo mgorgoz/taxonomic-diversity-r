@@ -164,7 +164,7 @@ bundled `anatolian_trees` data:
 | **Dashboard** | `taxdiv_explorer()` |
 
 Every main result object has tidy `print()` and `summary()` methods (13 S3 methods
-total), and the three example datasets (`anatolian_trees`, `campus_comm`, `campus_gytk`)
+total), and the four example datasets (`anatolian_trees`, `med_forest`, `campus_comm`, `campus_gytk`)
 let you try everything immediately.
 
 ## 🔁 Excel macro equivalence
@@ -200,7 +200,7 @@ Full documentation, tutorials, and the method theory live on the package website
 | Unit tests | 668 passing |
 | Exported functions | 27 |
 | S3 methods | 13 |
-| Example datasets | 3 |
+| Example datasets | 4 |
 | Vignettes | 7 (6 English + 1 Turkish) |
 
 ## 📖 Citation
