@@ -377,9 +377,9 @@ cat("uTO+:", round(islem2$uTO_plus_max, 4), "\n")
 cat("TO+: ", round(islem2$TO_plus_max, 4), "\n")
 #> TO+:  15.9905
 cat("uTO: ", round(islem2$uTO_max, 4), "\n")
-#> uTO:  9.0248
+#> uTO:  9.0553
 cat("TO:  ", round(islem2$TO_max, 4), "\n")
-#> TO:   15.604
+#> TO:   15.6344
 ```
 
 Islem 2 degerleri her zaman Islem 1’e esit veya buyuktur, cunku
@@ -409,9 +409,9 @@ cat("uTO+:", round(islem3$uTO_plus_max, 4), "\n")
 cat("TO+: ", round(islem3$TO_plus_max, 4), "\n")
 #> TO+:  15.9905
 cat("uTO: ", round(islem3$uTO_max, 4), "\n")
-#> uTO:  9.0689
+#> uTO:  9.1281
 cat("TO:  ", round(islem3$TO_max, 4), "\n")
-#> TO:   15.6481
+#> TO:   15.7074
 ```
 
 ### Tur Dahil Etme Olasiliklari
@@ -459,11 +459,11 @@ cat("Islem 1:", sprintf("%9.4f %9.4f %9.4f %9.4f",
 cat("Islem 2:", sprintf("%9.4f %9.4f %9.4f %9.4f",
     tam$run2$uTO_plus_max, tam$run2$TO_plus_max,
     tam$run2$uTO_max, tam$run2$TO_max), "\n")
-#> Islem 2:    9.4113   15.9905    9.0248   15.6040
+#> Islem 2:    9.4113   15.9905    9.0553   15.6344
 cat("Islem 3:", sprintf("%9.4f %9.4f %9.4f %9.4f",
     tam$run3$uTO_plus_max, tam$run3$TO_plus_max,
     tam$run3$uTO_max, tam$run3$TO_max), "\n")
-#> Islem 3:    9.4113   15.9905    9.0689   15.6481
+#> Islem 3:    9.4113   15.9905    9.1146   15.6938
 ```
 
 Her asama bir oncekine esit veya daha buyuk deger uretir.
@@ -488,9 +488,9 @@ cat("Mutlu turler:  ", jk$n_happy, "/", jk$n_happy + jk$n_unhappy, "\n\n")
 # Her turun cikarildiginda sonuc nasil degisiyor?
 head(jk$jackknife_results)
 #>               species uTO_plus  TO_plus      uTO       TO is_happy
-#> 1   Quercus_coccifera 8.733962 15.31321 8.685926 15.26517     TRUE
+#> 1   Quercus_coccifera 8.733962 15.31321 8.739166 15.31842     TRUE
 #> 2  Quercus_infectoria 8.733962 15.31321 8.697188 15.27644     TRUE
-#> 3        Pinus_brutia 9.285601 15.86485 8.921840 15.50092    FALSE
+#> 3        Pinus_brutia 9.285601 15.86485 8.995725 15.57485    FALSE
 #> 4         Pinus_nigra 9.285601 15.86485 8.986643 15.56589    FALSE
 #> 5   Juniperus_excelsa 9.112068 15.69132 8.882034 15.46129    FALSE
 #> 6 Juniperus_oxycedrus 9.112068 15.69132 8.897231 15.47648    FALSE
@@ -524,11 +524,11 @@ print(sonuc_batch)
 #>   Indices: 14 
 #> 
 #>    Site N_Species  Shannon  Simpson    Delta Delta_star AvTD VarTD      uTO
-#>  Alan_A         5 1.549722 0.776406 2.065527   2.561837  2.6  0.44 5.564160
-#>  Alan_B         5 1.262243 0.643599 1.705882   2.494624  2.6  0.44 4.772005
+#>  Alan_A         5 1.549722 0.776406 2.065527   2.561837  2.6  0.44 5.631255
+#>  Alan_B         5 1.262243 0.643599 1.705882   2.494624  2.6  0.44 5.324159
 #>        TO uTO_plus  TO_plus  uTO_max   TO_max uTO_plus_max TO_plus_max
-#>  8.742112 5.845169 9.023223 5.564160 8.742112     5.845169    9.023223
-#>  7.947352 5.845169 9.023223 5.060345 8.236574     5.845169    9.023223
+#>  8.809309 5.845169 9.023223 5.685528 8.863582     5.845169    9.023223
+#>  8.502213 5.845169 9.023223 5.516415 8.694468     5.845169    9.023223
 ```
 
 Cikti 16 sutundan olusur: Site, N_Species ve 14 cesitlilik indeksi.
@@ -687,7 +687,7 @@ sonuc_plot$table
 #>     Baskin        10 1.842189 0.75500 3.315789   4.172185 4.311111 3.50321
 #>       uTO       TO uTO_plus  TO_plus  uTO_max   TO_max uTO_plus_max TO_plus_max
 #>  8.804283 15.38353 8.901929 15.48118 8.804283 15.38353     8.901929    15.48118
-#>  7.293489 13.87174 8.901929 15.48118 7.293489 13.87174     8.901929    15.48118
+#>  8.209190 14.78803 8.901929 15.48118 8.209190 14.78803     8.901929    15.48118
 ```
 
 ### Islem 2 Iterasyon Grafigi
@@ -1130,9 +1130,9 @@ pto_sonuc <- ozkan_pto(ornek_topluluk, ornek_agac)
 cat("Ozkan pTO sonuclari:\n")
 #> Ozkan pTO sonuclari:
 cat("  uTO  =", round(pto_sonuc$uTO, 4), "\n")
-#>   uTO  = 5.4045
+#>   uTO  = 5.5947
 cat("  TO   =", round(pto_sonuc$TO, 4), "\n")
-#>   TO   = 8.5796
+#>   TO   = 8.771
 cat("  uTO+ =", round(pto_sonuc$uTO_plus, 4), "\n")
 #>   uTO+ = 5.9881
 cat("  TO+  =", round(pto_sonuc$TO_plus, 4), "\n\n")
@@ -1220,11 +1220,12 @@ for (i in seq_along(pto_sonuc$Ed_levels)) {
 
 ### Veri Setleri
 
-| Veri Seti         | Aciklama                                        |
-|-------------------|-------------------------------------------------|
-| `anatolian_trees` | Anadolu agac turleri taksonomik hiyerarsisi     |
-| `gazi_comm`       | Gazi Universitesi kampus ormani topluluk verisi |
-| `gazi_gytk`       | Gazi Universitesi kampus ormani taksonomik agac |
+| Veri Seti         | Aciklama                                               |
+|-------------------|--------------------------------------------------------|
+| `anatolian_trees` | Anadolu agac turleri taksonomik hiyerarsisi            |
+| `med_forest`      | Akdeniz ormani/makisi, 92 ornekleme alani (cok-sahali) |
+| `campus_comm`     | Ornek kampus ormani (demo) topluluk verisi             |
+| `campus_gytk`     | Ornek kampus ormani (demo) taksonomik agac             |
 
 ## Kaynaklar
 

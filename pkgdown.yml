@@ -1,5 +1,5 @@
 pandoc: 3.8.3
-pkgdown: 2.2.0
+pkgdown: 2.2.1
 pkgdown_sha: ~
 articles:
   clarke-warwick: clarke-warwick.html
@@ -9,7 +9,7 @@ articles:
   ozkan-pto: ozkan-pto.html
   visualization: visualization.html
   workflow: workflow.html
-last_built: 2026-06-10T23:04Z
+last_built: 2026-11-08T13:02Z
 urls:
   reference: https://mgorgoz.github.io/taxonomic-diversity-r/reference
   article: https://mgorgoz.github.io/taxonomic-diversity-r/articles

@@ -122,9 +122,9 @@ compare_indices(comm, tax)
 #>   Indices: Shannon, Simpson, Delta, Delta_star, AvTD, VarTD, uTO, TO, uTO_plus, TO_plus, uTO_max, TO_max, uTO_plus_max, TO_plus_max 
 #> 
 #>  Community N_Species  Shannon Simpson Delta Delta_star AvTD    VarTD      uTO
-#>  Community         4 1.321164    0.72  1.39   1.853333    2 0.666667 3.559537
+#>  Community         4 1.321164    0.72  1.39   1.853333    2 0.666667 3.715837
 #>        TO uTO_plus  TO_plus  uTO_max   TO_max uTO_plus_max TO_plus_max
-#>  5.257519  4.04615 5.837909 3.559537 5.257519      4.04615    5.837909
+#>  5.434181  4.04615 5.837909 3.715837 5.434181      4.04615    5.837909
 
 # Multiple communities
 comm_list <- list(
@@ -140,6 +140,6 @@ compare_indices(comm_list, tax)
 #>     Site_A         4 1.321164    0.72 1.390000   1.853333    2 0.666667
 #>     Site_B         4 1.386294    0.75 1.578947   2.000000    2 0.666667
 #>       uTO       TO uTO_plus  TO_plus  uTO_max   TO_max uTO_plus_max TO_plus_max
-#>  3.559537 5.257519  4.04615 5.837909 3.559537 5.257519      4.04615    5.837909
+#>  3.715837 5.434181  4.04615 5.837909 3.715837 5.434181      4.04615    5.837909
 #>  4.046150 5.837909  4.04615 5.837909 4.046150 5.837909      4.04615    5.837909
 ```

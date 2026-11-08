@@ -125,7 +125,9 @@ taxonomic classifications.
 
 - [`anatolian_trees`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/anatolian_trees.md)
   : Anatolian Forest Trees: Multi-Site Species Data
-- [`gazi_comm`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/gazi_comm.md)
+- [`med_forest`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/med_forest.md)
+  : Mediterranean Forest: Multi-Site Vegetation Data
+- [`campus_comm`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/campus_comm.md)
   : Example Community Vector: 8 Anatolian Tree Species
-- [`gazi_gytk`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/gazi_gytk.md)
+- [`campus_gytk`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/campus_gytk.md)
   : Example Taxonomy: 8 Anatolian Tree Species

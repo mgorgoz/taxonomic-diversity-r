@@ -149,8 +149,9 @@ on the bundled `anatolian_trees` data:
 Every main result object has tidy
 [`print()`](https://rdrr.io/r/base/print.html) and
 [`summary()`](https://rdrr.io/r/base/summary.html) methods (13 S3
-methods total), and the three example datasets (`anatolian_trees`,
-`gazi_comm`, `gazi_gytk`) let you try everything immediately.
+methods total), and the four example datasets (`anatolian_trees`,
+`med_forest`, `campus_comm`, `campus_gytk`) let you try everything
+immediately.
 
 ## 🔁 Excel macro equivalence
 
@@ -194,7 +195,7 @@ website:
 | Unit tests         | 668 passing                   |
 | Exported functions | 27                            |
 | S3 methods         | 13                            |
-| Example datasets   | 3                             |
+| Example datasets   | 4                             |
 | Vignettes          | 7 (6 English + 1 Turkish)     |
 
 ## 📖 Citation

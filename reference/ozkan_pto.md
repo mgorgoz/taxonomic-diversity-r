@@ -104,10 +104,13 @@ pTO+ (taxonomic distance) uses only the nk=0 slice: \$\$pT_O^+ = \ln
 \prod\_{i=1}^{L} \left( w_i \left( \frac{(e^{E_d^S})^2}{e^{E_d^i}} + 1
 \right) \right)\$\$
 
-pTO (taxonomic diversity) aggregates across all slices: \$\$pT_O = \ln
-\left( \frac{\sum\_{k=0}^{n_s} (n_s - n_k) \prod\_{i=1}^{L} \left( w_i
-\left( \frac{(e^{E_d^S})^2} {e^{E_d^i}} + 1 \right) \right)}{n_s + \sum
-n_k} \right)\$\$
+pTO (taxonomic diversity) aggregates across the informative slices —
+those retaining at least two species. Single-species slices carry no
+taxonomic information and are excluded; the slice weighting restarts
+from the number of informative slices \\n_a\\: \$\$pT_O = \ln \left(
+\frac{\sum\_{k=0}^{n_a - 1} (n_a - k) \prod\_{i=1}^{L} \left( w_i \left(
+\frac{(e^{E_d^S})^2} {e^{E_d^i}} + 1 \right) \right)}{\sum\_{k=1}^{n_a}
+k} \right)\$\$
 
 ## References
 
@@ -148,14 +151,14 @@ ozkan_pto(comm, tax)
 #> taxdiv -- Ozkan pTO Result
 #> 
 #>   All levels:
-#>     uTO  : 2.632978 
-#>     TO   : 3.300651 
+#>     uTO  : 2.795401 
+#>     TO   : 3.473158 
 #>     uTO+ : 3.060705 
 #>     TO+  : 3.753852 
 #> 
 #>   Max informative level (level 1):
-#>     uTO_max  : 2.632978 
-#>     TO_max   : 3.300651 
+#>     uTO_max  : 2.795401 
+#>     TO_max   : 3.473158 
 #>     uTO+_max : 3.060705 
 #>     TO+_max  : 3.753852 
 #> 
@@ -169,14 +172,14 @@ ozkan_pto(comm, tax, max_level = "auto")
 #> taxdiv -- Ozkan pTO Result
 #> 
 #>   All levels:
-#>     uTO  : 2.632978 
-#>     TO   : 3.300651 
+#>     uTO  : 2.795401 
+#>     TO   : 3.473158 
 #>     uTO+ : 3.060705 
 #>     TO+  : 3.753852 
 #> 
 #>   Max informative level (level 1):
-#>     uTO_max  : 2.632978 
-#>     TO_max   : 3.300651 
+#>     uTO_max  : 2.795401 
+#>     TO_max   : 3.473158 
 #>     uTO+_max : 3.060705 
 #>     TO+_max  : 3.753852 
 #> 

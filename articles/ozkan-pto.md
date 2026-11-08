@@ -269,7 +269,7 @@ cat("Run 2:", sprintf("%9.4f %9.4f %9.4f %9.4f",
 cat("Run 3:", sprintf("%9.4f %9.4f %9.4f %9.4f",
     full$run3$uTO_plus_max, full$run3$TO_plus_max,
     full$run3$uTO_max, full$run3$TO_max), "\n")
-#> Run 3:    8.5502   11.7283    7.7613   10.9393
+#> Run 3:    8.5502   11.7283    7.8185   10.9965
 ```
 
 ## Jackknife Leave-One-Out Analysis

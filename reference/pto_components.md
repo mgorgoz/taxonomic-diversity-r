@@ -48,7 +48,7 @@ tax <- data.frame(
 )
 pto_components(comm, tax)
 #>          uTO           TO     uTO_plus      TO_plus      uTO_max       TO_max 
-#>     2.632978     3.300651     3.060705     3.753852     2.632978     3.300651 
+#>     2.795401     3.473158     3.060705     3.753852     2.795401     3.473158 
 #> uTO_plus_max  TO_plus_max 
 #>     3.060705     3.753852 
 ```

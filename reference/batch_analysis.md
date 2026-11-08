@@ -185,9 +185,9 @@ batch_analysis(df)
 #>   Indices: 14 
 #> 
 #>  Site N_Species  Shannon Simpson    Delta Delta_star AvTD    VarTD      uTO
-#>   All         4 1.279854     0.7 1.444444   1.857143    2 0.666667 3.357526
+#>   All         4 1.279854     0.7 1.444444   1.857143    2 0.666667 3.540215
 #>        TO uTO_plus  TO_plus  uTO_max   TO_max uTO_plus_max TO_plus_max
-#>  5.002732  4.04615 5.837909 3.357526 5.002732      4.04615    5.837909
+#>  5.211137  4.04615 5.837909 3.540215 5.211137      4.04615    5.837909
 
 # Only classical indices (fast)
 batch_analysis(df, indices = "classical")
@@ -214,7 +214,7 @@ batch_analysis(df, indices = "ozkan_pto", full = FALSE)
 #>   Indices: 8 
 #> 
 #>  Site N_Species      uTO       TO uTO_plus  TO_plus  uTO_max   TO_max
-#>   All         4 3.357526 5.002732  4.04615 5.837909 3.357526 5.002732
+#>   All         4 3.540215 5.211137  4.04615 5.837909 3.540215 5.211137
 #>  uTO_plus_max TO_plus_max
 #>       4.04615    5.837909
 # }

@@ -96,9 +96,11 @@ Handbook of Vegetation Science 5, 617–726.
 
 [`batch_analysis`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/batch_analysis.md)
 for multi-site analysis,
-[`gazi_comm`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/gazi_comm.md)
+[`med_forest`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/med_forest.md)
+for a larger multi-site dataset,
+[`campus_comm`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/campus_comm.md)
 and
-[`gazi_gytk`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/gazi_gytk.md)
+[`campus_gytk`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/campus_gytk.md)
 for a single-community example.
 
 ## Examples
@@ -132,9 +134,9 @@ batch_analysis(anatolian_trees)
 #>    Conifer_Forest         8 1.868458 0.824142 2.526882   2.967172 4.071429
 #>      Mixed_Forest        12 2.317570 0.889414 3.826087   4.208289 4.575758
 #>     VarTD      uTO       TO uTO_plus  TO_plus  uTO_max   TO_max uTO_plus_max
-#>  0.733070 6.887741 10.05336 7.872282 11.05034 7.468801 10.64251     8.506628
-#>  3.066327 7.236543 13.80194 8.416052 14.99530 8.400411 14.97703     9.280162
-#>  2.335170 8.984158 15.56321 9.717193 16.29644 9.551268 16.13051    10.393644
+#>  0.733070 7.081149 10.25036 7.872282 11.05034 7.667163 10.84460     8.506628
+#>  3.066327 7.347992 13.91426 8.416052 14.99530 8.570022 15.14712     9.280162
+#>  2.335170 9.076165 15.65527 9.717193 16.29644 9.873612 16.45286    10.393644
 #>  TO_plus_max
 #>     11.68468
 #>     15.85941
@@ -149,14 +151,14 @@ ozkan_pto(comm, tax)
 #> taxdiv -- Ozkan pTO Result
 #> 
 #>   All levels:
-#>     uTO  : 8.984158 
-#>     TO   : 15.56321 
+#>     uTO  : 9.076165 
+#>     TO   : 15.65527 
 #>     uTO+ : 9.717193 
 #>     TO+  : 16.29644 
 #> 
 #>   Max informative level (level 5):
-#>     uTO_max  : 8.984158 
-#>     TO_max   : 15.56321 
+#>     uTO_max  : 9.076165 
+#>     TO_max   : 15.65527 
 #>     uTO+_max : 9.717193 
 #>     TO+_max  : 16.29644 
 #> 

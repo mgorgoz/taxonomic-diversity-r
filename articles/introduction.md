@@ -376,9 +376,9 @@ cat("uTO+:", round(run3$uTO_plus_max, 4), "\n")
 cat("TO+: ", round(run3$TO_plus_max, 4), "\n")
 #> TO+:  11.7283
 cat("uTO: ", round(run3$uTO_max, 4), "\n")
-#> uTO:  7.7613
+#> uTO:  7.8185
 cat("TO:  ", round(run3$TO_max, 4), "\n")
-#> TO:   10.9393
+#> TO:   10.9965
 ```
 
 The overall maximum across all three runs represents the “potential”
@@ -434,7 +434,7 @@ cat("Run 2:", sprintf("%9.4f %9.4f %9.4f %9.4f",
 cat("Run 3:", sprintf("%9.4f %9.4f %9.4f %9.4f",
     run3$uTO_plus_max, run3$TO_plus_max,
     run3$uTO_max, run3$TO_max), "\n")
-#> Run 3:    8.5502   11.7283    7.7613   10.9393
+#> Run 3:    8.5502   11.7283    7.8185   10.9965
 ```
 
 Each subsequent run finds values \>= the previous run, reflecting the
@@ -575,7 +575,7 @@ comparison$table
 #>   Dominant        10 1.842189 0.755000 2.078947   2.615894 2.866667 0.248889
 #>       uTO       TO uTO_plus  TO_plus  uTO_max   TO_max uTO_plus_max TO_plus_max
 #>  7.761257 10.93931  8.55023 11.72828 7.761257 10.93931      8.55023    11.72828
-#>  6.942210 10.11890  8.55023 11.72828 6.942210 10.11890      8.55023    11.72828
+#>  7.857664 11.03516  8.55023 11.72828 7.857664 11.03516      8.55023    11.72828
 ```
 
 ### Iteration Plot (Run 2)

@@ -149,8 +149,9 @@ on the bundled `anatolian_trees` data:
 Every main result object has tidy
 [`print()`](https://rdrr.io/r/base/print.html) and
 [`summary()`](https://rdrr.io/r/base/summary.html) methods (13 S3
-methods total), and the three example datasets (`anatolian_trees`,
-`gazi_comm`, `gazi_gytk`) let you try everything immediately.
+methods total), and the four example datasets (`anatolian_trees`,
+`med_forest`, `campus_comm`, `campus_gytk`) let you try everything
+immediately.
 
 ## 🔁 Excel macro equivalence
 
@@ -194,7 +195,7 @@ website:
 | Unit tests         | 668 passing                   |
 | Exported functions | 27                            |
 | S3 methods         | 13                            |
-| Example datasets   | 3                             |
+| Example datasets   | 4                             |
 | Vignettes          | 7 (6 English + 1 Turkish)     |
 
 ## 📖 Citation
@@ -410,9 +411,11 @@ taxonomic classifications.
 
 - [`anatolian_trees`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/anatolian_trees.md)
   : Anatolian Forest Trees: Multi-Site Species Data
-- [`gazi_comm`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/gazi_comm.md)
+- [`med_forest`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/med_forest.md)
+  : Mediterranean Forest: Multi-Site Vegetation Data
+- [`campus_comm`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/campus_comm.md)
   : Example Community Vector: 8 Anatolian Tree Species
-- [`gazi_gytk`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/gazi_gytk.md)
+- [`campus_gytk`](https://mgorgoz.github.io/taxonomic-diversity-r/reference/campus_gytk.md)
   : Example Taxonomy: 8 Anatolian Tree Species
 
 # Articles
